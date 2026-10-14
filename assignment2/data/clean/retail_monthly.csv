@@ -1,0 +1,361 @@
+month,group,grams_per_day
+2018-07,"Cereals (bread, flour, pasta)",132.7
+2018-07,Fruit,132.3
+2018-07,Meat & poultry,147.7
+2018-07,Milk products,284.4
+2018-07,Vegetables,195.9
+2018-08,"Cereals (bread, flour, pasta)",130.7
+2018-08,Fruit,136.7
+2018-08,Meat & poultry,140.0
+2018-08,Milk products,284.8
+2018-08,Vegetables,192.4
+2018-09,"Cereals (bread, flour, pasta)",126.3
+2018-09,Fruit,137.9
+2018-09,Meat & poultry,138.2
+2018-09,Milk products,281.4
+2018-09,Vegetables,189.2
+2018-10,"Cereals (bread, flour, pasta)",130.9
+2018-10,Fruit,150.0
+2018-10,Meat & poultry,140.6
+2018-10,Milk products,285.5
+2018-10,Vegetables,194.0
+2018-11,"Cereals (bread, flour, pasta)",130.0
+2018-11,Fruit,162.5
+2018-11,Meat & poultry,140.4
+2018-11,Milk products,286.1
+2018-11,Vegetables,189.7
+2018-12,"Cereals (bread, flour, pasta)",122.1
+2018-12,Fruit,164.8
+2018-12,Meat & poultry,147.5
+2018-12,Milk products,286.9
+2018-12,Vegetables,187.8
+2019-01,"Cereals (bread, flour, pasta)",126.3
+2019-01,Fruit,166.8
+2019-01,Meat & poultry,136.2
+2019-01,Milk products,278.1
+2019-01,Vegetables,185.7
+2019-02,"Cereals (bread, flour, pasta)",132.0
+2019-02,Fruit,172.2
+2019-02,Meat & poultry,140.2
+2019-02,Milk products,289.8
+2019-02,Vegetables,194.3
+2019-03,"Cereals (bread, flour, pasta)",131.8
+2019-03,Fruit,158.2
+2019-03,Meat & poultry,138.2
+2019-03,Milk products,286.3
+2019-03,Vegetables,192.2
+2019-04,"Cereals (bread, flour, pasta)",134.7
+2019-04,Fruit,137.0
+2019-04,Meat & poultry,136.8
+2019-04,Milk products,278.0
+2019-04,Vegetables,192.3
+2019-05,"Cereals (bread, flour, pasta)",133.7
+2019-05,Fruit,135.8
+2019-05,Meat & poultry,137.6
+2019-05,Milk products,279.1
+2019-05,Vegetables,195.3
+2019-06,"Cereals (bread, flour, pasta)",131.5
+2019-06,Fruit,127.7
+2019-06,Meat & poultry,137.7
+2019-06,Milk products,278.4
+2019-06,Vegetables,194.8
+2019-07,"Cereals (bread, flour, pasta)",131.5
+2019-07,Fruit,124.2
+2019-07,Meat & poultry,137.4
+2019-07,Milk products,276.6
+2019-07,Vegetables,192.1
+2019-08,"Cereals (bread, flour, pasta)",131.0
+2019-08,Fruit,133.7
+2019-08,Meat & poultry,135.9
+2019-08,Milk products,278.8
+2019-08,Vegetables,192.2
+2019-09,"Cereals (bread, flour, pasta)",128.4
+2019-09,Fruit,137.8
+2019-09,Meat & poultry,135.3
+2019-09,Milk products,277.0
+2019-09,Vegetables,188.3
+2019-10,"Cereals (bread, flour, pasta)",127.0
+2019-10,Fruit,147.1
+2019-10,Meat & poultry,135.8
+2019-10,Milk products,276.9
+2019-10,Vegetables,191.4
+2019-11,"Cereals (bread, flour, pasta)",128.1
+2019-11,Fruit,159.3
+2019-11,Meat & poultry,136.0
+2019-11,Milk products,279.9
+2019-11,Vegetables,188.9
+2019-12,"Cereals (bread, flour, pasta)",120.6
+2019-12,Fruit,162.0
+2019-12,Meat & poultry,140.8
+2019-12,Milk products,280.4
+2019-12,Vegetables,186.0
+2020-01,"Cereals (bread, flour, pasta)",130.0
+2020-01,Fruit,161.5
+2020-01,Meat & poultry,134.4
+2020-01,Milk products,279.9
+2020-01,Vegetables,190.2
+2020-02,"Cereals (bread, flour, pasta)",133.8
+2020-02,Fruit,163.0
+2020-02,Meat & poultry,134.0
+2020-02,Milk products,281.8
+2020-02,Vegetables,193.1
+2020-03,"Cereals (bread, flour, pasta)",193.8
+2020-03,Fruit,161.9
+2020-03,Meat & poultry,162.7
+2020-03,Milk products,319.3
+2020-03,Vegetables,239.5
+2020-04,"Cereals (bread, flour, pasta)",134.3
+2020-04,Fruit,137.2
+2020-04,Meat & poultry,135.9
+2020-04,Milk products,288.3
+2020-04,Vegetables,210.6
+2020-05,"Cereals (bread, flour, pasta)",129.1
+2020-05,Fruit,138.5
+2020-05,Meat & poultry,143.1
+2020-05,Milk products,292.2
+2020-05,Vegetables,214.9
+2020-06,"Cereals (bread, flour, pasta)",131.9
+2020-06,Fruit,132.1
+2020-06,Meat & poultry,143.0
+2020-06,Milk products,285.0
+2020-06,Vegetables,207.4
+2020-07,"Cereals (bread, flour, pasta)",138.8
+2020-07,Fruit,131.2
+2020-07,Meat & poultry,145.4
+2020-07,Milk products,289.0
+2020-07,Vegetables,211.2
+2020-08,"Cereals (bread, flour, pasta)",134.0
+2020-08,Fruit,139.0
+2020-08,Meat & poultry,143.1
+2020-08,Milk products,287.6
+2020-08,Vegetables,209.5
+2020-09,"Cereals (bread, flour, pasta)",128.8
+2020-09,Fruit,142.6
+2020-09,Meat & poultry,139.7
+2020-09,Milk products,284.0
+2020-09,Vegetables,203.2
+2020-10,"Cereals (bread, flour, pasta)",126.1
+2020-10,Fruit,152.0
+2020-10,Meat & poultry,142.0
+2020-10,Milk products,284.3
+2020-10,Vegetables,202.7
+2020-11,"Cereals (bread, flour, pasta)",124.1
+2020-11,Fruit,164.0
+2020-11,Meat & poultry,139.2
+2020-11,Milk products,282.0
+2020-11,Vegetables,194.7
+2020-12,"Cereals (bread, flour, pasta)",122.2
+2020-12,Fruit,165.1
+2020-12,Meat & poultry,149.8
+2020-12,Milk products,284.0
+2020-12,Vegetables,196.7
+2021-01,"Cereals (bread, flour, pasta)",131.9
+2021-01,Fruit,166.9
+2021-01,Meat & poultry,142.7
+2021-01,Milk products,284.6
+2021-01,Vegetables,200.0
+2021-02,"Cereals (bread, flour, pasta)",132.5
+2021-02,Fruit,162.5
+2021-02,Meat & poultry,137.3
+2021-02,Milk products,279.5
+2021-02,Vegetables,193.9
+2021-03,"Cereals (bread, flour, pasta)",129.1
+2021-03,Fruit,147.5
+2021-03,Meat & poultry,136.8
+2021-03,Milk products,273.8
+2021-03,Vegetables,191.1
+2021-04,"Cereals (bread, flour, pasta)",130.8
+2021-04,Fruit,137.8
+2021-04,Meat & poultry,137.2
+2021-04,Milk products,272.7
+2021-04,Vegetables,194.2
+2021-05,"Cereals (bread, flour, pasta)",130.3
+2021-05,Fruit,137.5
+2021-05,Meat & poultry,139.7
+2021-05,Milk products,275.6
+2021-05,Vegetables,196.5
+2021-06,"Cereals (bread, flour, pasta)",134.8
+2021-06,Fruit,130.0
+2021-06,Meat & poultry,142.1
+2021-06,Milk products,278.5
+2021-06,Vegetables,203.1
+2021-07,"Cereals (bread, flour, pasta)",140.5
+2021-07,Fruit,135.6
+2021-07,Meat & poultry,147.6
+2021-07,Milk products,286.1
+2021-07,Vegetables,211.0
+2021-08,"Cereals (bread, flour, pasta)",140.5
+2021-08,Fruit,145.1
+2021-08,Meat & poultry,150.3
+2021-08,Milk products,290.5
+2021-08,Vegetables,212.8
+2021-09,"Cereals (bread, flour, pasta)",132.0
+2021-09,Fruit,143.2
+2021-09,Meat & poultry,146.3
+2021-09,Milk products,284.5
+2021-09,Vegetables,202.6
+2021-10,"Cereals (bread, flour, pasta)",130.8
+2021-10,Fruit,148.2
+2021-10,Meat & poultry,143.2
+2021-10,Milk products,280.2
+2021-10,Vegetables,198.1
+2021-11,"Cereals (bread, flour, pasta)",126.2
+2021-11,Fruit,153.4
+2021-11,Meat & poultry,140.8
+2021-11,Milk products,273.6
+2021-11,Vegetables,189.1
+2021-12,"Cereals (bread, flour, pasta)",123.5
+2021-12,Fruit,159.6
+2021-12,Meat & poultry,149.7
+2021-12,Milk products,278.0
+2021-12,Vegetables,190.8
+2022-01,"Cereals (bread, flour, pasta)",138.8
+2022-01,Fruit,160.9
+2022-01,Meat & poultry,143.0
+2022-01,Milk products,284.4
+2022-01,Vegetables,199.9
+2022-02,"Cereals (bread, flour, pasta)",128.5
+2022-02,Fruit,160.8
+2022-02,Meat & poultry,137.2
+2022-02,Milk products,277.1
+2022-02,Vegetables,188.2
+2022-03,"Cereals (bread, flour, pasta)",132.2
+2022-03,Fruit,150.8
+2022-03,Meat & poultry,137.8
+2022-03,Milk products,272.0
+2022-03,Vegetables,186.1
+2022-04,"Cereals (bread, flour, pasta)",132.0
+2022-04,Fruit,141.2
+2022-04,Meat & poultry,138.6
+2022-04,Milk products,269.3
+2022-04,Vegetables,201.9
+2022-05,"Cereals (bread, flour, pasta)",128.5
+2022-05,Fruit,137.5
+2022-05,Meat & poultry,138.4
+2022-05,Milk products,272.1
+2022-05,Vegetables,199.8
+2022-06,"Cereals (bread, flour, pasta)",130.1
+2022-06,Fruit,127.8
+2022-06,Meat & poultry,138.8
+2022-06,Milk products,274.7
+2022-06,Vegetables,188.5
+2022-07,"Cereals (bread, flour, pasta)",129.2
+2022-07,Fruit,118.9
+2022-07,Meat & poultry,138.1
+2022-07,Milk products,267.1
+2022-07,Vegetables,186.6
+2022-08,"Cereals (bread, flour, pasta)",126.2
+2022-08,Fruit,125.2
+2022-08,Meat & poultry,137.0
+2022-08,Milk products,266.2
+2022-08,Vegetables,183.1
+2022-09,"Cereals (bread, flour, pasta)",125.2
+2022-09,Fruit,125.5
+2022-09,Meat & poultry,137.1
+2022-09,Milk products,265.1
+2022-09,Vegetables,181.9
+2022-10,"Cereals (bread, flour, pasta)",128.0
+2022-10,Fruit,135.3
+2022-10,Meat & poultry,139.5
+2022-10,Milk products,269.2
+2022-10,Vegetables,187.2
+2022-11,"Cereals (bread, flour, pasta)",124.7
+2022-11,Fruit,145.2
+2022-11,Meat & poultry,140.3
+2022-11,Milk products,269.9
+2022-11,Vegetables,182.4
+2022-12,"Cereals (bread, flour, pasta)",122.4
+2022-12,Fruit,153.4
+2022-12,Meat & poultry,147.9
+2022-12,Milk products,272.0
+2022-12,Vegetables,184.4
+2023-01,"Cereals (bread, flour, pasta)",131.1
+2023-01,Fruit,153.2
+2023-01,Meat & poultry,142.3
+2023-01,Milk products,273.2
+2023-01,Vegetables,182.8
+2023-02,"Cereals (bread, flour, pasta)",130.5
+2023-02,Fruit,155.3
+2023-02,Meat & poultry,142.4
+2023-02,Milk products,273.2
+2023-02,Vegetables,181.3
+2023-03,"Cereals (bread, flour, pasta)",131.7
+2023-03,Fruit,147.1
+2023-03,Meat & poultry,140.7
+2023-03,Milk products,269.3
+2023-03,Vegetables,181.4
+2023-04,"Cereals (bread, flour, pasta)",132.6
+2023-04,Fruit,132.9
+2023-04,Meat & poultry,142.9
+2023-04,Milk products,265.8
+2023-04,Vegetables,187.7
+2023-05,"Cereals (bread, flour, pasta)",129.6
+2023-05,Fruit,129.2
+2023-05,Meat & poultry,142.1
+2023-05,Milk products,265.6
+2023-05,Vegetables,185.4
+2023-06,"Cereals (bread, flour, pasta)",129.7
+2023-06,Fruit,123.3
+2023-06,Meat & poultry,142.3
+2023-06,Milk products,264.1
+2023-06,Vegetables,184.6
+2023-07,"Cereals (bread, flour, pasta)",129.6
+2023-07,Fruit,121.2
+2023-07,Meat & poultry,142.7
+2023-07,Milk products,266.6
+2023-07,Vegetables,185.4
+2023-08,"Cereals (bread, flour, pasta)",128.4
+2023-08,Fruit,126.3
+2023-08,Meat & poultry,142.6
+2023-08,Milk products,266.1
+2023-08,Vegetables,182.1
+2023-09,"Cereals (bread, flour, pasta)",124.7
+2023-09,Fruit,127.7
+2023-09,Meat & poultry,142.4
+2023-09,Milk products,265.2
+2023-09,Vegetables,180.4
+2023-10,"Cereals (bread, flour, pasta)",127.9
+2023-10,Fruit,136.5
+2023-10,Meat & poultry,142.6
+2023-10,Milk products,269.6
+2023-10,Vegetables,182.8
+2023-11,"Cereals (bread, flour, pasta)",125.0
+2023-11,Fruit,144.9
+2023-11,Meat & poultry,144.1
+2023-11,Milk products,268.9
+2023-11,Vegetables,180.1
+2023-12,"Cereals (bread, flour, pasta)",121.7
+2023-12,Fruit,153.6
+2023-12,Meat & poultry,150.3
+2023-12,Milk products,272.3
+2023-12,Vegetables,182.5
+2024-01,"Cereals (bread, flour, pasta)",130.2
+2024-01,Fruit,154.2
+2024-01,Meat & poultry,143.4
+2024-01,Milk products,271.2
+2024-01,Vegetables,184.7
+2024-02,"Cereals (bread, flour, pasta)",131.0
+2024-02,Fruit,158.7
+2024-02,Meat & poultry,143.0
+2024-02,Milk products,274.0
+2024-02,Vegetables,183.1
+2024-03,"Cereals (bread, flour, pasta)",131.5
+2024-03,Fruit,147.4
+2024-03,Meat & poultry,143.3
+2024-03,Milk products,268.1
+2024-03,Vegetables,183.8
+2024-04,"Cereals (bread, flour, pasta)",130.3
+2024-04,Fruit,135.1
+2024-04,Meat & poultry,145.9
+2024-04,Milk products,270.6
+2024-04,Vegetables,188.7
+2024-05,"Cereals (bread, flour, pasta)",129.9
+2024-05,Fruit,129.1
+2024-05,Meat & poultry,146.4
+2024-05,Milk products,269.0
+2024-05,Vegetables,187.0
+2024-06,"Cereals (bread, flour, pasta)",130.0
+2024-06,Fruit,121.1
+2024-06,Meat & poultry,146.7
+2024-06,Milk products,267.7
+2024-06,Vegetables,186.0

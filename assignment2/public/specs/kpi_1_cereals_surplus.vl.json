@@ -1,0 +1,172 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "KPI micro-chart: kg of cereals grown in Australia for every 100 kg used here, 2023. The part past the 100 kg line is surplus.",
+  "width": "container",
+  "height": 44,
+  "data": {
+    "url": "../data/clean/fbs_groups.csv",
+    "format": {
+      "parse": {
+        "year": "number",
+        "self_sufficiency": "number",
+        "exports": "number",
+        "imports": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.year === 2023 && datum.group === 'Cereals'"
+    },
+    {
+      "calculate": "0",
+      "as": "zero"
+    },
+    {
+      "calculate": "100",
+      "as": "used"
+    },
+    {
+      "calculate": "50",
+      "as": "used_mid"
+    },
+    {
+      "calculate": "(100 + datum.self_sufficiency) / 2",
+      "as": "surplus_mid"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "color": "#F5F6F3",
+        "cornerRadiusTopLeft": 2,
+        "cornerRadiusBottomLeft": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "zero",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              360
+            ],
+            "nice": false
+          },
+          "axis": null
+        },
+        "x2": {
+          "field": "used"
+        },
+        "y": {
+          "value": 6
+        },
+        "y2": {
+          "value": 22
+        },
+        "tooltip": {
+          "value": "100 kg grown and used in Australia"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "bar",
+        "color": "#A3AEC6",
+        "cornerRadiusTopRight": 2,
+        "cornerRadiusBottomRight": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "used",
+          "type": "quantitative"
+        },
+        "x2": {
+          "field": "self_sufficiency"
+        },
+        "y": {
+          "value": 6
+        },
+        "y2": {
+          "value": 22
+        },
+        "tooltip": [
+          {
+            "field": "self_sufficiency",
+            "title": "Grown per 100 kg used",
+            "format": ".0f"
+          },
+          {
+            "field": "exports",
+            "title": "Exported (1000 t)",
+            "format": ",.0f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#E7E2DE",
+        "strokeWidth": 1.5,
+        "strokeDash": [
+          3,
+          2
+        ]
+      },
+      "encoding": {
+        "x": {
+          "field": "used",
+          "type": "quantitative"
+        },
+        "y": {
+          "value": 2
+        },
+        "y2": {
+          "value": 26
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "color": "#A3AEC6",
+        "fontSize": 10,
+        "baseline": "bottom"
+      },
+      "encoding": {
+        "x": {
+          "field": "used_mid",
+          "type": "quantitative"
+        },
+        "y": {
+          "value": 44
+        },
+        "text": {
+          "value": "used here"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "color": "#A3AEC6",
+        "fontSize": 10,
+        "baseline": "bottom"
+      },
+      "encoding": {
+        "x": {
+          "field": "surplus_mid",
+          "type": "quantitative"
+        },
+        "y": {
+          "value": 44
+        },
+        "text": {
+          "value": "surplus, mostly exported"
+        }
+      }
+    }
+  ]
+}

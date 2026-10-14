@@ -1,0 +1,44 @@
+state,region,group,aud_m,lon,lat,share
+ACT,Australian Capital Territory,"Grains, oilseeds & pulses",4.5,149.1,-35.5,0.0
+ACT,Australian Capital Territory,Meat (livestock sold),7.0,149.1,-35.5,0.0
+NSW,New South Wales,Fruit,1542.4,146.9,-32.4,21.0
+NSW,New South Wales,"Grains, oilseeds & pulses",7764.9,146.9,-32.4,32.9
+NSW,New South Wales,Meat (livestock sold),6596.9,146.9,-32.4,24.2
+NSW,New South Wales,Milk,892.8,146.9,-32.4,15.0
+NSW,New South Wales,Nuts,456.0,146.9,-32.4,28.0
+NSW,New South Wales,Sugarcane,92.4,146.9,-32.4,5.3
+NSW,New South Wales,Vegetables,618.9,146.9,-32.4,10.5
+NT,Northern Territory,Fruit,199.3,133.4,-19.6,2.7
+NT,Northern Territory,Meat (livestock sold),456.2,133.4,-19.6,1.7
+NT,Northern Territory,Vegetables,7.1,133.4,-19.6,0.1
+QLD,Queensland,Fruit,2303.3,144.6,-22.6,31.4
+QLD,Queensland,"Grains, oilseeds & pulses",2118.2,144.6,-22.6,9.0
+QLD,Queensland,Meat (livestock sold),8677.4,144.6,-22.6,31.8
+QLD,Queensland,Milk,251.7,144.6,-22.6,4.2
+QLD,Queensland,Nuts,128.0,144.6,-22.6,7.9
+QLD,Queensland,Sugarcane,1662.9,144.6,-22.6,94.7
+QLD,Queensland,Vegetables,1424.3,144.6,-22.6,24.1
+SA,South Australia,Fruit,446.3,135.6,-30.2,6.1
+SA,South Australia,"Grains, oilseeds & pulses",2024.0,135.6,-30.2,8.6
+SA,South Australia,Meat (livestock sold),1595.7,135.6,-30.2,5.9
+SA,South Australia,Milk,338.9,135.6,-30.2,5.7
+SA,South Australia,Nuts,406.7,135.6,-30.2,24.9
+SA,South Australia,Vegetables,987.7,135.6,-30.2,16.7
+TAS,Tasmania,Fruit,370.6,146.6,-42.1,5.1
+TAS,Tasmania,"Grains, oilseeds & pulses",24.2,146.6,-42.1,0.1
+TAS,Tasmania,Meat (livestock sold),508.6,146.6,-42.1,1.9
+TAS,Tasmania,Milk,623.5,146.6,-42.1,10.4
+TAS,Tasmania,Nuts,9.2,146.6,-42.1,0.6
+TAS,Tasmania,Vegetables,678.2,146.6,-42.1,11.5
+VIC,Victoria,Fruit,1912.6,144.2,-36.9,26.1
+VIC,Victoria,"Grains, oilseeds & pulses",3472.0,144.2,-36.9,14.7
+VIC,Victoria,Meat (livestock sold),7625.2,144.2,-36.9,28.0
+VIC,Victoria,Milk,3623.3,144.2,-36.9,60.7
+VIC,Victoria,Nuts,620.9,144.2,-36.9,38.1
+VIC,Victoria,Vegetables,1736.5,144.2,-36.9,29.4
+WA,Western Australia,Fruit,553.4,121.9,-25.8,7.6
+WA,Western Australia,"Grains, oilseeds & pulses",8221.4,121.9,-25.8,34.8
+WA,Western Australia,Meat (livestock sold),1801.2,121.9,-25.8,6.6
+WA,Western Australia,Milk,238.2,121.9,-25.8,4.0
+WA,Western Australia,Nuts,9.6,121.9,-25.8,0.6
+WA,Western Australia,Vegetables,448.2,121.9,-25.8,7.6

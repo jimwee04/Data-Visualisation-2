@@ -1,0 +1,347 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Proportional symbol (spike) map: where each food group is produced, by state, 2024-25. Spike height is proportional to farm-gate value; every spike has the same base width, so spikes are compared by length.",
+  "width": "container",
+  "height": 420,
+  "padding": {
+    "top": 40,
+    "left": 5,
+    "right": 5,
+    "bottom": 5
+  },
+  "params": [
+    {
+      "name": "food",
+      "value": "Milk",
+      "description": "Set by the icon buttons above the chart (see js/main.js)."
+    }
+  ],
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [
+      -18,
+      -36
+    ],
+    "rotate": [
+      -132,
+      0
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "../data/clean/australia.json",
+        "format": {
+          "type": "topojson",
+          "feature": "STE_2021_AUST_GDA2020"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#E7E2DE",
+        "stroke": "#ffffff",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "tooltip": {
+          "field": "properties.STE_NAME21",
+          "type": "nominal",
+          "title": "State"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "../data/clean/state_groups.csv",
+        "format": {
+          "parse": {
+            "aud_m": "number",
+            "share": "number",
+            "lon": "number",
+            "lat": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.group === food"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "aud_m",
+              "as": "groupMax"
+            }
+          ]
+        },
+        {
+          "calculate": "pow(10, floor(log(datum.groupMax) / LN10 + 1e-9))",
+          "as": "mag"
+        },
+        {
+          "calculate": "ceil(datum.groupMax / datum.mag) * datum.mag",
+          "as": "niceMax"
+        },
+        {
+          "calculate": "datum.aud_m / datum.niceMax",
+          "as": "h"
+        },
+        {
+          "calculate": "'M-0.08,0L0,-' + format(datum.h, '.4f') + 'L0.08,0Z'",
+          "as": "spike"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "size": 44100,
+            "fill": "#2F3A55",
+            "fillOpacity": 0.85,
+            "stroke": "#ffffff",
+            "strokeWidth": 1,
+            "strokeOpacity": 1
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "shape": {
+              "field": "spike",
+              "type": "nominal",
+              "scale": null,
+              "legend": null
+            },
+            "order": {
+              "field": "aud_m",
+              "sort": "descending"
+            },
+            "tooltip": [
+              {
+                "field": "region",
+                "type": "nominal",
+                "title": "State"
+              },
+              {
+                "field": "group",
+                "type": "nominal",
+                "title": "Food group"
+              },
+              {
+                "field": "aud_m",
+                "type": "quantitative",
+                "title": "Farm-gate value (A$m)",
+                "format": ",.0f"
+              },
+              {
+                "field": "share",
+                "type": "quantitative",
+                "title": "Share of national value (%)",
+                "format": ".1f"
+              }
+            ]
+          }
+        },
+        {
+          "description": "State labels sit under each spike's base, so they never collide with spikes of any height.",
+          "transform": [
+            {
+              "filter": "datum.share >= 3"
+            },
+            {
+              "calculate": "datum.state + ' ' + format(datum.share, '.0f') + '%'",
+              "as": "label"
+            }
+          ],
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "label"
+            }
+          },
+          "layer": [
+            {
+              "mark": {
+                "type": "text",
+                "fontSize": 11,
+                "fontWeight": 600,
+                "baseline": "top",
+                "dy": 5,
+                "stroke": "#ffffff",
+                "strokeWidth": 3.5,
+                "strokeOpacity": 0.85,
+                "strokeJoin": "round"
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "fontSize": 11,
+                "fontWeight": 600,
+                "baseline": "top",
+                "dy": 5,
+                "color": "#2F3A55"
+              }
+            }
+          ]
+        },
+        {
+          "description": "Legend: two reference spikes at round values (r and 2r, where r is the largest 1/2/5 x 10^k at or below a quarter of the group's nice maximum), laid out in pixels in the bottom-left ocean corner so the projection cannot tilt it.",
+          "transform": [
+            {
+              "aggregate": [
+                {
+                  "op": "max",
+                  "field": "niceMax",
+                  "as": "niceMax"
+                }
+              ]
+            },
+            {
+              "calculate": "datum.niceMax / 4",
+              "as": "q"
+            },
+            {
+              "calculate": "pow(10, floor(log(datum.q) / LN10 + 1e-9))",
+              "as": "m"
+            },
+            {
+              "calculate": "(datum.q / datum.m >= 5 ? 5 : datum.q / datum.m >= 2 ? 2 : 1) * datum.m",
+              "as": "r"
+            },
+            {
+              "calculate": "[1, 2]",
+              "as": "k"
+            },
+            {
+              "flatten": [
+                "k"
+              ]
+            },
+            {
+              "calculate": "datum.k * datum.r",
+              "as": "ref"
+            },
+            {
+              "calculate": "datum.ref / datum.niceMax",
+              "as": "h"
+            },
+            {
+              "calculate": "'M-0.08,0L0,-' + format(datum.h, '.4f') + 'L0.08,0Z'",
+              "as": "spike"
+            },
+            {
+              "calculate": "datum.k === 1 ? 12 : 96",
+              "as": "px"
+            },
+            {
+              "calculate": "datum.px + 11",
+              "as": "labelX"
+            },
+            {
+              "calculate": "'A$' + format(datum.ref, ',') + 'm'",
+              "as": "refLabel"
+            }
+          ],
+          "layer": [
+            {
+              "mark": {
+                "type": "point",
+                "filled": true,
+                "size": 44100,
+                "fill": "#6E6F73",
+                "fillOpacity": 0.55,
+                "stroke": "#ffffff",
+                "strokeWidth": 1,
+                "y": {
+                  "expr": "height - 6"
+                }
+              },
+              "encoding": {
+                "x": {
+                  "field": "px",
+                  "type": "quantitative",
+                  "scale": null
+                },
+                "shape": {
+                  "field": "spike",
+                  "type": "nominal",
+                  "scale": null,
+                  "legend": null
+                }
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "align": "left",
+                "baseline": "bottom",
+                "fontSize": 11,
+                "color": "#4B5569",
+                "y": {
+                  "expr": "height - 5"
+                }
+              },
+              "encoding": {
+                "x": {
+                  "field": "labelX",
+                  "type": "quantitative",
+                  "scale": null
+                },
+                "text": {
+                  "field": "refLabel"
+                }
+              }
+            },
+            {
+              "transform": [
+                {
+                  "filter": "datum.k === 2"
+                },
+                {
+                  "calculate": "datum.h * 105 + 14",
+                  "as": "lift"
+                },
+                {
+                  "calculate": "height - datum.lift",
+                  "as": "yPos"
+                }
+              ],
+              "mark": {
+                "type": "text",
+                "align": "left",
+                "baseline": "bottom",
+                "fontSize": 11,
+                "fontWeight": 600,
+                "color": "#2F3A55",
+                "x": 2,
+                "text": "Spike height = farm-gate value"
+              },
+              "encoding": {
+                "y": {
+                  "field": "yPos",
+                  "type": "quantitative",
+                  "scale": null
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

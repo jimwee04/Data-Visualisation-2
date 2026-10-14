@@ -1,0 +1,407 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Multi-series line chart: food supply per person, indexed to 2010 = 100, 2010-2023",
+  "width": "container",
+  "height": 360,
+  "data": {
+    "url": "../data/clean/fbs_per_person.csv",
+    "format": {
+      "parse": {
+        "year": "number",
+        "kg_per_person": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": {
+        "field": "food",
+        "oneOf": [
+          "Milk & dairy",
+          "Beef",
+          "Chicken & poultry",
+          "Cereals",
+          "Fruit"
+        ]
+      }
+    },
+    {
+      "calculate": "datum.year === 2010 ? datum.kg_per_person : null",
+      "as": "v2010"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "v2010",
+          "as": "base"
+        }
+      ],
+      "groupby": [
+        "food"
+      ]
+    },
+    {
+      "calculate": "100 * datum.kg_per_person / datum.base",
+      "as": "index"
+    },
+    {
+      "calculate": "datum.index - 100",
+      "as": "change"
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "values": [
+          {
+            "y": 100
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#4B5569",
+        "strokeDash": [
+          4,
+          3
+        ]
+      },
+      "encoding": {
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        }
+      }
+    },
+    {
+      "params": [
+        {
+          "name": "foodPick",
+          "select": {
+            "type": "point",
+            "fields": [
+              "food"
+            ]
+          },
+          "bind": "legend"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.5,
+        "interpolate": "monotone"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              2010,
+              2023
+            ]
+          },
+          "axis": {
+            "format": "d",
+            "tickCount": 7,
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "index",
+          "type": "quantitative",
+          "title": "Supply per person (2010 = 100)",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        },
+        "color": {
+          "field": "food",
+          "type": "nominal",
+          "title": null,
+          "scale": {
+            "domain": [
+              "Milk & dairy",
+              "Beef",
+              "Chicken & poultry",
+              "Cereals",
+              "Fruit"
+            ],
+            "range": [
+              "#2F3A55",
+              "#C2724F",
+              "#4E9A8B",
+              "#C9A227",
+              "#9B6A9E"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "symbolType": "stroke",
+            "symbolStrokeWidth": 3
+          }
+        },
+        "opacity": {
+          "condition": {
+            "param": "foodPick",
+            "value": 1
+          },
+          "value": 0.12
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === 2023"
+        },
+        {
+          "calculate": "datum.food + ' ' + (datum.change >= 0 ? '+' : '−') + format(abs(datum.change), '.0f') + '%'",
+          "as": "label"
+        },
+        {
+          "calculate": "datum.index + (datum.food === \"Cereals\" ? 3.5 : datum.food === \"Milk & dairy\" ? -3 : 0)",
+          "as": "labelY"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 6,
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#2F3A55"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              2010,
+              2023
+            ]
+          },
+          "axis": {
+            "format": "d",
+            "tickCount": 7,
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "labelY",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        },
+        "text": {
+          "field": "label"
+        },
+        "opacity": {
+          "condition": {
+            "param": "foodPick",
+            "value": 1
+          },
+          "value": 0.15
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "pivot": "food",
+          "value": "kg_per_person",
+          "groupby": [
+            "year"
+          ]
+        }
+      ],
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "year"
+            ],
+            "nearest": true,
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#4B5569",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              2010,
+              2023
+            ]
+          },
+          "axis": {
+            "format": "d",
+            "tickCount": 7,
+            "grid": false
+          }
+        },
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "empty": false,
+            "value": 0.6
+          },
+          "value": 0
+        },
+        "tooltip": [
+          {
+            "field": "year",
+            "type": "quantitative",
+            "title": "Year",
+            "format": "d"
+          },
+          {
+            "field": "Chicken & poultry",
+            "type": "quantitative",
+            "title": "Chicken & poultry (kg/person)",
+            "format": ".1f"
+          },
+          {
+            "field": "Beef",
+            "type": "quantitative",
+            "title": "Beef (kg/person)",
+            "format": ".1f"
+          },
+          {
+            "field": "Fruit",
+            "type": "quantitative",
+            "title": "Fruit (kg/person)",
+            "format": ".1f"
+          },
+          {
+            "field": "Cereals",
+            "type": "quantitative",
+            "title": "Cereals (kg/person)",
+            "format": ".1f"
+          },
+          {
+            "field": "Milk & dairy",
+            "type": "quantitative",
+            "title": "Milk & dairy (kg/person)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": {
+            "param": "hover",
+            "empty": false
+          }
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "size": 60,
+        "stroke": "#ffffff",
+        "strokeWidth": 1.5,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              2010,
+              2023
+            ]
+          },
+          "axis": {
+            "format": "d",
+            "tickCount": 7,
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "index",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        },
+        "color": {
+          "field": "food",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 2019,
+            "y": 74,
+            "t": "Fruit low point: 74 kg per person (2019)"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "dy": 14,
+        "fontSize": 10,
+        "fontStyle": "italic",
+        "color": "#4B5569"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative"
+        },
+        "y": {
+          "datum": 72.4,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ]
+}

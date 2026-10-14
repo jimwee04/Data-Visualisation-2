@@ -1,0 +1,287 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Multi-series line chart: supermarket food sales per person per day, by month, Jul 2018 - Jun 2024",
+  "width": "container",
+  "height": 360,
+  "data": {
+    "url": "../data/clean/retail_monthly.csv",
+    "format": {
+      "parse": {
+        "month": "date:'%Y-%m'"
+      }
+    }
+  },
+  "layer": [
+    {
+      "data": {
+        "values": [
+          {
+            "start": "2020-02-15",
+            "end": "2020-04-15"
+          }
+        ]
+      },
+      "mark": {
+        "type": "rect",
+        "color": "#E7E2DE"
+      },
+      "encoding": {
+        "x": {
+          "field": "start",
+          "type": "temporal"
+        },
+        "x2": {
+          "field": "end"
+        }
+      }
+    },
+    {
+      "params": [
+        {
+          "name": "groupPick",
+          "select": {
+            "type": "point",
+            "fields": [
+              "group"
+            ]
+          },
+          "bind": "legend"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "month",
+          "type": "temporal",
+          "title": null,
+          "axis": {
+            "format": "%b %Y",
+            "tickCount": {
+              "interval": "month",
+              "step": 6
+            },
+            "labelAngle": 0,
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "grams_per_day",
+          "type": "quantitative",
+          "title": "Grams bought per person per day",
+          "scale": {
+            "domain": [
+              100,
+              340
+            ]
+          }
+        },
+        "color": {
+          "field": "group",
+          "type": "nominal",
+          "title": null,
+          "scale": {
+            "domain": [
+              "Milk products",
+              "Meat & poultry",
+              "Vegetables",
+              "Cereals (bread, flour, pasta)",
+              "Fruit"
+            ],
+            "range": [
+              "#2F3A55",
+              "#C2724F",
+              "#4E9A8B",
+              "#C9A227",
+              "#9B6A9E"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "symbolType": "stroke",
+            "symbolStrokeWidth": 3,
+            "columns": 5
+          }
+        },
+        "opacity": {
+          "condition": {
+            "param": "groupPick",
+            "value": 1
+          },
+          "value": 0.12
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "pivot": "group",
+          "value": "grams_per_day",
+          "groupby": [
+            "month"
+          ]
+        }
+      ],
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "month"
+            ],
+            "nearest": true,
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#4B5569"
+      },
+      "encoding": {
+        "x": {
+          "field": "month",
+          "type": "temporal"
+        },
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "empty": false,
+            "value": 0.6
+          },
+          "value": 0
+        },
+        "tooltip": [
+          {
+            "field": "month",
+            "type": "temporal",
+            "title": "Month",
+            "format": "%B %Y"
+          },
+          {
+            "field": "Milk products",
+            "type": "quantitative",
+            "title": "Milk products (g/day)",
+            "format": ".1f"
+          },
+          {
+            "field": "Vegetables",
+            "type": "quantitative",
+            "title": "Vegetables (g/day)",
+            "format": ".1f"
+          },
+          {
+            "field": "Meat & poultry",
+            "type": "quantitative",
+            "title": "Meat & poultry (g/day)",
+            "format": ".1f"
+          },
+          {
+            "field": "Fruit",
+            "type": "quantitative",
+            "title": "Fruit (g/day)",
+            "format": ".1f"
+          },
+          {
+            "field": "Cereals (bread, flour, pasta)",
+            "type": "quantitative",
+            "title": "Cereals (g/day)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": {
+            "param": "hover",
+            "empty": false
+          }
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "size": 50,
+        "stroke": "#ffffff",
+        "strokeWidth": 1.5,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "month",
+          "type": "temporal"
+        },
+        "y": {
+          "field": "grams_per_day",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              100,
+              340
+            ]
+          }
+        },
+        "color": {
+          "field": "group",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "m": "2020-04-20",
+            "y": 336,
+            "t": "Mar 2020 panic buying:",
+            "align": "left"
+          },
+          {
+            "m": "2020-04-20",
+            "y": 326,
+            "t": "flour & pasta +45% on Feb",
+            "align": "left"
+          },
+          {
+            "m": "2022-07-01",
+            "y": 112,
+            "t": "Jul 2022: lowest fruit month (119 g)",
+            "align": "center"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 10,
+        "fontStyle": "italic",
+        "color": "#4B5569",
+        "align": "left",
+        "dx": 6
+      },
+      "encoding": {
+        "x": {
+          "field": "m",
+          "type": "temporal"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              100,
+              340
+            ]
+          }
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ]
+}

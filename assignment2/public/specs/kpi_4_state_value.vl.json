@@ -1,0 +1,120 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "KPI micro-chart: farm-gate food value per resident by state, 2024-25, with the national average as a dashed line.",
+  "width": "container",
+  "height": 40,
+  "data": {
+    "url": "../data/clean/state_per_person.csv",
+    "format": {
+      "parse": {
+        "food_value_m": "number",
+        "population": "number",
+        "value_per_person": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "joinaggregate": [
+        {
+          "op": "sum",
+          "field": "food_value_m",
+          "as": "aus_value_m"
+        },
+        {
+          "op": "sum",
+          "field": "population",
+          "as": "aus_population"
+        }
+      ]
+    },
+    {
+      "calculate": "datum.aus_value_m * 1e6 / datum.aus_population",
+      "as": "aus_per_person"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "color": "#A3AEC6",
+        "cornerRadiusTopLeft": 2,
+        "cornerRadiusTopRight": 2,
+        "width": {
+          "band": 0.7
+        }
+      },
+      "encoding": {
+        "y": {
+          "field": "value_per_person",
+          "type": "quantitative",
+          "axis": null,
+          "scale": {
+            "domain": [
+              0,
+              4000
+            ],
+            "nice": false
+          }
+        },
+        "tooltip": [
+          {
+            "field": "region",
+            "title": "State"
+          },
+          {
+            "field": "value_per_person",
+            "title": "Food value per resident (A$)",
+            "format": "$,.0f"
+          },
+          {
+            "field": "food_value_m",
+            "title": "Total (A$ m)",
+            "format": ",.0f"
+          }
+        ],
+        "x": {
+          "field": "state",
+          "type": "nominal",
+          "sort": {
+            "field": "value_per_person",
+            "order": "descending"
+          },
+          "axis": {
+            "title": null,
+            "domain": false,
+            "ticks": false,
+            "labelAngle": 0,
+            "labelColor": "#E7E2DE",
+            "labelFontSize": 9,
+            "labelPadding": 3
+          }
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#F5F6F3",
+        "strokeDash": [
+          3,
+          2
+        ],
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "y": {
+          "aggregate": "mean",
+          "field": "aus_per_person",
+          "type": "quantitative"
+        },
+        "tooltip": {
+          "aggregate": "mean",
+          "field": "aus_per_person",
+          "title": "Australia (A$ per resident)",
+          "format": "$,.0f"
+        }
+      }
+    }
+  ]
+}

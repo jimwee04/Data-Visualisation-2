@@ -1,0 +1,545 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Origin-destination flow map: Australia's 10 largest food export markets and 10 largest import sources (Europe combined) by value, 2024. Each flow is a gentle arc whose width is proportional to value; the arrowhead at its midpoint shows direction.",
+  "width": "container",
+  "height": 460,
+  "params": [
+    {
+      "name": "flow",
+      "value": "Exports",
+      "description": "Set by the icon buttons above the chart (see js/main.js)."
+    }
+  ],
+  "projection": {
+    "type": "equalEarth",
+    "rotate": [
+      -150,
+      0,
+      0
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "sphere": true
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#F5F6F3"
+      }
+    },
+    {
+      "data": {
+        "url": "../data/clean/world-atlas.json",
+        "format": {
+          "type": "topojson",
+          "feature": "countries"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#E7E2DE",
+        "stroke": "#ffffff",
+        "strokeWidth": 0.4
+      }
+    },
+    {
+      "data": {
+        "url": "../data/clean/trade_partners.csv",
+        "format": {
+          "parse": {
+            "rank": "number",
+            "usd_m": "number",
+            "share": "number",
+            "lon": "number",
+            "lat": "number",
+            "bend": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.flow === flow"
+        },
+        {
+          "calculate": "134",
+          "as": "auLon"
+        },
+        {
+          "calculate": "-25.5",
+          "as": "auLat"
+        },
+        {
+          "calculate": "datum.lon < -30 ? datum.lon + 360 : datum.lon",
+          "as": "toLon"
+        },
+        {
+          "calculate": "datum.toLon - datum.auLon",
+          "as": "dx"
+        },
+        {
+          "calculate": "datum.lat - datum.auLat",
+          "as": "dy"
+        },
+        {
+          "calculate": "datum.auLon + datum.dx / 2 - datum.bend * datum.dy",
+          "as": "ctrlLon"
+        },
+        {
+          "calculate": "datum.auLat + datum.dy / 2 + datum.bend * datum.dx",
+          "as": "ctrlLat"
+        },
+        {
+          "calculate": "datum.partner + ' ' + format(datum.share, '.0f') + '%'",
+          "as": "label"
+        },
+        {
+          "calculate": "datum.members ? datum.members : 'n/a'",
+          "as": "includes"
+        }
+      ],
+      "layer": [
+        {
+          "description": "Flow arcs: a quadratic curve from Australia to each partner, sampled at 41 points.",
+          "transform": [
+            {
+              "calculate": "sequence(0, 1.0001, 0.025)",
+              "as": "t"
+            },
+            {
+              "flatten": [
+                "t"
+              ]
+            },
+            {
+              "calculate": "pow(1 - datum.t, 2) * datum.auLon + 2 * (1 - datum.t) * datum.t * datum.ctrlLon + pow(datum.t, 2) * datum.toLon",
+              "as": "pLon"
+            },
+            {
+              "calculate": "pow(1 - datum.t, 2) * datum.auLat + 2 * (1 - datum.t) * datum.t * datum.ctrlLat + pow(datum.t, 2) * datum.lat",
+              "as": "pLat"
+            }
+          ],
+          "mark": {
+            "type": "line",
+            "opacity": 0.6,
+            "strokeCap": "round",
+            "interpolate": "linear"
+          },
+          "encoding": {
+            "longitude": {
+              "field": "pLon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "pLat",
+              "type": "quantitative"
+            },
+            "detail": {
+              "field": "partner",
+              "type": "nominal"
+            },
+            "order": {
+              "field": "t",
+              "type": "quantitative"
+            },
+            "strokeWidth": {
+              "field": "usd_m",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  0,
+                  8000
+                ],
+                "range": [
+                  0,
+                  10
+                ],
+                "zero": true
+              },
+              "legend": {
+                "title": "Trade value, 2024 (US$ million)",
+                "orient": "bottom-left",
+                "direction": "horizontal",
+                "values": [
+                  500,
+                  2000,
+                  5000
+                ],
+                "format": ",.0f",
+                "symbolType": "stroke",
+                "symbolStrokeColor": "#6E6F73",
+                "symbolSize": 400,
+                "titleOrient": "top",
+                "titleLimit": 320
+              }
+            },
+            "color": {
+              "field": "flow",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "Exports",
+                  "Imports"
+                ],
+                "range": [
+                  "#2F3A55",
+                  "#C2724F"
+                ]
+              },
+              "legend": {
+                "orient": "top-left",
+                "title": null,
+                "symbolType": "stroke",
+                "labelExpr": "datum.label === 'Exports' ? 'Food exports (Australia → partner)' : 'Food imports (partner → Australia)'",
+                "labelLimit": 320
+              }
+            },
+            "tooltip": [
+              {
+                "field": "partner",
+                "type": "nominal",
+                "title": "Partner"
+              },
+              {
+                "field": "flow",
+                "type": "nominal",
+                "title": "Flow"
+              },
+              {
+                "field": "usd_m",
+                "type": "quantitative",
+                "title": "Value 2024 (US$ million)",
+                "format": ",.0f"
+              },
+              {
+                "field": "share",
+                "type": "quantitative",
+                "title": "Share of Australia's total (%)",
+                "format": ".1f"
+              },
+              {
+                "field": "top_item",
+                "type": "nominal",
+                "title": "Largest item"
+              },
+              {
+                "field": "includes",
+                "type": "nominal",
+                "title": "Includes (US$ million)"
+              }
+            ]
+          }
+        },
+        {
+          "description": "Dart-shaped arrowheads (unambiguous when rotated) at each arc's midpoint. For a quadratic curve the midpoint tangent is parallel to the chord; dx is scaled by cos(latitude) to approximate the projection.",
+          "transform": [
+            {
+              "calculate": "0.25 * datum.auLon + 0.5 * datum.ctrlLon + 0.25 * datum.toLon",
+              "as": "mLon"
+            },
+            {
+              "calculate": "0.25 * datum.auLat + 0.5 * datum.ctrlLat + 0.25 * datum.lat",
+              "as": "mLat"
+            },
+            {
+              "calculate": "atan2(datum.dx * cos(datum.mLat * PI / 180), datum.dy) * 180 / PI + (datum.flow === 'Imports' ? 180 : 0)",
+              "as": "heading"
+            }
+          ],
+          "mark": {
+            "type": "point",
+            "shape": "M0,-1L0.6,0.8L0,0.4L-0.6,0.8Z",
+            "filled": true,
+            "size": 140,
+            "stroke": "#ffffff",
+            "strokeWidth": 1,
+            "opacity": 1
+          },
+          "encoding": {
+            "longitude": {
+              "field": "mLon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "mLat",
+              "type": "quantitative"
+            },
+            "angle": {
+              "field": "heading",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  0,
+                  360
+                ],
+                "range": [
+                  0,
+                  360
+                ]
+              }
+            },
+            "color": {
+              "field": "flow",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "Exports",
+                  "Imports"
+                ],
+                "range": [
+                  "#2F3A55",
+                  "#C2724F"
+                ]
+              },
+              "legend": null
+            }
+          }
+        },
+        {
+          "description": "Partner nodes: uniform small dots, so value is encoded once (by flow width) and nodes never overlap.",
+          "mark": {
+            "type": "circle",
+            "size": 55,
+            "stroke": "#ffffff",
+            "strokeWidth": 1.5,
+            "opacity": 1
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "color": {
+              "field": "flow",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "Exports",
+                  "Imports"
+                ],
+                "range": [
+                  "#2F3A55",
+                  "#C2724F"
+                ]
+              },
+              "legend": null
+            },
+            "tooltip": [
+              {
+                "field": "partner",
+                "type": "nominal",
+                "title": "Partner"
+              },
+              {
+                "field": "flow",
+                "type": "nominal",
+                "title": "Flow"
+              },
+              {
+                "field": "usd_m",
+                "type": "quantitative",
+                "title": "Value 2024 (US$ million)",
+                "format": ",.0f"
+              },
+              {
+                "field": "share",
+                "type": "quantitative",
+                "title": "Share of Australia's total (%)",
+                "format": ".1f"
+              },
+              {
+                "field": "top_item",
+                "type": "nominal",
+                "title": "Largest item"
+              },
+              {
+                "field": "includes",
+                "type": "nominal",
+                "title": "Includes (US$ million)"
+              }
+            ]
+          }
+        },
+        {
+          "description": "Partner labels (top of node) with a halo so flows passing underneath do not hide them.",
+          "transform": [
+            {
+              "filter": "datum.rank <= 8 && datum.label_side === 'top'"
+            }
+          ],
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "label"
+            }
+          },
+          "layer": [
+            {
+              "mark": {
+                "type": "text",
+                "fontSize": 11,
+                "fontWeight": 600,
+                "color": "#2F3A55",
+                "baseline": "bottom",
+                "dy": -7,
+                "stroke": "#F5F6F3",
+                "strokeWidth": 4,
+                "strokeJoin": "round",
+                "strokeOpacity": 0.95
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "fontSize": 11,
+                "fontWeight": 600,
+                "color": "#2F3A55",
+                "baseline": "bottom",
+                "dy": -7
+              }
+            }
+          ]
+        },
+        {
+          "description": "Partner labels (left of node) with a halo so flows passing underneath do not hide them.",
+          "transform": [
+            {
+              "filter": "datum.rank <= 8 && datum.label_side === 'left'"
+            }
+          ],
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "label"
+            }
+          },
+          "layer": [
+            {
+              "mark": {
+                "type": "text",
+                "fontSize": 11,
+                "fontWeight": 600,
+                "color": "#2F3A55",
+                "align": "right",
+                "dx": -8,
+                "stroke": "#F5F6F3",
+                "strokeWidth": 4,
+                "strokeJoin": "round",
+                "strokeOpacity": 0.95
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "fontSize": 11,
+                "fontWeight": 600,
+                "color": "#2F3A55",
+                "align": "right",
+                "dx": -8
+              }
+            }
+          ]
+        },
+        {
+          "description": "Partner labels (right of node) with a halo so flows passing underneath do not hide them.",
+          "transform": [
+            {
+              "filter": "datum.rank <= 8 && datum.label_side === 'right'"
+            }
+          ],
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "label"
+            }
+          },
+          "layer": [
+            {
+              "mark": {
+                "type": "text",
+                "fontSize": 11,
+                "fontWeight": 600,
+                "color": "#2F3A55",
+                "align": "left",
+                "dx": 8,
+                "stroke": "#F5F6F3",
+                "strokeWidth": 4,
+                "strokeJoin": "round",
+                "strokeOpacity": 0.95
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "fontSize": 11,
+                "fontWeight": 600,
+                "color": "#2F3A55",
+                "align": "left",
+                "dx": 8
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 134,
+            "lat": -25.5,
+            "name": "Australia (all flows start or end here)"
+          }
+        ]
+      },
+      "mark": {
+        "type": "circle",
+        "size": 160,
+        "fill": "#2F3A55",
+        "stroke": "#ffffff",
+        "strokeWidth": 2,
+        "opacity": 1
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "tooltip": {
+          "field": "name",
+          "type": "nominal"
+        }
+      }
+    }
+  ]
+}

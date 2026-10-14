@@ -1,0 +1,196 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Choropleth: farm-gate food value per resident by state, 2024-25",
+  "width": "container",
+  "height": 400,
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [
+      -18,
+      -36
+    ],
+    "rotate": [
+      -132,
+      0
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "../data/clean/australia.json",
+        "format": {
+          "type": "topojson",
+          "feature": "STE_2021_AUST_GDA2020"
+        }
+      },
+      "transform": [
+        {
+          "lookup": "properties.STE_NAME21",
+          "from": {
+            "data": {
+              "url": "../data/clean/state_per_person.csv",
+              "format": {
+                "parse": {
+                  "food_value_m": "number",
+                  "population": "number",
+                  "value_per_person": "number",
+                  "lon": "number",
+                  "lat": "number"
+                }
+              }
+            },
+            "key": "region",
+            "fields": [
+              "state",
+              "food_value_m",
+              "population",
+              "value_per_person",
+              "largest_group"
+            ]
+          }
+        },
+        {
+          "calculate": "datum.food_value_m / 1000",
+          "as": "food_value_b"
+        }
+      ],
+      "params": [
+        {
+          "name": "hoverState",
+          "select": {
+            "type": "point",
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#ffffff",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "color": {
+          "field": "value_per_person",
+          "type": "quantitative",
+          "title": "Food value per resident (A$)",
+          "scale": {
+            "type": "threshold",
+            "domain": [
+              1000,
+              2500,
+              3000,
+              3500
+            ],
+            "range": [
+              "#E7E2DE",
+              "#B9BFCD",
+              "#8B96AE",
+              "#5C6B8A",
+              "#2F3A55"
+            ]
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "format": "$,.0f",
+            "titleOrient": "left",
+            "gradientLength": 260,
+            "labelExpr": "datum.label"
+          }
+        },
+        "strokeWidth": {
+          "condition": {
+            "param": "hoverState",
+            "empty": false,
+            "value": 3
+          },
+          "value": 1.5
+        },
+        "tooltip": [
+          {
+            "field": "properties.STE_NAME21",
+            "type": "nominal",
+            "title": "State"
+          },
+          {
+            "field": "value_per_person",
+            "type": "quantitative",
+            "title": "Food value per resident",
+            "format": "$,.0f"
+          },
+          {
+            "field": "food_value_b",
+            "type": "quantitative",
+            "title": "Total food value (A$ billion)",
+            "format": ",.1f"
+          },
+          {
+            "field": "population",
+            "type": "quantitative",
+            "title": "Residents (Dec 2024)",
+            "format": ",.0f"
+          },
+          {
+            "field": "largest_group",
+            "type": "nominal",
+            "title": "Biggest food group by value"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "../data/clean/state_per_person.csv",
+        "format": {
+          "parse": {
+            "food_value_m": "number",
+            "population": "number",
+            "value_per_person": "number",
+            "lon": "number",
+            "lat": "number",
+            "label_lon": "number",
+            "label_lat": "number",
+            "label_inside": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.state !== 'ACT'"
+        },
+        {
+          "calculate": "datum.state + '\\n' + format(datum.value_per_person, '$,.0f')",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "lineBreak": "\n",
+        "lineHeight": 15
+      },
+      "encoding": {
+        "longitude": {
+          "field": "label_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "label_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.label_inside === 1 && datum.value_per_person >= 2500",
+            "value": "#ffffff"
+          },
+          "value": "#2F3A55"
+        }
+      }
+    }
+  ]
+}

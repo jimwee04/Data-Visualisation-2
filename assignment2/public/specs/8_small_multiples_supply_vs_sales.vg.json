@@ -1,0 +1,204 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Small-multiple line charts: FAO food supply vs ABS supermarket sales, both indexed to 2019 = 100",
+  "data": {
+    "url": "../data/clean/supply_vs_sales.csv",
+    "format": {
+      "parse": {
+        "year": "number",
+        "value": "number",
+        "index": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.source === 'Supermarket sales (ABS)' ? 'FY ' + datum.fy : toString(datum.year)",
+      "as": "period"
+    },
+    {
+      "calculate": "indexof(['Fruit', 'Dairy milk', 'Chicken & poultry', 'Beef, lamb & pork', 'Vegetables', 'Cereals'], datum.food)",
+      "as": "foodOrder"
+    }
+  ],
+  "facet": {
+    "field": "food",
+    "type": "nominal",
+    "title": null,
+    "sort": {
+      "field": "foodOrder",
+      "op": "min"
+    },
+    "header": {
+      "labelFontSize": 13,
+      "labelFontWeight": 600,
+      "labelAnchor": "start",
+      "labelColor": "#2F3A55",
+      "labelPadding": 6
+    }
+  },
+  "columns": 3,
+  "spec": {
+    "width": 220,
+    "height": 140,
+    "layer": [
+      {
+        "mark": {
+          "type": "rule",
+          "color": "#4B5569",
+          "strokeDash": [
+            4,
+            3
+          ],
+          "strokeWidth": 1
+        },
+        "encoding": {
+          "y": {
+            "datum": 100,
+            "type": "quantitative",
+            "scale": {
+              "domain": [
+                85,
+                125
+              ]
+            }
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "line",
+          "strokeWidth": 2.5,
+          "point": {
+            "size": 36,
+            "filled": true
+          }
+        },
+        "encoding": {
+          "x": {
+            "field": "year",
+            "type": "ordinal",
+            "title": null,
+            "axis": {
+              "labelAngle": 0,
+              "labelExpr": "datum.value === 2019 || datum.value === 2023 ? datum.value : ''"
+            }
+          },
+          "y": {
+            "field": "index",
+            "type": "quantitative",
+            "title": "Index (2019 = 100)",
+            "scale": {
+              "domain": [
+                85,
+                125
+              ]
+            },
+            "axis": {
+              "tickCount": 4
+            }
+          },
+          "color": {
+            "field": "source",
+            "type": "nominal",
+            "title": null,
+            "scale": {
+              "domain": [
+                "Food supply (FAO)",
+                "Supermarket sales (ABS)"
+              ],
+              "range": [
+                "#2F3A55",
+                "#C2724F"
+              ]
+            },
+            "legend": {
+              "orient": "top",
+              "symbolType": "stroke",
+              "symbolStrokeWidth": 3
+            }
+          },
+          "strokeDash": {
+            "field": "source",
+            "type": "nominal",
+            "scale": {
+              "domain": [
+                "Food supply (FAO)",
+                "Supermarket sales (ABS)"
+              ],
+              "range": [
+                [
+                  1,
+                  0
+                ],
+                [
+                  5,
+                  3
+                ]
+              ]
+            },
+            "legend": null
+          },
+          "opacity": {
+            "condition": {
+              "param": "srcPick",
+              "value": 1
+            },
+            "value": 0.15
+          },
+          "tooltip": [
+            {
+              "field": "food",
+              "type": "nominal",
+              "title": "Food"
+            },
+            {
+              "field": "source",
+              "type": "nominal",
+              "title": "Source"
+            },
+            {
+              "field": "period",
+              "type": "nominal",
+              "title": "Period"
+            },
+            {
+              "field": "value",
+              "type": "quantitative",
+              "title": "Value",
+              "format": ".1f"
+            },
+            {
+              "field": "unit",
+              "type": "nominal",
+              "title": "Unit"
+            },
+            {
+              "field": "index",
+              "type": "quantitative",
+              "title": "Index (2019 = 100)",
+              "format": ".0f"
+            }
+          ]
+        },
+        "params": [
+          {
+            "name": "srcPick",
+            "select": {
+              "type": "point",
+              "fields": [
+                "source"
+              ]
+            },
+            "bind": "legend"
+          }
+        ]
+      }
+    ]
+  },
+  "resolve": {
+    "scale": {
+      "y": "shared"
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "KPI micro-chart: kg of seafood caught or farmed in Australia for every 100 kg used here, 2023. The outlined gap up to 100 kg is filled by imports.",
+  "width": "container",
+  "height": 44,
+  "data": {
+    "url": "../data/clean/fbs_groups.csv",
+    "format": {
+      "parse": {
+        "year": "number",
+        "self_sufficiency": "number",
+        "exports": "number",
+        "imports": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.year === 2023 && datum.group === 'Fish & seafood'"
+    },
+    {
+      "calculate": "0",
+      "as": "zero"
+    },
+    {
+      "calculate": "100",
+      "as": "used"
+    },
+    {
+      "calculate": "datum.self_sufficiency / 2",
+      "as": "grown_mid"
+    },
+    {
+      "calculate": "(datum.self_sufficiency + 100) / 2",
+      "as": "gap_mid"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "color": "#F5F6F3",
+        "cornerRadiusTopLeft": 2,
+        "cornerRadiusBottomLeft": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "zero",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              104
+            ],
+            "nice": false
+          },
+          "axis": null
+        },
+        "x2": {
+          "field": "self_sufficiency"
+        },
+        "y": {
+          "value": 6
+        },
+        "y2": {
+          "value": 22
+        },
+        "tooltip": [
+          {
+            "field": "self_sufficiency",
+            "title": "Caught or farmed here, per 100 kg used",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "bar",
+        "fill": null,
+        "stroke": "#A3AEC6",
+        "strokeDash": [
+          3,
+          2
+        ],
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "self_sufficiency",
+          "type": "quantitative"
+        },
+        "x2": {
+          "field": "used"
+        },
+        "y": {
+          "value": 6
+        },
+        "y2": {
+          "value": 22
+        },
+        "tooltip": [
+          {
+            "field": "imports",
+            "title": "Imported (1000 t)",
+            "format": ",.0f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#E7E2DE",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "x": {
+          "field": "used",
+          "type": "quantitative"
+        },
+        "y": {
+          "value": 2
+        },
+        "y2": {
+          "value": 26
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "color": "#A3AEC6",
+        "fontSize": 10,
+        "baseline": "bottom"
+      },
+      "encoding": {
+        "x": {
+          "field": "grown_mid",
+          "type": "quantitative"
+        },
+        "y": {
+          "value": 44
+        },
+        "text": {
+          "value": "grown here"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "color": "#A3AEC6",
+        "fontSize": 10,
+        "baseline": "bottom"
+      },
+      "encoding": {
+        "x": {
+          "field": "gap_mid",
+          "type": "quantitative"
+        },
+        "y": {
+          "value": 44
+        },
+        "text": {
+          "value": "imported"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,317 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Dumbbell plot: kg grown in Australia for every 100 kg used here, 2010 vs 2023",
+  "width": "container",
+  "height": 340,
+  "data": {
+    "url": "../data/clean/fbs_groups.csv",
+    "format": {
+      "parse": {
+        "year": "number",
+        "production": "number",
+        "imports": "number",
+        "exports": "number",
+        "domestic_use": "number",
+        "kg_per_person": "number",
+        "self_sufficiency": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "(datum.year === 2010 || datum.year === 2023) && datum.group !== 'Vegetables'"
+    },
+    {
+      "calculate": "datum.year === 2023 ? datum.self_sufficiency : null",
+      "as": "ssr2023"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "ssr2023",
+          "as": "sortKey"
+        }
+      ],
+      "groupby": [
+        "group"
+      ]
+    },
+    {
+      "calculate": "toString(datum.year)",
+      "as": "Year"
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "values": [
+          {
+            "x": 0,
+            "x2": 100
+          }
+        ]
+      },
+      "mark": {
+        "type": "rect",
+        "color": "#E7E2DE"
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "x2": {
+          "field": "x2"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 100
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#4B5569",
+        "strokeDash": [
+          4,
+          3
+        ]
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 50,
+            "label": "Relies on imports"
+          },
+          {
+            "x": 165,
+            "label": "Surplus: grows more than it uses"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 10,
+        "fontStyle": "italic",
+        "color": "#4B5569",
+        "baseline": "top",
+        "dy": 4
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "y": {
+          "value": 0
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#B9BFCD",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "sort": {
+            "field": "sortKey",
+            "op": "max",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "self_sufficiency",
+          "type": "quantitative",
+          "aggregate": "min"
+        },
+        "x2": {
+          "field": "self_sufficiency",
+          "aggregate": "max"
+        }
+      }
+    },
+    {
+      "params": [
+        {
+          "name": "yearPick",
+          "select": {
+            "type": "point",
+            "fields": [
+              "Year"
+            ]
+          },
+          "bind": "legend"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "size": 130,
+        "stroke": "#ffffff",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "sort": {
+            "field": "sortKey",
+            "op": "max",
+            "order": "descending"
+          },
+          "title": null,
+          "axis": {
+            "labelFontSize": 12,
+            "labelPadding": 8,
+            "ticks": false,
+            "domain": false,
+            "offset": 0
+          }
+        },
+        "x": {
+          "field": "self_sufficiency",
+          "type": "quantitative",
+          "title": "kg grown here per 100 kg used",
+          "scale": {
+            "domain": [
+              0,
+              420
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              0,
+              100,
+              200,
+              300,
+              400
+            ],
+            "grid": true
+          }
+        },
+        "color": {
+          "field": "Year",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "2010",
+              "2023"
+            ],
+            "range": [
+              "#B9BFCD",
+              "#2F3A55"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "title": null,
+            "symbolStrokeWidth": 0
+          }
+        },
+        "opacity": {
+          "condition": {
+            "param": "yearPick",
+            "value": 1
+          },
+          "value": 0.2
+        },
+        "tooltip": [
+          {
+            "field": "group",
+            "type": "nominal",
+            "title": "Food group"
+          },
+          {
+            "field": "Year",
+            "type": "nominal"
+          },
+          {
+            "field": "self_sufficiency",
+            "type": "quantitative",
+            "title": "kg grown per 100 kg used",
+            "format": ".0f"
+          },
+          {
+            "field": "production",
+            "type": "quantitative",
+            "title": "Production ('000 t)",
+            "format": ",.0f"
+          },
+          {
+            "field": "domestic_use",
+            "type": "quantitative",
+            "title": "Used in Australia ('000 t)",
+            "format": ",.0f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "self_sufficiency",
+              "as": "rightEnd"
+            }
+          ],
+          "groupby": [
+            "group"
+          ]
+        },
+        {
+          "filter": "datum.year === 2023"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 10,
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#2F3A55"
+      },
+      "encoding": {
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "sort": {
+            "field": "sortKey",
+            "op": "max",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "rightEnd",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "self_sufficiency",
+          "type": "quantitative",
+          "format": ".0f"
+        }
+      }
+    }
+  ]
+}

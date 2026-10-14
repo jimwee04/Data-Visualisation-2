@@ -1,0 +1,9 @@
+state,region,food_value_m,population,value_per_person,largest_group,lon,lat,label_inside,label_lon,label_lat
+TAS,Tasmania,2214.0,576271,3842.0,Vegetables,146.6,-42.1,0,151.4,-42.4
+WA,Western Australia,11272.0,3011197,3743.0,"Grains, oilseeds & pulses",121.9,-25.8,1,121.9,-25.8
+SA,South Australia,5799.0,1891224,3066.0,"Grains, oilseeds & pulses",135.6,-30.2,1,135.6,-30.2
+QLD,Queensland,16566.0,5620399,2947.0,Meat (livestock sold),144.6,-22.6,1,144.6,-22.6
+VIC,Victoria,18991.0,7003810,2711.0,Meat (livestock sold),144.2,-36.9,0,140.6,-40.4
+NT,Northern Territory,663.0,263283,2516.0,Meat (livestock sold),133.4,-19.6,1,133.4,-19.6
+NSW,New South Wales,17964.0,8538677,2104.0,"Grains, oilseeds & pulses",146.9,-32.4,1,146.9,-32.4
+ACT,Australian Capital Territory,11.0,481258,24.0,Meat (livestock sold),149.1,-35.5,1,149.1,-35.5

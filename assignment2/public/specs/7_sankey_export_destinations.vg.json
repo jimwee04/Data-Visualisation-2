@@ -1,0 +1,415 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Sankey diagram: Australia's food exports by commodity (left) and destination region (right), 2024, US$",
+  "width": "container",
+  "height": 480,
+  "params": [
+    {
+      "name": "familyOf",
+      "expr": "{'Beef': 'Meat', 'Lamb & mutton': 'Meat', 'Wheat': 'Grains', 'Barley': 'Grains', 'Canola': 'Oilseeds & pulses', 'Pulses': 'Oilseeds & pulses', 'Dairy': 'Dairy', 'Wine': 'Wine', 'Other food': 'Other food'}"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          -0.36,
+          1.5
+        ]
+      },
+      "axis": null
+    },
+    "y": {
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          -2600,
+          47765
+        ],
+        "reverse": true,
+        "nice": false,
+        "zero": false
+      },
+      "axis": null
+    }
+  },
+  "layer": [
+    {
+      "description": "Ribbons: each link is sampled at 21 points; its top edge eases from the commodity side to the destination side along an S-curve (smoothstep) and its thickness is its value",
+      "data": {
+        "url": "../data/clean/sankey_links.csv",
+        "format": {
+          "parse": {
+            "usd_m": "number",
+            "src_y": "number",
+            "tgt_y": "number",
+            "pct_of_commodity": "number",
+            "pct_of_region": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "calculate": "familyOf[datum.commodity]",
+          "as": "family"
+        },
+        {
+          "calculate": "sequence(0, 21)",
+          "as": "step"
+        },
+        {
+          "flatten": [
+            "step"
+          ]
+        },
+        {
+          "calculate": "datum.step / 20",
+          "as": "x"
+        },
+        {
+          "calculate": "datum.src_y + (datum.tgt_y - datum.src_y) * datum.x * datum.x * (3 - 2 * datum.x)",
+          "as": "y"
+        },
+        {
+          "calculate": "datum.y + datum.usd_m",
+          "as": "y2"
+        }
+      ],
+      "params": [
+        {
+          "name": "familyPick",
+          "select": {
+            "type": "point",
+            "fields": [
+              "family"
+            ]
+          },
+          "bind": "legend"
+        },
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "commodity"
+            ],
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "area",
+        "interpolate": "monotone"
+      },
+      "encoding": {
+        "x": {
+          "field": "x"
+        },
+        "y": {
+          "field": "y"
+        },
+        "y2": {
+          "field": "y2"
+        },
+        "detail": [
+          {
+            "field": "commodity"
+          },
+          {
+            "field": "region"
+          }
+        ],
+        "color": {
+          "field": "family",
+          "type": "nominal",
+          "title": null,
+          "scale": {
+            "domain": [
+              "Meat",
+              "Oilseeds & pulses",
+              "Grains",
+              "Wine",
+              "Dairy",
+              "Other food"
+            ],
+            "range": [
+              "#C2724F",
+              "#4E9A8B",
+              "#C9A227",
+              "#9B6A9E",
+              "#2F3A55",
+              "#B9BFCD"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "symbolType": "square",
+            "columns": 6
+          }
+        },
+        "opacity": {
+          "condition": [
+            {
+              "param": "hover",
+              "empty": false,
+              "value": 0.85
+            },
+            {
+              "test": "length(data('hover_store')) > 0",
+              "value": 0.08
+            },
+            {
+              "param": "familyPick",
+              "value": 0.55
+            }
+          ],
+          "value": 0.08
+        },
+        "tooltip": [
+          {
+            "field": "commodity",
+            "type": "nominal",
+            "title": "Food"
+          },
+          {
+            "field": "region",
+            "type": "nominal",
+            "title": "Sold to"
+          },
+          {
+            "field": "usd_m",
+            "type": "quantitative",
+            "title": "Value (US$ million)",
+            "format": ",.0f"
+          },
+          {
+            "field": "pct_of_commodity",
+            "type": "quantitative",
+            "title": "% of this food's exports",
+            "format": ".0f"
+          },
+          {
+            "field": "pct_of_region",
+            "type": "quantitative",
+            "title": "% of what this region buys from us",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "description": "Nodes: commodities on the left (coloured by food family), destinations on the right (neutral)",
+      "data": {
+        "url": "../data/clean/sankey_nodes.csv",
+        "format": {
+          "parse": {
+            "usd_m": "number",
+            "y": "number",
+            "y2": "number",
+            "share": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "calculate": "datum.side === 'Commodity' ? familyOf[datum.node] : null",
+          "as": "family"
+        },
+        {
+          "calculate": "datum.side === 'Commodity' ? -0.03 : 1",
+          "as": "x"
+        },
+        {
+          "calculate": "datum.x + 0.03",
+          "as": "x2"
+        },
+        {
+          "calculate": "datum.node + '  US$' + format(datum.usd_m / 1000, '.1f') + 'b'",
+          "as": "label"
+        },
+        {
+          "calculate": "(datum.y + datum.y2) / 2",
+          "as": "ymid"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "rect",
+            "cornerRadius": 2
+          },
+          "encoding": {
+            "x": {
+              "field": "x"
+            },
+            "x2": {
+              "field": "x2"
+            },
+            "y": {
+              "field": "y"
+            },
+            "y2": {
+              "field": "y2"
+            },
+            "color": {
+              "condition": {
+                "test": "datum.side === 'Destination'",
+                "value": "#5C6B8A"
+              },
+              "field": "family",
+              "type": "nominal"
+            },
+            "tooltip": [
+              {
+                "field": "node",
+                "type": "nominal",
+                "title": "Group"
+              },
+              {
+                "field": "usd_m",
+                "type": "quantitative",
+                "title": "Value (US$ million)",
+                "format": ",.0f"
+              },
+              {
+                "field": "share",
+                "type": "quantitative",
+                "title": "% of all food exports",
+                "format": ".0f"
+              }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.side === 'Commodity'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "baseline": "middle",
+            "dx": -8,
+            "fontSize": 11,
+            "fontWeight": 600,
+            "color": "#2F3A55"
+          },
+          "encoding": {
+            "x": {
+              "field": "x"
+            },
+            "y": {
+              "field": "ymid"
+            },
+            "text": {
+              "field": "label"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.side === 'Destination'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "dx": 8,
+            "fontSize": 11,
+            "fontWeight": 600,
+            "color": "#2F3A55"
+          },
+          "encoding": {
+            "x": {
+              "field": "x2"
+            },
+            "y": {
+              "field": "ymid"
+            },
+            "text": {
+              "field": "label"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Column headings",
+      "data": {
+        "values": [
+          {
+            "x": -0.03,
+            "t": "WHAT WE SELL",
+            "align": "right"
+          },
+          {
+            "x": 1.03,
+            "t": "WHO BUYS IT",
+            "align": "left"
+          }
+        ]
+      },
+      "layer": [
+        {
+          "transform": [
+            {
+              "filter": "datum.align === 'right'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "baseline": "top",
+            "fontSize": 11,
+            "fontWeight": 700,
+            "letterSpacing": 1,
+            "color": "#6E6F73"
+          },
+          "encoding": {
+            "x": {
+              "field": "x"
+            },
+            "y": {
+              "datum": -2600
+            },
+            "text": {
+              "field": "t"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.align === 'left'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "top",
+            "fontSize": 11,
+            "fontWeight": 700,
+            "letterSpacing": 1,
+            "color": "#6E6F73"
+          },
+          "encoding": {
+            "x": {
+              "field": "x"
+            },
+            "y": {
+              "datum": -2600
+            },
+            "text": {
+              "field": "t"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

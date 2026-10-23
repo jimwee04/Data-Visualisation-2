@@ -1,0 +1,19 @@
+side,node,usd_m,y,y2,share
+Commodity,Beef,9992.8,0.0,9992.8,25.9
+Commodity,Wheat,5586.1,11148.4,16734.5,14.5
+Commodity,Lamb & mutton,3745.9,17890.1,21636.1,9.7
+Commodity,Canola,3037.8,22791.7,25829.5,7.9
+Commodity,Dairy,2254.4,26985.1,29239.5,5.9
+Commodity,Pulses,1858.4,30395.1,32253.5,4.8
+Commodity,Wine,1749.9,33409.1,35159.0,4.5
+Commodity,Barley,1654.6,36314.6,37969.2,4.3
+Commodity,Other food,8639.7,39124.7,47764.5,22.4
+Destination,North America,5501.3,0.0,5501.3,14.3
+Destination,"Japan, Korea & Taiwan",6748.0,6656.9,13404.9,17.5
+Destination,Middle East & North Africa,3362.0,14560.5,17922.5,8.7
+Destination,South-East Asia,7225.4,19078.0,26303.5,18.8
+Destination,Europe,2596.6,27459.1,30055.7,6.7
+Destination,China,8245.1,31211.3,39456.4,21.4
+Destination,South Asia,2081.1,40612.0,42693.1,5.4
+Destination,NZ & Pacific,2240.0,43848.6,46088.6,5.8
+Destination,Rest of world,520.2,47244.2,47764.5,1.4

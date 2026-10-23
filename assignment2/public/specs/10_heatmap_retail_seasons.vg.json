@@ -1,0 +1,237 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Calendar heatmap: each month's supermarket sales vs that financial year's monthly average, by food group, Jul 2018 - Jun 2024",
+  "data": {
+    "url": "../data/clean/retail_monthly.csv",
+    "format": {
+      "parse": {
+        "month": "date:'%Y-%m'",
+        "grams_per_day": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "month(datum.month) >= 6 ? year(datum.month) : year(datum.month) - 1",
+      "as": "fyStart"
+    },
+    {
+      "calculate": "datum.fyStart + '-' + slice(toString(datum.fyStart + 1), 2)",
+      "as": "fy"
+    },
+    {
+      "calculate": "timeFormat(datum.month, '%b')",
+      "as": "mon"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "mean",
+          "field": "grams_per_day",
+          "as": "fyAverage"
+        }
+      ],
+      "groupby": [
+        "group",
+        "fy"
+      ]
+    },
+    {
+      "calculate": "100 * (datum.grams_per_day / datum.fyAverage - 1)",
+      "as": "pct"
+    },
+    {
+      "calculate": "abs(datum.pct) >= 10 ? (datum.pct > 0 ? '+' : '') + format(datum.pct, '.0f') : ''",
+      "as": "label"
+    }
+  ],
+  "facet": {
+    "row": {
+      "field": "group",
+      "type": "nominal",
+      "sort": [
+        "Fruit",
+        "Cereals (bread, flour, pasta)",
+        "Vegetables",
+        "Meat & poultry",
+        "Milk products"
+      ],
+      "title": null,
+      "header": {
+        "labelAngle": 0,
+        "labelAlign": "left",
+        "labelAnchor": "start",
+        "labelOrient": "top",
+        "labelFontSize": 13,
+        "labelFontWeight": 600,
+        "labelColor": "#2F3A55",
+        "labelPadding": 6
+      }
+    }
+  },
+  "spacing": 14,
+  "spec": {
+    "width": {
+      "step": 58
+    },
+    "height": {
+      "step": 19
+    },
+    "encoding": {
+      "x": {
+        "field": "mon",
+        "type": "ordinal",
+        "title": null,
+        "sort": [
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun"
+        ],
+        "axis": {
+          "orient": "bottom",
+          "labelAngle": 0,
+          "labelFontSize": 11
+        }
+      },
+      "y": {
+        "field": "fy",
+        "type": "ordinal",
+        "title": null,
+        "axis": {
+          "labelFontSize": 10
+        }
+      }
+    },
+    "layer": [
+      {
+        "params": [
+          {
+            "name": "monthHover",
+            "select": {
+              "type": "point",
+              "fields": [
+                "mon"
+              ],
+              "on": "pointerover",
+              "clear": "pointerout"
+            }
+          }
+        ],
+        "mark": {
+          "type": "rect",
+          "cornerRadius": 3,
+          "strokeWidth": 2
+        },
+        "encoding": {
+          "color": {
+            "field": "pct",
+            "type": "quantitative",
+            "title": "Sales vs that year's average",
+            "scale": {
+              "domain": [
+                -15,
+                0,
+                15
+              ],
+              "range": [
+                "#5C6B8A",
+                "#F5F6F3",
+                "#C2724F"
+              ],
+              "clamp": true,
+              "interpolate": "lab"
+            },
+            "legend": {
+              "orient": "top",
+              "direction": "horizontal",
+              "gradientLength": 220,
+              "values": [
+                -15,
+                -10,
+                -5,
+                0,
+                5,
+                10,
+                15
+              ],
+              "labelExpr": "(datum.value > 0 ? '+' : '') + datum.value + '%' + (datum.value === 15 ? ' or more' : datum.value === -15 ? ' or less' : '')",
+              "titleLimit": 300
+            }
+          },
+          "stroke": {
+            "condition": {
+              "param": "monthHover",
+              "empty": false,
+              "value": "#2F3A55"
+            },
+            "value": "#ffffff"
+          },
+          "tooltip": [
+            {
+              "field": "group",
+              "type": "nominal",
+              "title": "Food group"
+            },
+            {
+              "field": "month",
+              "type": "temporal",
+              "title": "Month",
+              "format": "%B %Y"
+            },
+            {
+              "field": "grams_per_day",
+              "type": "quantitative",
+              "title": "Bought (g per person per day)",
+              "format": ".1f"
+            },
+            {
+              "field": "fyAverage",
+              "type": "quantitative",
+              "title": "That year's monthly average (g)",
+              "format": ".1f"
+            },
+            {
+              "field": "pct",
+              "type": "quantitative",
+              "title": "Difference (%)",
+              "format": "+.1f"
+            }
+          ]
+        }
+      },
+      {
+        "mark": {
+          "type": "text",
+          "fontSize": 10,
+          "fontWeight": 600
+        },
+        "encoding": {
+          "text": {
+            "field": "label"
+          },
+          "color": {
+            "condition": {
+              "test": "abs(datum.pct) >= 14",
+              "value": "#ffffff"
+            },
+            "value": "#2F3A55"
+          }
+        }
+      }
+    ]
+  },
+  "resolve": {
+    "axis": {
+      "x": "independent"
+    }
+  }
+}

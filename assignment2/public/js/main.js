@@ -43,10 +43,13 @@ const charts = {
   fig2: "specs/2_symbol_map_food_source.vg.json",
   fig3: "specs/3_dumbbell_self_sufficiency.vg.json",
   fig4: "specs/4_diverging_supply_balance.vg.json",
-  fig5: "specs/5_flow_map_trade.vg.json",
-  fig6: "specs/6_line_per_person_trend.vg.json",
-  fig7: "specs/7_line_retail_monthly.vg.json",
-  fig8: "specs/8_small_multiples_supply_vs_sales.vg.json"
+  fig5: "specs/5_connected_scatter_dairy_buffer.vg.json",
+  fig6: "specs/6_flow_map_trade.vg.json",
+  fig7: "specs/7_sankey_export_destinations.vg.json",
+  fig8: "specs/8_line_per_person_trend.vg.json",
+  fig9: "specs/9_line_retail_monthly.vg.json",
+  fig10: "specs/10_heatmap_retail_seasons.vg.json",
+  fig11: "specs/11_small_multiples_supply_vs_sales.vg.json"
 };
 
 const kpis = {

@@ -161,6 +161,16 @@
       </figure>
     </div>
 
+    <div class="fig-row">
+      <figure class="card fig-a">
+        <p class="fig-num">Figure 5</p>
+        <h3><span class="fig-q">Is dairy still a surplus food?</span> Only just: the buffer has shrunk from 18 kg to 3 kg in every 100</h3>
+        <p class="fig-sub">Milk produced in Australia vs milk used here, one dot per year, 2010–2023</p>
+        <div id="fig5" class="chart"></div>
+        <figcaption>Follow the path from light (2010) to dark (2023). Dashed lines join every point that grows the same amount per 100 kg used; the closer the path gets to the solid 100 line, the thinner the safety margin. Production climbed to a 2016 peak, then fell back while use kept rising and imports grew 70% (1.0 to 1.7 Mt). Hover a dot for imports and exports. Dairy products are counted as their liquid-milk equivalent.<br><span class="src">Source: FAOSTAT Food Balances (2010–2023), item "Milk – Excluding Butter".</span></figcaption>
+      </figure>
+    </div>
+
     <div class="takeaway">
       <p><strong>What it means.</strong> Cereals, pulses, sugar and meat are in deep surplus, and most of it is shipped overseas. Seafood is the clear exception, with two-thirds of supply imported. Dairy is the staple losing its buffer: milk production peaked at 10.0 Mt in 2016 and fell to 8.5 Mt in 2023 while imports rose 70%, pushing it from 118 to just 103 kg grown per 100 kg used.</p>
       <p class="pull">We grow 3&frac12; times the grain we use, but only about 1 kg in every 3 kg of seafood we use is caught or farmed here.</p>
@@ -177,16 +187,26 @@
 
     <div class="fig-row">
       <figure class="card fig-a">
-        <p class="fig-num">Figure 5</p>
+        <p class="fig-num">Figure 6</p>
         <h3><span class="fig-q">What do we trade, and with whom?</span> Raw commodities out to Asia; processed food in, led by Europe</h3>
-        <p class="fig-sub">Australia's 10 largest food export markets and import sources by value, 2024. Showing: <strong data-showing="fig5"></strong>.</p>
-        <div id="fig5" class="chart chart-world"></div>
+        <p class="fig-sub">Australia's 10 largest food export markets and import sources by value, 2024. Showing: <strong data-showing="fig6"></strong>.</p>
+        <div id="fig6" class="chart chart-world"></div>
         <figcaption>Line width is proportional to trade value (US$); arrows show the direction of trade. Europe's 38 trading countries share one corridor, so they are combined into a single flow. Labels give each partner's share of Australia's total; hover a line or dot for the largest item traded. Food only: wool, cotton, hides, tobacco and animal feed are excluded. Fish and seafood are not covered by this dataset.<br><span class="src">Source: FAOSTAT Detailed Trade Matrix (reporter: Australia, 190 partners, 2024); Natural Earth.</span></figcaption>
       </figure>
-      <div class="icon-filter fig-bar" role="radiogroup" aria-label="Trade direction" data-chart="fig5" data-param="flow">
+      <div class="icon-filter fig-bar" role="radiogroup" aria-label="Trade direction" data-chart="fig6" data-param="flow">
         <button type="button" role="radio" data-value="Exports" aria-label="Exports (Australia to partner)" title="Exports (Australia to partner)"><svg aria-hidden="true"><use href="#i-export"/></svg></button>
         <button type="button" role="radio" data-value="Imports" aria-label="Imports (partner to Australia)" title="Imports (partner to Australia)"><svg aria-hidden="true"><use href="#i-import"/></svg></button>
       </div>
+    </div>
+
+    <div class="fig-row">
+      <figure class="card fig-a">
+        <p class="fig-num">Figure 7</p>
+        <h3><span class="fig-q">Which foods go where?</span> Barley to China, beef to America and North Asia, pulses to South Asia</h3>
+        <p class="fig-sub">Australia's food exports by product (left) and destination region (right), 2024, US$</p>
+        <div id="fig7" class="chart chart-sankey"></div>
+        <figcaption>Each band's thickness is proportional to its value. Hover a band to follow one food to every region that buys it; click a food family in the legend to isolate it. 74% of barley goes to China, 69% of pulses to South Asia, 43% of wheat to South-East Asia, and half of canola to Europe. "Other food" includes sorghum, almonds, sugar, live cattle and processed foods.<br><span class="src">Source: FAOSTAT Detailed Trade Matrix (reporter: Australia, 190 partners, 2024).</span></figcaption>
+      </figure>
     </div>
 
     <div class="takeaway">
@@ -205,10 +225,10 @@
 
     <div class="fig-row">
       <figure class="card fig-a">
-        <p class="fig-num">Figure 6</p>
+        <p class="fig-num">Figure 8</p>
         <h3><span class="fig-q">How has the food on our plates changed?</span> Chicken up 14%, beef down 30%, fruit down 16%</h3>
         <p class="fig-sub">Food supply per person, indexed so that 2010 = 100</p>
-        <div id="fig6" class="chart"></div>
+        <div id="fig8" class="chart"></div>
         <figcaption>Each line is scaled to its own 2010 level so foods of very different weights can share one axis; hover for kilograms per person. Click a food in the legend to highlight it.<br><span class="src">Source: FAOSTAT Food Balances (2010–2023).</span></figcaption>
       </figure>
     </div>
@@ -229,11 +249,21 @@
 
     <div class="fig-row">
       <figure class="card fig-a">
-        <p class="fig-num">Figure 7</p>
+        <p class="fig-num">Figure 9</p>
         <h3><span class="fig-q">How fast do shocks reach the trolley?</span> Within weeks: flour and pasta sales jumped 45% in March 2020</h3>
         <p class="fig-sub">Supermarket food sales, grams per person per day, by month, July 2018 – June 2024</p>
-        <div id="fig7" class="chart"></div>
+        <div id="fig9" class="chart"></div>
         <figcaption>Hover anywhere on the chart to compare all groups in a month. Click a group in the legend to highlight it.<br><span class="src">Source: ABS Apparent Consumption of Selected Foodstuffs, Australia, 2023-24 (Table 1.2, experimental).</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="fig-row">
+      <figure class="card fig-a">
+        <p class="fig-num">Figure 10</p>
+        <h3><span class="fig-q">Is there a rhythm to what we buy?</span> Fruit follows the summer, meat peaks every December, and March 2020 broke every pattern</h3>
+        <p class="fig-sub">Each month's supermarket sales compared with that financial year's monthly average, by food group</p>
+        <div id="fig10" class="chart chart-facet"></div>
+        <figcaption>Read across a row for one year, down a column for the same month in different years. Orange months sold above that year's average, blue months below; numbers mark differences of 10% or more. Comparing within each year removes long-term trends, so only seasons and shocks remain. Hover a month to outline it in every food group.<br><span class="src">Source: ABS Apparent Consumption of Selected Foodstuffs, Australia, 2023-24 (Table 1.2, experimental).</span></figcaption>
       </figure>
     </div>
 
@@ -253,10 +283,10 @@
 
     <div class="fig-row">
       <figure class="card fig-a">
-        <p class="fig-num">Figure 8</p>
+        <p class="fig-num">Figure 11</p>
         <h3><span class="fig-q">Does more fruit available mean more fruit bought?</span> No: supply recovered, but supermarket sales fell</h3>
         <p class="fig-sub">FAO food supply vs ABS supermarket sales, each indexed so that its first year = 100</p>
-        <div id="fig8" class="chart chart-facet"></div>
+        <div id="fig11" class="chart chart-facet"></div>
         <figcaption>FAO calendar years 2019–2023 are aligned with ABS financial years 2018-19 to 2022-23. Hover a point for the original value and unit. Click a source in the legend to isolate it.<br><span class="src">Sources: FAOSTAT Food Balances; ABS Apparent Consumption of Selected Foodstuffs 2023-24 (Table 1.1).</span></figcaption>
       </figure>
     </div>

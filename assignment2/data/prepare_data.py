@@ -253,6 +253,63 @@ save(by[['flow', 'rank', 'partner', 'm49', 'lon', 'lat', 'usd_m', 'share', 'top_
      'trade_partners.csv')
 print('trade totals US$bn:', (tr.groupby('flow').Value.sum() / 1e6).round(1).to_dict())
 
+# ---------------------------------------------------------------- Chart 7: Sankey, export commodity -> destination (2024)
+# Python decides the node order and where each ribbon joins its two nodes; the spec draws the curves.
+COMMODITY = [  # (label, item regex); first match wins, everything else is "Other food"
+    ('Beef', r'^(?:Meat|Edible offal) of cattle'), ('Wheat', r'^Wheat'),
+    ('Lamb & mutton', r'^(?:Meat|Edible offal) of (?:sheep|goat)'), ('Canola', r'^Rape or colza seed'),
+    ('Dairy', r'milk|cheese|^Whey|^Yoghurt|^Ice cream'),
+    ('Pulses', r'^(?:Lentils|Chick peas|Peas|Beans|Broad beans|Cow peas|Pigeon peas|Lupins)'),
+    ('Wine', r'^Wine$'), ('Barley', r'^Barley$')]
+REGION = {  # destination: M49 codes (Europe reuses the flow-map set above)
+    'China': {'156', '344', '446'},
+    'Japan, Korea & Taiwan': {'392', '410', '158'},
+    'South-East Asia': {'360', '458', '608', '702', '764', '704', '104', '116', '418', '096', '626'},
+    'North America': {'840', '124', '484'},
+    'South Asia': {'356', '050', '586', '144', '524', '462', '064', '004'},
+    'Middle East & North Africa': {'784', '682', '887', '634', '414', '512', '048', '368', '364', '400', '422',
+                                   '376', '792', '818', '012', '504', '788', '434', '760', '275'},
+    'Europe': EUROPE,
+    'NZ & Pacific': {'554', '598', '242', '540', '258', '090', '548', '882', '776', '296', '583', '584', '520',
+                     '798', '570', '184', '316', '580', '876'}}
+ex = tr[tr.flow == 'Exports'].copy()
+ex['commodity'] = 'Other food'
+for label, pat in reversed(COMMODITY):
+    ex.loc[ex.Item.str.contains(pat, case=False), 'commodity'] = label
+ex['region'] = ex.m49.map({c: r for r, codes in REGION.items() for c in codes}).fillna('Rest of world')
+lk = ex.groupby(['commodity', 'region']).Value.sum().div(1e3).reset_index(name='usd_m')
+
+# Commodities top to bottom by value ("Other food" last); regions by the average position of the
+# commodities they buy, so ribbons cross as little as possible ("Rest of world" last).
+c_tot = lk.groupby('commodity').usd_m.sum().sort_values(ascending=False)
+c_order = [c for c in c_tot.index if c != 'Other food'] + ['Other food']
+lk['c_rank'] = lk.commodity.map({c: i for i, c in enumerate(c_order)})
+bary = (lk.c_rank * lk.usd_m).groupby(lk.region).sum() / lk.groupby('region').usd_m.sum()
+r_order = [r for r in bary.sort_values().index if r != 'Rest of world'] + ['Rest of world']
+lk['r_rank'] = lk.region.map({r: i for i, r in enumerate(r_order)})
+
+GAP = 0.03 * lk.usd_m.sum()  # white space between nodes, in the same units as value (US$m)
+nodes = []
+for side, col, order in [('Commodity', 'commodity', c_order), ('Destination', 'region', r_order)]:
+    y = 0
+    for name in order:
+        v = lk.loc[lk[col] == name, 'usd_m'].sum()
+        nodes.append({'side': side, 'node': name, 'usd_m': v, 'y': y, 'y2': y + v,
+                      'share': 100 * v / lk.usd_m.sum()})
+        y += v + GAP
+nodes = pd.DataFrame(nodes)
+top = nodes.set_index(['side', 'node']).y
+# Each ribbon starts where the previous one in its node ended: stacked in destination order on the
+# left, and in commodity order on the right.
+lk = lk.sort_values(['c_rank', 'r_rank'])
+lk['src_y'] = lk.commodity.map(top['Commodity']) + lk.groupby('commodity').usd_m.cumsum() - lk.usd_m
+lk = lk.sort_values(['r_rank', 'c_rank'])
+lk['tgt_y'] = lk.region.map(top['Destination']) + lk.groupby('region').usd_m.cumsum() - lk.usd_m
+lk['pct_of_commodity'] = 100 * lk.usd_m / lk.commodity.map(c_tot)
+lk['pct_of_region'] = 100 * lk.usd_m / lk.groupby('region').usd_m.transform('sum')
+save(lk.drop(columns=['c_rank', 'r_rank']).sort_values(['commodity', 'region']).round(1), 'sankey_links.csv')
+save(nodes.round(1), 'sankey_nodes.csv')
+
 # ---------------------------------------------------------------- map geometry
 for f in ['australia.json', 'world-atlas.json']:
     shutil.copy(os.path.join(RAW, f), os.path.join(OUT, f))

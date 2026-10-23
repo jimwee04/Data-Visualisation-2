@@ -1,0 +1,394 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Box plot with jittered points: month-to-month change in supermarket food sales by food group, Aug 2018 - Jun 2024, with the March-April 2020 shock highlighted",
+  "width": "container",
+  "height": {
+    "step": 58
+  },
+  "data": {
+    "url": "../data/clean/retail_monthly.csv",
+    "format": {
+      "parse": {
+        "month": "date:'%Y-%m'",
+        "grams_per_day": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "window": [
+        {
+          "op": "lag",
+          "field": "grams_per_day",
+          "as": "prev"
+        },
+        {
+          "op": "row_number",
+          "as": "rn"
+        }
+      ],
+      "groupby": [
+        "group"
+      ],
+      "sort": [
+        {
+          "field": "month",
+          "order": "ascending"
+        }
+      ]
+    },
+    {
+      "filter": "datum.prev != null"
+    },
+    {
+      "calculate": "100 * (datum.grams_per_day / datum.prev - 1)",
+      "as": "pct"
+    },
+    {
+      "calculate": "timeFormat(datum.month, '%Y-%m')",
+      "as": "ym"
+    },
+    {
+      "calculate": "datum.ym === '2020-03' ? 'March 2020: panic buying' : datum.ym === '2020-04' ? 'April 2020: eating the stockpile' : 'Every other month'",
+      "as": "when"
+    },
+    {
+      "calculate": "datum.when === 'Every other month' ? ((datum.rn * 7919) % 101) / 100 - 0.5 : 0",
+      "as": "jitter"
+    },
+    {
+      "calculate": "(datum.pct > 0 ? '+' : '−') + format(abs(datum.pct), '.0f') + '%'",
+      "as": "label"
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "values": [
+          {
+            "x": 0
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#4B5569",
+        "strokeDash": [
+          4,
+          3
+        ]
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "boxplot",
+        "extent": 1.5,
+        "outliers": false,
+        "size": 30,
+        "box": {
+          "color": "#E1E5ED",
+          "stroke": "#5C6B8A",
+          "strokeWidth": 1
+        },
+        "median": {
+          "color": "#2F3A55",
+          "strokeWidth": 2
+        },
+        "rule": {
+          "color": "#5C6B8A"
+        },
+        "ticks": {
+          "color": "#5C6B8A",
+          "size": 12
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative",
+          "title": "Change in sales from the month before (%)",
+          "scale": {
+            "domain": [
+              -42,
+              50
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              -30,
+              -20,
+              -10,
+              0,
+              10,
+              20,
+              30,
+              40,
+              50
+            ],
+            "labelExpr": "(datum.value > 0 ? '+' : '') + datum.value + '%'",
+            "grid": true
+          }
+        },
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Cereals (bread, flour, pasta)",
+            "Vegetables",
+            "Meat & poultry",
+            "Milk products",
+            "Fruit"
+          ],
+          "axis": {
+            "labelFontSize": 12,
+            "labelPadding": 8,
+            "labelLimit": 200
+          }
+        }
+      }
+    },
+    {
+      "params": [
+        {
+          "name": "monthHover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "ym"
+            ],
+            "nearest": true,
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        },
+        {
+          "name": "whenPick",
+          "select": {
+            "type": "point",
+            "fields": [
+              "when"
+            ]
+          },
+          "bind": "legend"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "stroke": "#ffffff"
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative"
+        },
+        "yOffset": {
+          "field": "jitter",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -1,
+              1
+            ]
+          }
+        },
+        "color": {
+          "field": "when",
+          "type": "nominal",
+          "title": null,
+          "scale": {
+            "domain": [
+              "March 2020: panic buying",
+              "April 2020: eating the stockpile",
+              "Every other month"
+            ],
+            "range": [
+              "#C2724F",
+              "#5C6B8A",
+              "#B9BFCD"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "symbolType": "circle",
+            "labelLimit": 260
+          }
+        },
+        "size": {
+          "condition": [
+            {
+              "param": "monthHover",
+              "empty": false,
+              "value": 150
+            },
+            {
+              "test": "datum.when !== 'Every other month'",
+              "value": 110
+            }
+          ],
+          "value": 14
+        },
+        "opacity": {
+          "condition": [
+            {
+              "param": "monthHover",
+              "empty": false,
+              "value": 1
+            },
+            {
+              "param": "whenPick",
+              "value": 0.85
+            }
+          ],
+          "value": 0.1
+        },
+        "tooltip": [
+          {
+            "field": "group",
+            "type": "nominal",
+            "title": "Food group"
+          },
+          {
+            "field": "month",
+            "type": "temporal",
+            "title": "Month",
+            "format": "%B %Y"
+          },
+          {
+            "field": "grams_per_day",
+            "type": "quantitative",
+            "title": "Bought (g per person per day)",
+            "format": ".1f"
+          },
+          {
+            "field": "prev",
+            "type": "quantitative",
+            "title": "Month before (g)",
+            "format": ".1f"
+          },
+          {
+            "field": "pct",
+            "type": "quantitative",
+            "title": "Change (%)",
+            "format": "+.1f"
+          }
+        ],
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Cereals (bread, flour, pasta)",
+            "Vegetables",
+            "Meat & poultry",
+            "Milk products",
+            "Fruit"
+          ],
+          "axis": {
+            "labelFontSize": 12,
+            "labelPadding": 8,
+            "labelLimit": 200
+          }
+        },
+        "strokeWidth": {
+          "condition": {
+            "test": "datum.when !== 'Every other month'",
+            "value": 1.5
+          },
+          "value": 0
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.ym === '2020-03' && abs(datum.pct) >= 5"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 9,
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#C2724F"
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        },
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Cereals (bread, flour, pasta)",
+            "Vegetables",
+            "Meat & poultry",
+            "Milk products",
+            "Fruit"
+          ],
+          "axis": {
+            "labelFontSize": 12,
+            "labelPadding": 8,
+            "labelLimit": 200
+          }
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.ym === '2020-04' && abs(datum.pct) >= 5"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "dx": -9,
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#5C6B8A"
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        },
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Cereals (bread, flour, pasta)",
+            "Vegetables",
+            "Meat & poultry",
+            "Milk products",
+            "Fruit"
+          ],
+          "axis": {
+            "labelFontSize": 12,
+            "labelPadding": 8,
+            "labelLimit": 200
+          }
+        }
+      }
+    }
+  ]
+}

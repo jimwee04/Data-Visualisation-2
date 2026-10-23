@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Connected scatterplot: milk produced vs milk used in Australia each year, 2010-2023, against lines of equal self-sufficiency",
   "width": "container",
-  "height": 400,
+  "height": 460,
   "data": {
     "url": "../data/clean/fbs_groups.csv",
     "format": {

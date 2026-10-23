@@ -42,14 +42,14 @@ const charts = {
   fig1: "specs/1_choropleth_state_value.vg.json",
   fig2: "specs/2_symbol_map_food_source.vg.json",
   fig3: "specs/3_dumbbell_self_sufficiency.vg.json",
-  fig4: "specs/4_diverging_supply_balance.vg.json",
+  fig4: "specs/4_waffle_supply_balance.vg.json",
   fig5: "specs/5_connected_scatter_dairy_buffer.vg.json",
   fig6: "specs/6_flow_map_trade.vg.json",
   fig7: "specs/7_sankey_export_destinations.vg.json",
   fig8: "specs/8_line_per_person_trend.vg.json",
-  fig9: "specs/9_line_retail_monthly.vg.json",
+  fig9: "specs/9_boxplot_retail_shock.vg.json",
   fig10: "specs/10_heatmap_retail_seasons.vg.json",
-  fig11: "specs/11_small_multiples_supply_vs_sales.vg.json"
+  fig11: "specs/11_dumbbell_supply_vs_sales.vg.json"
 };
 
 const kpis = {
@@ -59,10 +59,30 @@ const kpis = {
   kpi4: "specs/kpi_4_state_value.vl.json"
 };
 
+// Faceted charts have fixed cell sizes and can't use the container width,
+// so their cells are sized to fill the card once, before embedding.
+const fitToWidth = {
+  // Waffles of 10 squares with 28px between them and ~32px of chart padding:
+  // as many per row as fit at 13px squares (2 to 6), then squares grow to fill the row.
+  fig4: (spec, w) => {
+    const cols = Math.max(2, Math.min(6, Math.floor((w - 4) / 158)));
+    const square = Math.max(11, Math.min(20, Math.floor((w - 32 - 28 * (cols - 1)) / (cols * 10))));
+    spec.columns = cols;
+    spec.spec.width.step = spec.spec.height.step = square;
+  },
+  // 12 month columns after ~64px of year labels and padding.
+  fig10: (spec, w) => { spec.spec.width.step = Math.max(21, Math.floor((w - 64) / 12)); }
+};
+
 const views = {};
 
-function embed(id, spec, config) {
-  return vegaEmbed("#" + id, spec, { actions: false, renderer: "svg", config })
+function embed(id, url, config) {
+  const fit = fitToWidth[id];
+  const spec = fit
+    ? fetch(url).then((r) => r.json()).then((s) => { fit(s, document.getElementById(id).clientWidth); return s; })
+    : Promise.resolve(url);
+  return spec
+    .then((s) => vegaEmbed("#" + id, s, { actions: false, renderer: "svg", config }))
     .then((result) => {
       views[id] = result.view;
       // Apply any icon choice made while the chart was still loading.
@@ -79,12 +99,10 @@ for (const [id, spec] of Object.entries(charts)) embed(id, spec, theme);
 for (const [id, spec] of Object.entries(kpis)) embed(id, spec, kpiTheme);
 
 // ---------------------------------------------------------------- icon filters
-// Each .icon-filter is a radio group of icon buttons that sets one chart parameter.
+// Each .icon-filter is a radio group of labelled icon buttons that sets one chart parameter.
 // The first button is selected to match the spec's default value.
 document.querySelectorAll(".icon-filter").forEach((group) => {
   const buttons = [...group.querySelectorAll("button")];
-  // The bar has no room for text, so the chosen name is shown in the card's "Showing:" note.
-  const label = document.querySelector(`[data-showing="${group.dataset.chart}"]`);
 
   function select(button, focus) {
     buttons.forEach((b) => {
@@ -92,7 +110,6 @@ document.querySelectorAll(".icon-filter").forEach((group) => {
       b.setAttribute("aria-checked", on);
       b.tabIndex = on ? 0 : -1;
     });
-    if (label) label.textContent = button.getAttribute("aria-label");
     if (focus) button.focus();
     const view = views[group.dataset.chart];
     if (view) view.signal(group.dataset.param, button.dataset.value).runAsync();

@@ -1,0 +1,389 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Dumbbell plot: change since 2019 in FAO food supply per person vs ABS supermarket sales per person, by food. The longer the bar, the more 'available' and 'bought' have split.",
+  "width": "container",
+  "height": {
+    "step": 46
+  },
+  "data": {
+    "url": "../data/clean/supply_vs_sales.csv",
+    "format": {
+      "parse": {
+        "year": "number",
+        "value": "number",
+        "index": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.year === 2019 ? datum.value : null",
+      "as": "v2019"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "v2019",
+          "as": "start"
+        }
+      ],
+      "groupby": [
+        "food",
+        "source"
+      ]
+    },
+    {
+      "filter": "datum.year === 2023"
+    },
+    {
+      "calculate": "datum.index - 100",
+      "as": "change"
+    },
+    {
+      "calculate": "datum.source === 'Supermarket sales (ABS)' ? 'FY 2018-19 to FY 2022-23' : '2019 to 2023'",
+      "as": "period"
+    },
+    {
+      "calculate": "datum.source === 'Food supply (FAO)' ? datum.change : null",
+      "as": "faoChange"
+    },
+    {
+      "calculate": "datum.source === 'Supermarket sales (ABS)' ? datum.change : null",
+      "as": "absChange"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "faoChange",
+          "as": "fao"
+        },
+        {
+          "op": "max",
+          "field": "absChange",
+          "as": "abs"
+        },
+        {
+          "op": "max",
+          "field": "change",
+          "as": "rightEnd"
+        }
+      ],
+      "groupby": [
+        "food"
+      ]
+    },
+    {
+      "calculate": "datum.fao - datum.abs",
+      "as": "gap"
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "values": [
+          {
+            "x": 0
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#4B5569",
+        "strokeDash": [
+          4,
+          3
+        ]
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": -0.6,
+            "t": "← fell since 2019",
+            "align": "right"
+          },
+          {
+            "x": 0.6,
+            "t": "rose since 2019 →",
+            "align": "left"
+          }
+        ]
+      },
+      "layer": [
+        {
+          "transform": [
+            {
+              "filter": "datum.align === 'right'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "baseline": "top",
+            "dy": -16,
+            "fontSize": 10,
+            "fontStyle": "italic",
+            "color": "#4B5569"
+          },
+          "encoding": {
+            "x": {
+              "field": "x",
+              "type": "quantitative"
+            },
+            "y": {
+              "value": 0
+            },
+            "text": {
+              "field": "t"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.align === 'left'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "top",
+            "dy": -16,
+            "fontSize": 10,
+            "fontStyle": "italic",
+            "color": "#4B5569"
+          },
+          "encoding": {
+            "x": {
+              "field": "x",
+              "type": "quantitative"
+            },
+            "y": {
+              "value": 0
+            },
+            "text": {
+              "field": "t"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#B9BFCD",
+        "strokeWidth": 3
+      },
+      "encoding": {
+        "y": {
+          "field": "food",
+          "type": "nominal",
+          "sort": {
+            "field": "gap",
+            "op": "max",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "change",
+          "type": "quantitative",
+          "aggregate": "min"
+        },
+        "x2": {
+          "field": "change",
+          "aggregate": "max"
+        }
+      }
+    },
+    {
+      "params": [
+        {
+          "name": "srcPick",
+          "select": {
+            "type": "point",
+            "fields": [
+              "source"
+            ]
+          },
+          "bind": "legend"
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 140,
+        "stroke": "#ffffff",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "y": {
+          "field": "food",
+          "type": "nominal",
+          "title": null,
+          "sort": {
+            "field": "gap",
+            "op": "max",
+            "order": "descending"
+          },
+          "axis": {
+            "labelFontSize": 12,
+            "labelPadding": 8,
+            "labelLimit": 200
+          }
+        },
+        "x": {
+          "field": "change",
+          "type": "quantitative",
+          "title": "Change per person since 2019 (%)",
+          "scale": {
+            "domain": [
+              -10,
+              20
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              -10,
+              -5,
+              0,
+              5,
+              10,
+              15,
+              20
+            ],
+            "labelExpr": "(datum.value > 0 ? '+' : '') + datum.value + '%'",
+            "grid": true
+          }
+        },
+        "color": {
+          "field": "source",
+          "type": "nominal",
+          "title": null,
+          "scale": {
+            "domain": [
+              "Food supply (FAO)",
+              "Supermarket sales (ABS)"
+            ],
+            "range": [
+              "#2F3A55",
+              "#C2724F"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "labelExpr": "datum.label === 'Food supply (FAO)' ? 'Available: FAO food supply' : 'Bought: ABS supermarket sales'",
+            "labelLimit": 260
+          }
+        },
+        "shape": {
+          "field": "source",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Food supply (FAO)",
+              "Supermarket sales (ABS)"
+            ],
+            "range": [
+              "circle",
+              "square"
+            ]
+          }
+        },
+        "opacity": {
+          "condition": {
+            "param": "srcPick",
+            "value": 1
+          },
+          "value": 0.15
+        },
+        "tooltip": [
+          {
+            "field": "food",
+            "type": "nominal",
+            "title": "Food"
+          },
+          {
+            "field": "source",
+            "type": "nominal",
+            "title": "Source"
+          },
+          {
+            "field": "period",
+            "type": "nominal",
+            "title": "Period"
+          },
+          {
+            "field": "start",
+            "type": "quantitative",
+            "title": "Start value",
+            "format": ".1f"
+          },
+          {
+            "field": "value",
+            "type": "quantitative",
+            "title": "End value",
+            "format": ".1f"
+          },
+          {
+            "field": "unit",
+            "type": "nominal",
+            "title": "Unit"
+          },
+          {
+            "field": "change",
+            "type": "quantitative",
+            "title": "Change (%)",
+            "format": "+.1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.source === 'Food supply (FAO)'"
+        },
+        {
+          "calculate": "format(abs(datum.gap), '.0f') + (round(abs(datum.gap)) === 1 ? ' pt apart' : ' pts apart')",
+          "as": "gapLabel"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 12,
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#2F3A55"
+      },
+      "encoding": {
+        "y": {
+          "field": "food",
+          "type": "nominal",
+          "sort": {
+            "field": "gap",
+            "op": "max",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "rightEnd",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "gapLabel"
+        }
+      }
+    }
+  ]
+}

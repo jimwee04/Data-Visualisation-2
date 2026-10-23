@@ -39,7 +39,7 @@ body {
 }
 
 .wrap {
-  max-width: 1080px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -193,17 +193,35 @@ a:hover { color: var(--slate); }
   font-size: 19px;
   color: var(--text-secondary);
   max-width: var(--measure);
-  margin: 0 0 32px;
+  margin: 0 0 40px;
 }
 
 /* ---------------------------------------------------------------- figures */
+/* Two equal columns. Paired figures take one column each; the rest span both. */
+.fig-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+/* Each card is head / chart / caption. As a subgrid, paired cards share those rows,
+   so their titles, charts and captions start on the same lines. */
 .card {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  row-gap: 16px;
+  align-content: start;
   background: var(--card);
+  border: 1px solid rgba(47, 58, 85, 0.08);
   border-radius: 12px;
-  padding: 24px 24px 20px;
-  margin: 0 0 24px;
+  box-shadow: 0 1px 3px rgba(47, 58, 85, 0.06);
+  padding: 28px 32px 24px;
+  margin: 0;
   min-width: 0;
 }
+.card--full { grid-column: 1 / -1; }
+.fig-head { min-width: 0; container-type: inline-size; }
+.fig-head .icon-filter { margin: 12px 0 0; }
 .fig-num {
   margin: 0;
   font-size: 12px;
@@ -222,85 +240,71 @@ a:hover { color: var(--slate); }
 /* Figure titles read "Question? Answer": the question is quieter, the answer carries the weight */
 .fig-q { color: var(--slate); font-weight: 600; }
 .fig-sub {
-  margin: 0 0 16px;
+  margin: 0;
   font-size: 14px;
   color: var(--text-secondary);
   max-width: var(--measure);
 }
 .chart { width: 100%; min-height: 340px; }
+/* Fixed-size faceted charts sit centred in the card, and scroll sideways only when the card is too narrow */
 .chart-facet { overflow-x: auto; }
+.chart-facet > svg { display: block; margin-inline: auto; }
 figcaption {
-  margin-top: 16px;
-  max-width: var(--measure);
+  align-self: end;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
   font-size: 13px;
   color: var(--text-secondary);
   line-height: 1.5;
 }
+/* Wide cards keep captions to a readable line length */
+.card--full figcaption { padding-right: max(0px, calc(100% - 88ch)); }
 .src { color: var(--text-muted); font-style: italic; }
 
-/* Figure rows: card(s) plus a narrow hotbar column on the right. Every figure gets the column
-   (empty when it has no filters), so all cards share the same width and right edge. */
-.fig-row {
-  --bar: 44px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--bar);
-  grid-template-areas: "a bar";
-  column-gap: 10px;
-  row-gap: 24px;
-  margin: 0 0 24px;
-}
-.fig-row > .card { margin: 0; }
-.fig-a { grid-area: a; }
-.fig-b { grid-area: b; }
-.fig-bar { grid-area: bar; }
-.fig-row--2 { grid-template-areas: "a ." "b bar"; }
-@media (min-width: 1280px) {
-  .fig-row--2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--bar); grid-template-areas: "a b bar"; }
-}
-
-/* Hotbar: a slim vertical pill of icon buttons beside the chart that stays in view while scrolling */
-.icon-filter.fig-bar {
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-self: start;
-  position: sticky;
-  top: 16px;
-  margin: 0;
-  padding: 6px;
-  gap: 4px;
-  background: var(--card);
-  border-radius: 22px;
-  box-shadow: 0 2px 10px rgba(47, 58, 85, 0.08);
-}
-.story.alt .icon-filter.fig-bar { box-shadow: none; }
-
-/* Icon filters: small, evenly spaced icon buttons that replace dropdowns and radio buttons */
+/* Icon filters: a segmented control across the full card width that replaces dropdowns and radio buttons.
+   Each button is an icon over its name, plus a short note when the name alone doesn't say what it covers. */
 .icon-filter {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   gap: 4px;
-  margin: 0 0 10px;
+  padding: 4px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+/* In a narrow card, a long group (5+ buttons) drops to two even rows of four */
+@container (max-width: 470px) {
+  .icon-filter:has(> :nth-child(5)) { grid-auto-flow: row; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 .icon-filter button {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 2px;
   border: 0;
-  border-radius: 50%;
+  border-radius: 8px;
   background: transparent;
   color: var(--slate);
+  font: inherit;
+  line-height: 1.2;
+  text-align: center;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
-.icon-filter button:hover { background: var(--paper); color: var(--ink); }
+.filter-name { font-size: 12px; font-weight: 600; color: var(--ink); }
+.filter-note { font-size: 11px; color: var(--text-muted); }
+.icon-filter button:hover { background: var(--card); color: var(--ink); }
 .icon-filter button[aria-checked="true"] { background: var(--ink); color: #ffffff; }
+.icon-filter button[aria-checked="true"] .filter-name { color: #ffffff; }
+.icon-filter button[aria-checked="true"] .filter-note { color: var(--slate-tint); }
 .icon-filter button:focus-visible { outline: 2px solid var(--slate); outline-offset: 2px; }
 .icon-filter svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.6;
@@ -330,16 +334,23 @@ figcaption {
 .vega-bind label { margin-right: 10px; }
 
 /* ---------------------------------------------------------------- takeaways */
+/* A band under the figures, on the same two columns: the interpretation left, the pull quote right */
 .takeaway {
-  max-width: var(--measure);
-  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: 2px solid var(--ink);
 }
-.takeaway p { margin: 0 0 14px; }
+.takeaway p { margin: 0; max-width: var(--measure); }
 .pull {
-  margin-top: 22px;
-  font-size: 22px;
+  align-self: start;
+  padding-left: 24px;
+  border-left: 4px solid var(--slate);
+  font-size: 24px;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.35;
   color: var(--text-primary);
 }
 
@@ -348,22 +359,32 @@ figcaption {
 .conclusion h2 { color: var(--paper); }
 .conclusion .stage-tag { color: var(--slate-tint); }
 .conclusion .stage-count { color: var(--stone); }
+/* Three verdicts in three equal columns */
 .summary {
   list-style: none;
   padding: 0;
-  margin: 24px 0 32px;
+  margin: 32px 0 40px;
   display: grid;
-  gap: 18px;
-  max-width: var(--measure);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
 }
-.summary li { display: flex; gap: 14px; align-items: flex-start; font-size: 18px; }
+.summary li {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  border-radius: 12px;
+  background: rgba(245, 246, 243, 0.07);
+  font-size: 17px;
+}
 .summary .dot {
-  flex: 0 0 14px;
+  width: 14px;
   height: 14px;
   border-radius: 50%;
-  margin-top: 7px;
 }
 .cta {
+  padding-top: 28px;
+  border-top: 1px solid rgba(245, 246, 243, 0.2);
   font-size: 22px;
   font-weight: 600;
   color: var(--stone);
@@ -378,7 +399,7 @@ figcaption {
 }
 .about h2 { font-family: var(--display); font-size: 40px; font-weight: 800; line-height: 1; color: var(--text-primary); margin: 0 0 20px; }
 .about h4 { margin: 0 0 8px; color: var(--text-primary); font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; }
-.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 40px; }
+.about-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 40px; }
 .about ul { margin: 0; padding-left: 18px; }
 .about li { margin-bottom: 6px; max-width: var(--measure); }
 
@@ -500,10 +521,10 @@ figcaption {
   .rail-text { padding-top: 2px; }
 
   .wrap {
-    --ml: max(calc(var(--rail-w) + 28px), calc((100% - 1080px) / 2));
+    --ml: max(calc(var(--rail-w) + 28px), calc((100% - 1440px) / 2));
     margin-left: var(--ml);
     margin-right: auto;
-    max-width: min(1080px, calc(100% - var(--ml) - 16px));
+    max-width: min(1440px, calc(100% - var(--ml) - 16px));
   }
 }
 
@@ -530,10 +551,12 @@ figcaption {
   .rail-track { top: 17px; height: 2px; }
   .rail-fill { transform-origin: left; transform: scaleX(var(--progress, 0)); }
   .rail-item { align-items: center; gap: 6px; padding: 4px 8px 4px 4px; white-space: nowrap; }
+  /* The track runs behind the labels, so each label gets a backing that stops the line at the words */
+  .rail-text { padding: 0 6px; background: var(--card); }
+  .rail-item:hover .rail-text { background: var(--surface-alt); }
   .rail-dot { flex-basis: 26px; height: 26px; }
   .rail-stage { font-size: 15px; }
   .story { scroll-margin-top: 52px; }
-  .icon-filter.fig-bar { top: 64px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -543,14 +566,7 @@ figcaption {
 
 /* ---------------------------------------------------------------- responsive */
 @media (max-width: 900px) {
-  .stats { grid-template-columns: 1fr 1fr; }
-  .about-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 700px) {
-  .fig-row, .fig-row--2 { grid-template-columns: minmax(0, 1fr); grid-template-areas: "a" "bar" "b"; row-gap: 10px; }
-  .fig-row:not(.fig-row--2) { grid-template-areas: "bar" "a"; }
-  .icon-filter.fig-bar { flex-direction: row; justify-self: start; position: static; }
-  .fig-row:not(:has(.fig-bar)) { row-gap: 0; }
+  .fig-grid, .takeaway, .summary, .about-grid { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 560px) {
   .wrap { padding: 0 16px; }

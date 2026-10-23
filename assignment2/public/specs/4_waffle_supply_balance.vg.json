@@ -1,0 +1,206 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Small-multiple waffle charts: out of every 100 kg of a food group grown or imported, how many were exported, grown and used here, or imported",
+  "params": [
+    {
+      "name": "yr",
+      "value": 2023,
+      "bind": {
+        "input": "range",
+        "min": 2010,
+        "max": 2023,
+        "step": 1,
+        "name": "Year: "
+      }
+    },
+    {
+      "name": "partPick",
+      "select": {
+        "type": "point",
+        "fields": [
+          "part"
+        ]
+      },
+      "bind": "legend"
+    }
+  ],
+  "data": {
+    "url": "../data/clean/fbs_groups.csv",
+    "format": {
+      "parse": {
+        "year": "number",
+        "production": "number",
+        "imports": "number",
+        "exports": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.year === yr && datum.group !== 'Vegetables'"
+    },
+    {
+      "calculate": "datum.production + datum.imports",
+      "as": "handled"
+    },
+    {
+      "calculate": "datum.exports / datum.handled",
+      "as": "exportShare"
+    },
+    {
+      "calculate": "round(100 * datum.exports / datum.handled)",
+      "as": "nExported"
+    },
+    {
+      "calculate": "round(100 * datum.imports / datum.handled)",
+      "as": "nImported"
+    },
+    {
+      "calculate": "100 - datum.nExported - datum.nImported",
+      "as": "nKept"
+    },
+    {
+      "calculate": "datum.group + '|' + (datum.nExported >= datum.nImported ? datum.nExported + '% exported' : datum.nImported + '% imported')",
+      "as": "panel"
+    },
+    {
+      "calculate": "sequence(0, 100)",
+      "as": "cell"
+    },
+    {
+      "flatten": [
+        "cell"
+      ]
+    },
+    {
+      "calculate": "floor(datum.cell / 10)",
+      "as": "col"
+    },
+    {
+      "calculate": "datum.cell % 10",
+      "as": "row"
+    },
+    {
+      "calculate": "datum.cell < datum.nExported ? 'Exported' : datum.cell < datum.nExported + datum.nKept ? 'Grown & used here' : 'Imported'",
+      "as": "part"
+    },
+    {
+      "calculate": "datum.part === 'Exported' ? datum.exports : datum.part === 'Imported' ? datum.imports : datum.production - datum.exports",
+      "as": "kt"
+    },
+    {
+      "calculate": "datum.part === 'Exported' ? datum.nExported : datum.part === 'Imported' ? datum.nImported : datum.nKept",
+      "as": "squares"
+    }
+  ],
+  "facet": {
+    "field": "panel",
+    "type": "nominal",
+    "title": null,
+    "sort": {
+      "field": "exportShare",
+      "op": "max",
+      "order": "descending"
+    },
+    "header": {
+      "labelFontSize": 12,
+      "labelFontWeight": 600,
+      "labelAnchor": "start",
+      "labelColor": "#2F3A55",
+      "labelPadding": 6,
+      "labelLimit": 0,
+      "labelExpr": "split(datum.label, '|')",
+      "labelLineHeight": 15
+    }
+  },
+  "columns": 6,
+  "spacing": {
+    "row": 22,
+    "column": 28
+  },
+  "spec": {
+    "width": {
+      "step": 13
+    },
+    "height": {
+      "step": 13
+    },
+    "mark": {
+      "type": "rect",
+      "cornerRadius": 2,
+      "stroke": "#ffffff",
+      "strokeWidth": 2
+    },
+    "encoding": {
+      "x": {
+        "field": "col",
+        "type": "ordinal",
+        "axis": null
+      },
+      "y": {
+        "field": "row",
+        "type": "ordinal",
+        "axis": null
+      },
+      "color": {
+        "field": "part",
+        "type": "nominal",
+        "title": "Each square = 1 kg in every 100 kg grown or imported",
+        "scale": {
+          "domain": [
+            "Exported",
+            "Grown & used here",
+            "Imported"
+          ],
+          "range": [
+            "#2F3A55",
+            "#A3AEC6",
+            "#C2724F"
+          ]
+        },
+        "legend": {
+          "orient": "top",
+          "direction": "horizontal",
+          "symbolType": "square",
+          "titleLimit": 400
+        }
+      },
+      "opacity": {
+        "condition": {
+          "param": "partPick",
+          "value": 1
+        },
+        "value": 0.15
+      },
+      "tooltip": [
+        {
+          "field": "group",
+          "type": "nominal",
+          "title": "Food group"
+        },
+        {
+          "field": "year",
+          "type": "quantitative",
+          "title": "Year",
+          "format": "d"
+        },
+        {
+          "field": "part",
+          "type": "nominal",
+          "title": "Part of supply"
+        },
+        {
+          "field": "squares",
+          "type": "quantitative",
+          "title": "kg in every 100 kg"
+        },
+        {
+          "field": "kt",
+          "type": "quantitative",
+          "title": "Quantity ('000 t)",
+          "format": ",.0f"
+        }
+      ]
+    }
+  }
+}

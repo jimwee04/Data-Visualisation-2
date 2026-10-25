@@ -8,8 +8,8 @@ const theme = {
   axis: {
     labelColor: "#4B5569",
     titleColor: "#4B5569",
-    labelFontSize: 11,
-    titleFontSize: 12,
+    labelFontSize: 12,
+    titleFontSize: 13,
     titleFontWeight: 500,
     gridColor: "#E7E2DE",
     domain: false,
@@ -62,16 +62,22 @@ const kpis = {
 // Faceted charts have fixed cell sizes and can't use the container width,
 // so their cells are sized to fill the card once, before embedding.
 const fitToWidth = {
-  // Waffles of 10 squares with 28px between them and ~32px of chart padding:
-  // as many per row as fit at 13px squares (2 to 6), then squares grow to fill the row.
+  // Ten waffles of 10 squares with 28px between them and ~32px of chart padding:
+  // five per row when they fit at 13px squares, otherwise two, so rows always split evenly;
+  // then squares grow to fill the row.
   fig4: (spec, w) => {
-    const cols = Math.max(2, Math.min(6, Math.floor((w - 4) / 158)));
+    const cols = Math.floor((w - 4) / 158) >= 5 ? 5 : 2;
     const square = Math.max(11, Math.min(20, Math.floor((w - 32 - 28 * (cols - 1)) / (cols * 10))));
     spec.columns = cols;
     spec.spec.width.step = spec.spec.height.step = square;
   },
   // 12 month columns after ~64px of year labels and padding.
-  fig10: (spec, w) => { spec.spec.width.step = Math.max(21, Math.floor((w - 64) / 12)); }
+  // Full month names need ~66px; narrower columns tilt them instead of abbreviating.
+  fig10: (spec, w) => {
+    const step = Math.max(21, Math.floor((w - 64) / 12));
+    spec.spec.width.step = step;
+    if (step < 66) Object.assign(spec.spec.encoding.x.axis, { labelAngle: -45, labelAlign: "right" });
+  }
 };
 
 const views = {};

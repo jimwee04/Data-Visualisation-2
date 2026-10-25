@@ -100,9 +100,9 @@ for label, (fao, codes) in PAIRS.items():
     a = abs_g.loc[codes].sum()
     for i, yr in enumerate(range(2019, 2024)):
         rows.append({'food': label, 'year': yr, 'source': 'Food supply (FAO)', 'value': fao[yr],
-                     'unit': 'kg/person/yr', 'index': 100 * fao[yr] / fao[2019]})
+                     'unit': 'kg per person per year', 'index': 100 * fao[yr] / fao[2019]})
         rows.append({'food': label, 'year': yr, 'source': 'Supermarket sales (ABS)', 'value': a[FY[i]],
-                     'unit': 'g/person/day', 'index': 100 * a[FY[i]] / a[FY[0]], 'fy': FY[i]})
+                     'unit': 'grams per person per day', 'index': 100 * a[FY[i]] / a[FY[0]], 'fy': FY[i]})
 save(pd.DataFrame(rows).round(1), 'supply_vs_sales.csv')
 
 # ---------------------------------------------------------------- S3-S5 ABS production by state (2024-25)
@@ -214,7 +214,7 @@ PARTNER = {  # m49: (display name, lon, lat)
     '156': ('China', 104.2, 35.9), '840': ('United States', -98.6, 39.8), '392': ('Japan', 138.3, 36.2),
     '410': ('South Korea', 127.8, 36.4), '360': ('Indonesia', 113.9, -0.8), '554': ('New Zealand', 172.5, -41.5),
     '704': ('Vietnam', 106.3, 16.0), '608': ('Philippines', 122.0, 12.9), '356': ('India', 78.9, 21.5),
-    '458': ('Malaysia', 102.0, 4.2), '784': ('UAE', 54.4, 24.0), '702': ('Singapore', 103.8, 1.35),
+    '458': ('Malaysia', 102.0, 4.2), '784': ('United Arab Emirates', 54.4, 24.0), '702': ('Singapore', 103.8, 1.35),
     '764': ('Thailand', 101.0, 15.9), '050': ('Bangladesh', 90.3, 23.7), '158': ('Taiwan', 121.0, 23.7),
     '380': ('Italy', 12.6, 42.8), '250': ('France', 2.2, 46.2), '826': ('United Kingdom', -2.0, 54.0),
     '528': ('Netherlands', 5.3, 52.1), '032': ('Argentina', -63.6, -38.4), '724': ('Spain', -3.7, 40.4),
@@ -242,7 +242,7 @@ by['label_side'] = [SIDE.get((f, p), 'top') for f, p in zip(by.flow, by.partner)
 # node it doesn't connect to, no two flows share a corridor, and flows leave Australia >= 5 degrees apart.
 BEND = {('Exports', 'China'): -0.35, ('Exports', 'United States'): -0.05, ('Exports', 'Japan'): -0.25,
         ('Exports', 'South Korea'): -0.25, ('Exports', 'Indonesia'): 0.05, ('Exports', 'New Zealand'): -0.05,
-        ('Exports', 'Vietnam'): -0.1, ('Exports', 'Philippines'): -0.05, ('Exports', 'UAE'): 0.1,
+        ('Exports', 'Vietnam'): -0.1, ('Exports', 'Philippines'): -0.05, ('Exports', 'United Arab Emirates'): 0.1,
         ('Exports', 'Malaysia'): 0.15,
         ('Imports', 'Europe'): 0.25, ('Imports', 'New Zealand'): -0.05, ('Imports', 'United States'): -0.05,
         ('Imports', 'China'): -0.25, ('Imports', 'Thailand'): -0.2, ('Imports', 'Malaysia'): 0.25,
@@ -270,7 +270,7 @@ REGION = {  # destination: M49 codes (Europe reuses the flow-map set above)
     'Middle East & North Africa': {'784', '682', '887', '634', '414', '512', '048', '368', '364', '400', '422',
                                    '376', '792', '818', '012', '504', '788', '434', '760', '275'},
     'Europe': EUROPE,
-    'NZ & Pacific': {'554', '598', '242', '540', '258', '090', '548', '882', '776', '296', '583', '584', '520',
+    'New Zealand & Pacific': {'554', '598', '242', '540', '258', '090', '548', '882', '776', '296', '583', '584', '520',
                      '798', '570', '184', '316', '580', '876'}}
 ex = tr[tr.flow == 'Exports'].copy()
 ex['commodity'] = 'Other food'

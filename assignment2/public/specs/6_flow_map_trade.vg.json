@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Origin-destination flow map: Australia's 10 largest food export markets and 10 largest import sources (Europe combined) by value, 2024. Each flow is a gentle arc whose width is proportional to value; the arrowhead at its midpoint shows direction.",
+  "description": "Origin-destination flow map: Australia's 10 largest food export markets and 10 largest import sources (Europe combined) by value, 2024. Each flow is a gentle arc whose width is proportional to value; colour shows direction.",
   "width": "container",
   "height": 460,
   "params": [
@@ -184,7 +184,7 @@
                 ],
                 "range": [
                   "#2F3A55",
-                  "#C2724F"
+                  "#b0408e"
                 ]
               },
               "legend": {
@@ -232,71 +232,6 @@
           }
         },
         {
-          "description": "Dart-shaped arrowheads (unambiguous when rotated) at each arc's midpoint. For a quadratic curve the midpoint tangent is parallel to the chord; dx is scaled by cos(latitude) to approximate the projection.",
-          "transform": [
-            {
-              "calculate": "0.25 * datum.auLon + 0.5 * datum.ctrlLon + 0.25 * datum.toLon",
-              "as": "mLon"
-            },
-            {
-              "calculate": "0.25 * datum.auLat + 0.5 * datum.ctrlLat + 0.25 * datum.lat",
-              "as": "mLat"
-            },
-            {
-              "calculate": "atan2(datum.dx * cos(datum.mLat * PI / 180), datum.dy) * 180 / PI + (datum.flow === 'Imports' ? 180 : 0)",
-              "as": "heading"
-            }
-          ],
-          "mark": {
-            "type": "point",
-            "shape": "M0,-1L0.6,0.8L0,0.4L-0.6,0.8Z",
-            "filled": true,
-            "size": 140,
-            "stroke": "#ffffff",
-            "strokeWidth": 1,
-            "opacity": 1
-          },
-          "encoding": {
-            "longitude": {
-              "field": "mLon",
-              "type": "quantitative"
-            },
-            "latitude": {
-              "field": "mLat",
-              "type": "quantitative"
-            },
-            "angle": {
-              "field": "heading",
-              "type": "quantitative",
-              "scale": {
-                "domain": [
-                  0,
-                  360
-                ],
-                "range": [
-                  0,
-                  360
-                ]
-              }
-            },
-            "color": {
-              "field": "flow",
-              "type": "nominal",
-              "scale": {
-                "domain": [
-                  "Exports",
-                  "Imports"
-                ],
-                "range": [
-                  "#2F3A55",
-                  "#C2724F"
-                ]
-              },
-              "legend": null
-            }
-          }
-        },
-        {
           "description": "Partner nodes: uniform small dots, so value is encoded once (by flow width) and nodes never overlap.",
           "mark": {
             "type": "circle",
@@ -324,7 +259,7 @@
                 ],
                 "range": [
                   "#2F3A55",
-                  "#C2724F"
+                  "#b0408e"
                 ]
               },
               "legend": null

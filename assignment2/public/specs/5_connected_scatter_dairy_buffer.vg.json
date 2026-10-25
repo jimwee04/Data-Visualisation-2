@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Connected scatterplot: milk produced vs milk used in Australia each year, 2010-2023, against lines of equal self-sufficiency",
+  "description": "Connected scatterplot: milk produced compared with milk used in Australia each year, 2010-2023, against lines of equal self-sufficiency",
   "width": "container",
   "height": 460,
   "data": {
@@ -158,7 +158,7 @@
             "test": "datum.ratio === 100",
             "value": "#4B5569"
           },
-          "value": "#B9BFCD"
+          "value": "#B4B7BD"
         },
         "strokeDash": {
           "condition": {
@@ -197,7 +197,7 @@
       },
       "mark": {
         "type": "text",
-        "fontSize": 10,
+        "fontSize": 11,
         "fontStyle": "italic",
         "color": "#4B5569",
         "align": "right",
@@ -222,10 +222,11 @@
       "mark": {
         "type": "text",
         "fontSize": 11,
-        "fontWeight": 600,
+        "fontWeight": 400,
         "color": "#4B5569",
         "align": "left",
-        "baseline": "middle"
+        "baseline": "middle",
+        "fontStyle": "italic"
       },
       "encoding": {
         "text": {
@@ -246,10 +247,11 @@
       "mark": {
         "type": "text",
         "fontSize": 11,
-        "fontWeight": 600,
+        "fontWeight": 400,
         "color": "#4B5569",
         "align": "right",
-        "baseline": "middle"
+        "baseline": "middle",
+        "fontStyle": "italic"
       },
       "encoding": {
         "text": {
@@ -261,7 +263,7 @@
       "description": "The year-by-year path",
       "mark": {
         "type": "line",
-        "color": "#A3AEC6",
+        "color": "#C4C6CB",
         "strokeWidth": 2
       },
       "encoding": {
@@ -303,8 +305,8 @@
               2023
             ],
             "range": [
-              "#D5DAE5",
-              "#2F3A55"
+              "#D5D7DB",
+              "#45474C"
             ]
           },
           "legend": {
@@ -337,31 +339,31 @@
           {
             "field": "self_sufficiency",
             "type": "quantitative",
-            "title": "kg grown per 100 kg used",
+            "title": "kg grown for every 100 kg used",
             "format": ".0f"
           },
           {
             "field": "produced",
             "type": "quantitative",
-            "title": "Produced (Mt)",
+            "title": "Produced (million tonnes)",
             "format": ".2f"
           },
           {
             "field": "used",
             "type": "quantitative",
-            "title": "Used in Australia (Mt)",
+            "title": "Used in Australia (million tonnes)",
             "format": ".2f"
           },
           {
             "field": "imports",
             "type": "quantitative",
-            "title": "Imported ('000 t)",
+            "title": "Imported (thousand tonnes)",
             "format": ",.0f"
           },
           {
             "field": "exports",
             "type": "quantitative",
-            "title": "Exported ('000 t)",
+            "title": "Exported (thousand tonnes)",
             "format": ",.0f"
           }
         ]
@@ -373,7 +375,7 @@
           {
             "produced": 9.02,
             "used": 7.55,
-            "t": "2010: 118 kg grown per 100 kg used"
+            "t": "2010: 118 kg grown for every 100 kg used"
           }
         ]
       },
@@ -398,7 +400,7 @@
           {
             "produced": 9.96,
             "used": 9.23,
-            "t": "2016: peak, 10.0 Mt produced"
+            "t": "2016: peak of 10.0 million tonnes produced"
           }
         ]
       },

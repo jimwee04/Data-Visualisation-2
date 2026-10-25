@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Multi-series line chart: food supply per person, indexed to 2010 = 100, 2010-2023",
+  "description": "Multi-series line chart: food supply per person, indexed to 2010 = 100, 2010-2023. Beef, chicken and fruit are highlighted; cereals and milk are grey context lines.",
   "width": "container",
   "height": 360,
   "data": {
@@ -124,6 +124,14 @@
               60,
               130
             ]
+          },
+          "axis": {
+            "values": [
+              60,
+              80,
+              100,
+              120
+            ]
           }
         },
         "color": {
@@ -139,11 +147,11 @@
               "Fruit"
             ],
             "range": [
-              "#2F3A55",
-              "#C2724F",
-              "#4E9A8B",
-              "#C9A227",
-              "#9B6A9E"
+              "#B4B7BD",
+              "#c0392b",
+              "#2a6fb8",
+              "#9A9DA3",
+              "#d97fae"
             ]
           },
           "legend": {
@@ -158,6 +166,9 @@
             "value": 1
           },
           "value": 0.12
+        },
+        "strokeWidth": {
+          "value": 2.25
         }
       }
     },
@@ -180,8 +191,7 @@
         "align": "left",
         "dx": 6,
         "fontSize": 11,
-        "fontWeight": 600,
-        "color": "#2F3A55"
+        "fontWeight": 500
       },
       "encoding": {
         "x": {
@@ -219,6 +229,9 @@
             "value": 1
           },
           "value": 0.15
+        },
+        "color": {
+          "value": "#2F3A55"
         }
       }
     },
@@ -286,31 +299,31 @@
           {
             "field": "Chicken & poultry",
             "type": "quantitative",
-            "title": "Chicken & poultry (kg/person)",
+            "title": "Chicken & poultry (kg per person)",
             "format": ".1f"
           },
           {
             "field": "Beef",
             "type": "quantitative",
-            "title": "Beef (kg/person)",
+            "title": "Beef (kg per person)",
             "format": ".1f"
           },
           {
             "field": "Fruit",
             "type": "quantitative",
-            "title": "Fruit (kg/person)",
+            "title": "Fruit (kg per person)",
             "format": ".1f"
           },
           {
             "field": "Cereals",
             "type": "quantitative",
-            "title": "Cereals (kg/person)",
+            "title": "Cereals (kg per person)",
             "format": ".1f"
           },
           {
             "field": "Milk & dairy",
             "type": "quantitative",
-            "title": "Milk & dairy (kg/person)",
+            "title": "Milk & dairy (kg per person)",
             "format": ".1f"
           }
         ]
@@ -366,22 +379,23 @@
       }
     },
     {
+      "description": "Annotations sit in empty space and are hidden on narrow screens, where that space disappears (the caption and takeaway repeat them).",
       "data": {
         "values": [
           {
             "year": 2019,
-            "y": 74,
-            "t": "Fruit low point: 74 kg per person (2019)"
+            "y": 74.6,
+            "y2": 87.5
           }
         ]
       },
       "mark": {
-        "type": "text",
-        "align": "center",
-        "dy": 14,
-        "fontSize": 10,
-        "fontStyle": "italic",
-        "color": "#4B5569"
+        "type": "rule",
+        "color": "#6E6F73",
+        "strokeWidth": 1,
+        "opacity": {
+          "expr": "width < 560 ? 0 : 1"
+        }
       },
       "encoding": {
         "x": {
@@ -389,7 +403,136 @@
           "type": "quantitative"
         },
         "y": {
-          "datum": 72.4,
+          "field": "y",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        },
+        "y2": {
+          "field": "y2"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 2018.92,
+            "y": 92,
+            "t": "Fruit low point:\n74 kg per person (2019)"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontStyle": "italic",
+        "color": "#4B5569",
+        "lineBreak": "\n",
+        "lineHeight": 14,
+        "align": "right",
+        "baseline": "middle",
+        "opacity": {
+          "expr": "width < 560 ? 0 : 1"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 2010.15,
+            "y": 66,
+            "t": "Beef fell from 38.6 kg to 26.9 kg per person,\nas about 69% of production went to export"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontStyle": "italic",
+        "color": "#4B5569",
+        "lineBreak": "\n",
+        "lineHeight": 14,
+        "align": "left",
+        "baseline": "middle",
+        "opacity": {
+          "expr": "width < 560 ? 0 : 1"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 2010.15,
+            "y": 125,
+            "t": "Chicken rose from 46.5 kg to 53.1 kg per person"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontStyle": "italic",
+        "color": "#4B5569",
+        "lineBreak": "\n",
+        "lineHeight": 14,
+        "align": "left",
+        "baseline": "middle",
+        "opacity": {
+          "expr": "width < 560 ? 0 : 1"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "y",
           "type": "quantitative",
           "scale": {
             "domain": [

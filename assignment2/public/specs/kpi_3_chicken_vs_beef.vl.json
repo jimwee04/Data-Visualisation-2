@@ -1,45 +1,100 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "KPI micro-chart: chicken vs beef food supply per person (kg), 2023.",
+  "description": "KPI micro-chart: chicken compared with beef food supply per person (kg), 2023.",
   "width": "container",
   "height": 44,
   "data": {
     "url": "../data/clean/fbs_per_person.csv",
-    "format": {"parse": {"year": "number", "kg_per_person": "number"}}
+    "format": {
+      "parse": {
+        "year": "number",
+        "kg_per_person": "number"
+      }
+    }
   },
   "transform": [
-    {"filter": "datum.year === 2023 && (datum.food === 'Chicken & poultry' || datum.food === 'Beef')"},
-    {"calculate": "datum.food === 'Beef' ? 'Beef' : 'Chicken'", "as": "meat"},
-    {"calculate": "format(datum.kg_per_person, '.0f') + ' kg'", "as": "label"}
+    {
+      "filter": "datum.year === 2023 && (datum.food === 'Chicken & poultry' || datum.food === 'Beef')"
+    },
+    {
+      "calculate": "datum.food === 'Beef' ? 'Beef' : 'Chicken'",
+      "as": "meat"
+    },
+    {
+      "calculate": "format(datum.kg_per_person, '.0f') + ' kg'",
+      "as": "label"
+    }
   ],
   "encoding": {
     "y": {
       "field": "meat",
       "type": "nominal",
-      "sort": ["Chicken", "Beef"],
-      "axis": {"title": null, "domain": false, "ticks": false, "labelColor": "#E7E2DE", "labelFontSize": 11, "labelPadding": 6}
+      "sort": [
+        "Chicken",
+        "Beef"
+      ],
+      "axis": {
+        "title": null,
+        "domain": false,
+        "ticks": false,
+        "labelColor": "#E7E2DE",
+        "labelFontSize": 11,
+        "labelPadding": 6
+      }
     },
-    "x": {"field": "kg_per_person", "type": "quantitative", "scale": {"domain": [0, 72], "nice": false}, "axis": null}
+    "x": {
+      "field": "kg_per_person",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          0,
+          72
+        ],
+        "nice": false
+      },
+      "axis": null
+    }
   },
   "layer": [
     {
-      "mark": {"type": "bar", "cornerRadiusEnd": 2, "height": {"band": 0.72}},
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 2,
+        "height": {
+          "band": 0.72
+        }
+      },
       "encoding": {
         "color": {
-          "field": "meat",
-          "type": "nominal",
-          "scale": {"domain": ["Chicken", "Beef"], "range": ["#F5F6F3", "#8B96AE"]},
-          "legend": null
+          "value": "#F5F6F3"
         },
         "tooltip": [
-          {"field": "food", "title": "Food"},
-          {"field": "kg_per_person", "title": "kg per person, 2023", "format": ".1f"}
+          {
+            "field": "food",
+            "title": "Food"
+          },
+          {
+            "field": "kg_per_person",
+            "title": "kg per person, 2023",
+            "format": ".1f"
+          }
         ]
       }
     },
     {
-      "mark": {"type": "text", "align": "left", "dx": 4, "color": "#F5F6F3", "fontSize": 11, "fontWeight": 600},
-      "encoding": {"text": {"field": "label"}}
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 4,
+        "color": "#F5F6F3",
+        "fontSize": 11,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "text": {
+          "field": "label"
+        }
+      }
     }
   ]
 }

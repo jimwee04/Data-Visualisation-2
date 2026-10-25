@@ -6,7 +6,7 @@
   "params": [
     {
       "name": "familyOf",
-      "expr": "{'Beef': 'Meat', 'Lamb & mutton': 'Meat', 'Wheat': 'Grains', 'Barley': 'Grains', 'Canola': 'Oilseeds & pulses', 'Pulses': 'Oilseeds & pulses', 'Dairy': 'Dairy', 'Wine': 'Wine', 'Other food': 'Other food'}"
+      "expr": "{'Beef': 'Meat', 'Lamb & mutton': 'Meat', 'Wheat': 'Grains', 'Barley': 'Grains', 'Canola': 'Oilseeds & pulses', 'Pulses': 'Oilseeds & pulses', 'Dairy': 'Dairy, wine & other food', 'Wine': 'Dairy, wine & other food', 'Other food': 'Dairy, wine & other food'}"
     }
   ],
   "encoding": {
@@ -14,8 +14,8 @@
       "type": "quantitative",
       "scale": {
         "domain": [
-          -0.36,
-          1.5
+          -0.42,
+          1.58
         ]
       },
       "axis": null
@@ -128,25 +128,22 @@
           "scale": {
             "domain": [
               "Meat",
-              "Oilseeds & pulses",
               "Grains",
-              "Wine",
-              "Dairy",
-              "Other food"
+              "Oilseeds & pulses",
+              "Dairy, wine & other food"
             ],
             "range": [
-              "#C2724F",
-              "#4E9A8B",
-              "#C9A227",
-              "#9B6A9E",
-              "#2F3A55",
+              "#c0392b",
+              "#bfae1c",
+              "#1a9bb5",
               "#B9BFCD"
             ]
           },
           "legend": {
             "orient": "top",
             "symbolType": "square",
-            "columns": 6
+            "columns": 4,
+            "labelLimit": 260
           }
         },
         "opacity": {
@@ -226,7 +223,7 @@
           "as": "x2"
         },
         {
-          "calculate": "datum.node + '  US$' + format(datum.usd_m / 1000, '.1f') + 'b'",
+          "calculate": "datum.node + '  US$' + format(datum.usd_m / 1000, '.1f') + ' billion'",
           "as": "label"
         },
         {
@@ -256,7 +253,7 @@
             "color": {
               "condition": {
                 "test": "datum.side === 'Destination'",
-                "value": "#5C6B8A"
+                "value": "#2F3A55"
               },
               "field": "family",
               "type": "nominal"
@@ -336,7 +333,8 @@
             }
           }
         }
-      ]
+      ],
+      "encoding": {}
     },
     {
       "description": "Column headings",

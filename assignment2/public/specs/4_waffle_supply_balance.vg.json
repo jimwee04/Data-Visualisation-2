@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Small-multiple waffle charts: out of every 100 kg of a food group grown or imported, how many were exported, grown and used here, or imported",
+  "description": "Small-multiple waffle charts: out of every 100 kg of a food group grown or imported, how many were exported, grown and used here, or imported. Each panel is labelled with all three percentages.",
   "params": [
     {
       "name": "yr",
@@ -37,7 +37,7 @@
   },
   "transform": [
     {
-      "filter": "datum.year === yr && datum.group !== 'Vegetables'"
+      "filter": "datum.year === yr && datum.group !== 'Vegetables' && datum.group !== 'Eggs'"
     },
     {
       "calculate": "datum.production + datum.imports",
@@ -60,7 +60,7 @@
       "as": "nKept"
     },
     {
-      "calculate": "datum.group + '|' + (datum.nExported >= datum.nImported ? datum.nExported + '% exported' : datum.nImported + '% imported')",
+      "calculate": "upper(datum.group) + '|' + datum.nExported + '% exported|' + datum.nKept + '% grown & used here|' + datum.nImported + '% imported'",
       "as": "panel"
     },
     {
@@ -104,18 +104,18 @@
     },
     "header": {
       "labelFontSize": 12,
-      "labelFontWeight": 600,
+      "labelFontWeight": 500,
       "labelAnchor": "start",
-      "labelColor": "#2F3A55",
+      "labelColor": "#4B5569",
       "labelPadding": 6,
       "labelLimit": 0,
       "labelExpr": "split(datum.label, '|')",
       "labelLineHeight": 15
     }
   },
-  "columns": 6,
+  "columns": 5,
   "spacing": {
-    "row": 22,
+    "row": 26,
     "column": 28
   },
   "spec": {
@@ -154,8 +154,8 @@
           ],
           "range": [
             "#2F3A55",
-            "#A3AEC6",
-            "#C2724F"
+            "#C9CDD6",
+            "#b0408e"
           ]
         },
         "legend": {
@@ -197,7 +197,7 @@
         {
           "field": "kt",
           "type": "quantitative",
-          "title": "Quantity ('000 t)",
+          "title": "Quantity (thousand tonnes)",
           "format": ",.0f"
         }
       ]

@@ -14,6 +14,10 @@
       "name": "food",
       "value": "Milk",
       "description": "Set by the icon buttons above the chart (see js/main.js)."
+    },
+    {
+      "name": "stateName",
+      "expr": "{'WA': 'Western Australia', 'NT': 'Northern Territory', 'SA': 'South Australia', 'QLD': 'Queensland', 'NSW': 'New South Wales', 'VIC': 'Victoria', 'TAS': 'Tasmania', 'ACT': 'Australian Capital Territory'}"
     }
   ],
   "projection": {
@@ -137,7 +141,7 @@
               {
                 "field": "aud_m",
                 "type": "quantitative",
-                "title": "Farm-gate value (A$m)",
+                "title": "Farm-gate value (A$ million)",
                 "format": ",.0f"
               },
               {
@@ -150,19 +154,23 @@
           }
         },
         {
-          "description": "State labels sit under each spike's base, so they never collide with spikes of any height.",
+          "description": "Labels sit under each spike's base and give its raw farm-gate value, the quantity the spike height encodes. The New South Wales label is nudged east so Victoria's spike, just to its west, never crosses it.",
           "transform": [
             {
               "filter": "datum.share >= 3"
             },
             {
-              "calculate": "datum.state + ' ' + format(datum.share, '.0f') + '%'",
+              "calculate": "stateName[datum.state] + '\\n' + 'A$' + (datum.aud_m >= 1000 ? format(datum.aud_m / 1000, '.1f') + ' billion' : format(datum.aud_m, ',.0f') + ' million')",
               "as": "label"
+            },
+            {
+              "calculate": "datum.state === 'NSW' ? datum.lon + 3.4 : datum.lon",
+              "as": "labelLon"
             }
           ],
           "encoding": {
             "longitude": {
-              "field": "lon",
+              "field": "labelLon",
               "type": "quantitative"
             },
             "latitude": {
@@ -184,7 +192,9 @@
                 "stroke": "#ffffff",
                 "strokeWidth": 3.5,
                 "strokeOpacity": 0.85,
-                "strokeJoin": "round"
+                "strokeJoin": "round",
+                "lineBreak": "\n",
+                "lineHeight": 13
               }
             },
             {
@@ -194,7 +204,9 @@
                 "fontWeight": 600,
                 "baseline": "top",
                 "dy": 5,
-                "color": "#2F3A55"
+                "color": "#2F3A55",
+                "lineBreak": "\n",
+                "lineHeight": 13
               }
             }
           ]
@@ -245,7 +257,7 @@
               "as": "spike"
             },
             {
-              "calculate": "datum.k === 1 ? 12 : 96",
+              "calculate": "datum.k === 1 ? 12 : 120",
               "as": "px"
             },
             {
@@ -253,7 +265,7 @@
               "as": "labelX"
             },
             {
-              "calculate": "'A$' + format(datum.ref, ',') + 'm'",
+              "calculate": "'A$' + format(datum.ref, ',') + ' million'",
               "as": "refLabel"
             }
           ],

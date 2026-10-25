@@ -22,7 +22,8 @@
   --display: "Big Shoulders Display", "Arial Narrow", sans-serif;
   --sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --rail-w: 200px;
-  --measure: 64ch;
+  /* About 60 characters (7 to 10 words) per line, whatever the font size */
+  --measure: 25em;
 }
 
 * { box-sizing: border-box; }
@@ -34,7 +35,7 @@ body {
   background: var(--surface);
   color: var(--text-primary);
   font-family: var(--sans);
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.6;
 }
 
@@ -79,7 +80,7 @@ a:hover { color: var(--slate); }
   max-width: var(--measure);
 }
 /* Research question: labelled, larger than body text, ~12 words per line */
-.rq { margin: 0 0 36px; max-width: var(--measure); }
+.rq { margin: 0 0 36px; }
 .rq-label {
   margin: 0 0 6px;
   font-family: var(--display);
@@ -136,7 +137,7 @@ a:hover { color: var(--slate); }
   letter-spacing: 0.01em;
 }
 .stat-chart { width: 100%; min-height: 54px; margin: 4px 0 2px; }
-.stat-label { font-size: 15px; color: var(--stone); line-height: 1.45; max-width: var(--measure); }
+.stat-label { font-size: 16px; color: var(--stone); line-height: 1.45; max-width: var(--measure); }
 
 .reading-note {
   font-size: 15px;
@@ -190,7 +191,7 @@ a:hover { color: var(--slate); }
   letter-spacing: 0.005em;
 }
 .lede {
-  font-size: 19px;
+  font-size: 20px;
   color: var(--text-secondary);
   max-width: var(--measure);
   margin: 0 0 40px;
@@ -237,11 +238,11 @@ a:hover { color: var(--slate); }
   line-height: 1.3;
   max-width: var(--measure);
 }
-/* Figure titles read "Question? Answer": the question is quieter, the answer carries the weight */
-.fig-q { color: var(--slate); font-weight: 600; }
+/* Figure titles read "Question? Answer": the question sits on its own quieter line, the answer below carries the weight */
+.fig-q { display: block; margin-bottom: 2px; color: var(--slate); font-weight: 600; }
 .fig-sub {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   color: var(--text-secondary);
   max-width: var(--measure);
 }
@@ -253,13 +254,53 @@ figcaption {
   align-self: end;
   padding-top: 14px;
   border-top: 1px solid var(--border);
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.55;
 }
-/* Wide cards keep captions to a readable line length */
-.card--full figcaption { padding-right: max(0px, calc(100% - 88ch)); }
+/* Captions are three short lines: how to read the chart, how to use it, and the source */
+figcaption > span { display: block; }
+/* Wide cards keep captions and subtitles to a readable line length */
+/* Caption lines and subtitles are written to fit one line (60 characters or fewer), so they are not narrowed further */
+figcaption > span { max-width: none; }
+.fig-sub { max-width: none; }
 .src { color: var(--text-muted); font-style: italic; }
+
+/* Reference values for Figure 1, in the row where Figure 2 has its filter, so that space carries information */
+.fig-keys {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin: 12px 0 0;
+  padding: 4px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.fig-keys > div { padding: 10px 10px 8px; min-width: 0; }
+.fig-keys dt { font-size: 12px; font-weight: 500; line-height: 1.3; color: var(--text-secondary); }
+.fig-keys dd {
+  margin: 2px 0 0;
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+/* Figure 10's colour key: one swatch per band, left-aligned under the subtitle */
+.band-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.band-key li { display: flex; align-items: center; gap: 6px; }
+.band-key span { width: 16px; height: 16px; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(47, 58, 85, 0.12); }
 
 /* Icon filters: a segmented control across the full card width that replaces dropdowns and radio buttons.
    Each button is an icon over its name, plus a short note when the name alone doesn't say what it covers. */
@@ -343,7 +384,15 @@ figcaption {
   padding-top: 28px;
   border-top: 2px solid var(--ink);
 }
-.takeaway p { margin: 0; max-width: var(--measure); }
+.takeaway p { margin: 0; max-width: var(--measure); font-size: 18px; font-weight: 400; line-height: 1.6; }
+/* Key figures in paragraphs: bold ink on a neutral tint, so they lead the eye without borrowing a chart colour */
+.takeaway mark {
+  padding: 0 0.15em;
+  border-radius: 3px;
+  background: rgba(92, 107, 138, 0.16);
+  color: var(--text-primary);
+  font-weight: 700;
+}
 .pull {
   align-self: start;
   padding-left: 24px;
@@ -353,38 +402,56 @@ figcaption {
   line-height: 1.35;
   color: var(--text-primary);
 }
+.takeaway .pull { font-size: 24px; font-weight: 600; line-height: 1.35; }
+.pull-label {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
 
 /* ---------------------------------------------------------------- conclusion */
 .conclusion { background: var(--hero); color: var(--paper); }
 .conclusion h2 { color: var(--paper); }
 .conclusion .stage-tag { color: var(--slate-tint); }
 .conclusion .stage-count { color: var(--stone); }
-/* Three verdicts in three equal columns */
+/* Three verdicts stacked as rows on the page's text column, so each line holds 7 to 10 words */
 .summary {
   list-style: none;
   padding: 0;
   margin: 32px 0 40px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
+  grid-template-columns: minmax(0, calc(var(--measure) + 88px));
+  gap: 16px;
 }
 .summary li {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 18px;
   padding: 24px;
   border-radius: 12px;
   background: rgba(245, 246, 243, 0.07);
-  font-size: 17px;
+  font-size: 18px;
 }
-.summary .dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
+.summary-icon {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: var(--slate-tint);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .cta {
   padding-top: 28px;
   border-top: 1px solid rgba(245, 246, 243, 0.2);
+  max-width: var(--measure);
   font-size: 22px;
   font-weight: 600;
   color: var(--stone);
@@ -394,12 +461,15 @@ figcaption {
 /* ---------------------------------------------------------------- footer */
 .about {
   padding: 56px 0 64px;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-secondary);
 }
 .about h2 { font-family: var(--display); font-size: 40px; font-weight: 800; line-height: 1; color: var(--text-primary); margin: 0 0 20px; }
 .about h4 { margin: 0 0 8px; color: var(--text-primary); font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; }
-.about-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 40px; }
+/* Two wide columns (sources and credits on the left, notes on the right) keep footer lines at 7 to 10 words */
+.about-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 40px; }
+.about-grid { grid-template-rows: auto 1fr; align-items: start; }
+.about-grid > :nth-child(2) { grid-row: span 2; }
 .about ul { margin: 0; padding-left: 18px; }
 .about li { margin-bottom: 6px; max-width: var(--measure); }
 
@@ -567,6 +637,8 @@ figcaption {
 /* ---------------------------------------------------------------- responsive */
 @media (max-width: 900px) {
   .fig-grid, .takeaway, .summary, .about-grid { grid-template-columns: minmax(0, 1fr); }
+  .about-grid { grid-template-rows: none; }
+  .about-grid > :nth-child(2) { grid-row: auto; }
 }
 @media (max-width: 560px) {
   .wrap { padding: 0 16px; }

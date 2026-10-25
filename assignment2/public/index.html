@@ -52,13 +52,13 @@
         <span class="stat-tag">Surplus</span>
         <span class="stat-value">347 kg</span>
         <div id="kpi1" class="stat-chart" role="img" aria-label="Bar: Australia grows 347 kg of cereals for every 100 kg it uses; everything past the 100 kg line is surplus."></div>
-        <span class="stat-label">of cereals grown for every 100 kg used in Australia (2023)</span>
+        <span class="stat-label">of cereals grown for every 100 kg used here (2023)</span>
       </a>
       <a class="stat" href="#surplus">
         <span class="stat-tag stat-tag--gap">Import-reliant</span>
         <span class="stat-value">37 kg</span>
         <div id="kpi2" class="stat-chart" role="img" aria-label="Bar: 37 kg of seafood is caught or farmed here for every 100 kg used; the outlined remainder is imported."></div>
-        <span class="stat-label">of seafood caught or farmed here for every 100 kg we use</span>
+        <span class="stat-label">of seafood caught or farmed here per 100 kg used</span>
       </a>
       <a class="stat" href="#plates">
         <span class="stat-tag">Shift</span>
@@ -68,9 +68,9 @@
       </a>
       <a class="stat" href="#where">
         <span class="stat-tag">Grown here</span>
-        <span class="stat-value">A$73.5b</span>
+        <span class="stat-value">A$73.5 billion</span>
         <div id="kpi4" class="stat-chart" role="img" aria-label="Columns: farm-gate food value per resident by state, from Tasmania highest to the ACT lowest, against the national average of about $2,680."></div>
-        <span class="stat-label">farm-gate value of food grown in 2024-25, per resident by state</span>
+        <span class="stat-label">farm-gate food value, 2024-25; bars show value per resident</span>
       </a>
     </div>
   </div>
@@ -86,7 +86,7 @@
     <li><a class="rail-item" href="#trade"><span class="rail-dot"><svg><use href="#i-ship"/></svg></span><span class="rail-text"><span class="rail-stage">Ship</span><span class="rail-title">Where the surplus goes</span></span></a></li>
     <li><a class="rail-item" href="#plates"><span class="rail-dot"><svg><use href="#i-plate"/></svg></span><span class="rail-text"><span class="rail-stage">Plate</span><span class="rail-title">What changed on our plates</span></span></a></li>
     <li><a class="rail-item" href="#trolley"><span class="rail-dot"><svg><use href="#i-shock"/></svg></span><span class="rail-text"><span class="rail-stage">Shock</span><span class="rail-title">Shocks in the trolley</span></span></a></li>
-    <li><a class="rail-item" href="#sources"><span class="rail-dot"><svg><use href="#i-checkout"/></svg></span><span class="rail-text"><span class="rail-stage">Checkout</span><span class="rail-title">Available vs bought</span></span></a></li>
+    <li><a class="rail-item" href="#sources"><span class="rail-dot"><svg><use href="#i-checkout"/></svg></span><span class="rail-text"><span class="rail-stage">Checkout</span><span class="rail-title">Available versus bought</span></span></a></li>
     <li><a class="rail-item" href="#takeaway"><span class="rail-dot"><svg><use href="#i-verdict"/></svg></span><span class="rail-text"><span class="rail-stage">Verdict</span><span class="rail-title">How available is our food?</span></span></a></li>
   </ol>
 </nav>
@@ -98,27 +98,32 @@
   <div class="wrap">
     <p class="stage-tag"><svg aria-hidden="true"><use href="#i-grow"/></svg><span>Grow</span><span class="stage-count">1 of 7</span></p>
     <h2>Where our food grows</h2>
-    <p class="lede">Most Australians never see a farm. The food in an average trolley comes from very different landscapes, and some of it comes almost entirely from a single state.</p>
+    <p class="lede">Most Australians never see a farm. The food in a typical trolley comes from very different landscapes, and some of it from just one state.</p>
 
     <div class="fig-grid">
       <figure class="card">
         <div class="fig-head">
           <p class="fig-num">Figure 1</p>
-          <h3><span class="fig-q">Which states grow the most food per resident?</span> Tasmania and WA</h3>
-          <p class="fig-sub">Farm-gate value of food produced in each state, divided by its population, 2024-25</p>
+          <h3><span class="fig-q">Which states grow the most food per resident?</span> Tasmania and Western Australia</h3>
+          <p class="fig-sub">Farm-gate food value per resident, by state, 2024-25</p>
+          <dl class="fig-keys" aria-label="Reference values">
+            <div><dt>Australia overall</dt><dd>A$2,683</dd></div>
+            <div><dt>Highest: Tasmania</dt><dd>A$3,842</dd></div>
+            <div><dt>Lowest state: New South Wales</dt><dd>A$2,104</dd></div>
+          </dl>
         </div>
         <div id="fig1" class="chart chart-map"></div>
-        <figcaption>Includes grains, pulses, oilseeds, sugarcane, fruit, vegetables, nuts, milk and livestock sold; excludes wool and wine grapes. ACT ($24 per resident) is too small to label. Hover over a state for details.<br><span class="src">Source: ABS Australian Agriculture 2024-25 (Broadacre Crops, Horticulture, Livestock); ABS Estimated Resident Population, Dec 2024.</span></figcaption>
+        <figcaption><span class="cap-read">Darker states grow more food value per resident.</span><span class="cap-use">Hover over a state for its total and top food.</span><span class="src">Source: Australian Bureau of Statistics (ABS), 2024-25.</span></figcaption>
       </figure>
       <figure class="card">
         <div class="fig-head">
           <p class="fig-num">Figure 2</p>
           <h3><span class="fig-q">Does any food depend on one state?</span> Yes: milk on Victoria, sugarcane on Queensland</h3>
-          <p class="fig-sub">Farm-gate value of each food group by state, 2024-25.</p>
+          <p class="fig-sub">Farm-gate value of each food group, by state, 2024-25</p>
           <div class="icon-filter" role="radiogroup" aria-label="Food group" data-chart="fig2" data-param="food">
             <button type="button" role="radio" data-value="Milk"><svg aria-hidden="true"><use href="#i-milk"/></svg><span class="filter-name">Milk</span></button>
-            <button type="button" role="radio" data-value="Meat (livestock sold)"><svg aria-hidden="true"><use href="#i-meat"/></svg><span class="filter-name">Meat</span><span class="filter-note">livestock sold</span></button>
-            <button type="button" role="radio" data-value="Grains, oilseeds & pulses"><svg aria-hidden="true"><use href="#i-grain"/></svg><span class="filter-name">Grains</span><span class="filter-note">oilseeds &amp; pulses</span></button>
+            <button type="button" role="radio" data-value="Meat (livestock sold)"><svg aria-hidden="true"><use href="#i-meat"/></svg><span class="filter-name">Meat</span></button>
+            <button type="button" role="radio" data-value="Grains, oilseeds & pulses"><svg aria-hidden="true"><use href="#i-grain"/></svg><span class="filter-name">Grains</span></button>
             <button type="button" role="radio" data-value="Fruit"><svg aria-hidden="true"><use href="#i-fruit"/></svg><span class="filter-name">Fruit</span></button>
             <button type="button" role="radio" data-value="Vegetables"><svg aria-hidden="true"><use href="#i-veg"/></svg><span class="filter-name">Vegetables</span></button>
             <button type="button" role="radio" data-value="Nuts"><svg aria-hidden="true"><use href="#i-nut"/></svg><span class="filter-name">Nuts</span></button>
@@ -126,13 +131,13 @@
           </div>
         </div>
         <div id="fig2" class="chart chart-map"></div>
-        <figcaption>Spike height is proportional to value, and every spike has the same base, so compare them by height; the grey reference spikes show the scale for the chosen food group. Each spike sits at a representative point inside its state, not at the farms themselves. Labels show each state's share of the national total (states under 3% are unlabelled).<br><span class="src">Source: ABS Australian Agriculture 2024-25.</span></figcaption>
+        <figcaption><span class="cap-read">Taller spikes mean more value; labels give farm-gate values.</span><span class="cap-use">Pick a food group above; hover over spikes for values.</span><span class="src">Source: ABS Australian Agriculture 2024-25.</span></figcaption>
       </figure>
     </div>
 
     <div class="takeaway">
-      <p><strong>What it means.</strong> Victoria and NSW produce the most food in total, but they also have the most mouths to feed. Per resident, Tasmania ($3,842) and WA ($3,743) lead, and NSW ranks last of the states. Some foods hang on one region: Victoria produces <strong>61%</strong> of the nation's milk value, Queensland <strong>95%</strong> of its sugarcane, and WA and NSW split two-thirds of the grain.</p>
-      <p class="pull">Your fruit bowl and your milk carton come from a handful of places.</p>
+      <p><strong>What it means.</strong> Victoria and New South Wales grow the most food, but they also feed the most people. Per resident, Tasmania and Western Australia lead. Some foods rely on one state: Victoria produces <mark>61%</mark> of our milk value and Queensland <mark>95%</mark> of our sugarcane.</p>
+      <p class="pull"><span class="pull-label">Key takeaway</span>Our food is concentrated, so one bad season in Victoria would hit most of our milk.</p>
     </div>
   </div>
 </section>
@@ -142,41 +147,41 @@
   <div class="wrap">
     <p class="stage-tag"><svg aria-hidden="true"><use href="#i-stock"/></svg><span>Stock</span><span class="stage-count">2 of 7</span></p>
     <h2>A surplus country with an uneven pantry</h2>
-    <p class="lede">Whether Australia "has enough food" depends on which food you mean. For the staples we grow far more than we use. For a few everyday groups we rely on the rest of the world.</p>
+    <p class="lede">Having enough food depends on which food. Australia grows far more staples than it needs, yet relies on imports for some everyday foods.</p>
 
     <div class="fig-grid">
       <figure class="card card--full">
         <div class="fig-head">
           <p class="fig-num">Figure 3</p>
-          <h3><span class="fig-q">How much of our own food do we grow?</span> 3&frac12; times our grain, but only a third of our seafood</h3>
-          <p class="fig-sub">Kilograms produced in Australia for every 100 kg used here (by people and livestock), 2010 vs 2023</p>
+          <h3><span class="fig-q">How much of our own food do we grow?</span> 3&frac12; times our grain, but a third of our seafood</h3>
+          <p class="fig-sub">Kilograms grown here per 100 kg used, 2010 and 2023</p>
         </div>
         <div id="fig3" class="chart"></div>
-        <figcaption>Above 100 = surplus; below 100 = the gap is filled by imports. Vegetables are left out because FAO counts processed imports (e.g. tomato paste) at fresh weight, which inflates them. Click a year in the legend to isolate it.<br><span class="src">Source: FAOSTAT Food Balances (2010–2023), food groups aggregated from item level.</span></figcaption>
+        <figcaption><span class="cap-read">Above 100 means surplus; below 100, imports fill the gap.</span><span class="cap-use">Click a legend year to isolate it; hover for tonnes.</span><span class="src">Source: Food and Agriculture Organization (FAO), 2010&ndash;2023.</span></figcaption>
       </figure>
       <figure class="card card--full">
         <div class="fig-head">
           <p class="fig-num">Figure 4</p>
           <h3><span class="fig-q">Where does each food group end up?</span> Grain and pulses mostly leave; seafood mostly arrives</h3>
-          <p class="fig-sub">Out of every 100 kg grown here or imported, how many were exported, kept and used here, or imported. Drag the slider to change year.</p>
+          <p class="fig-sub">Where every 100 kg grown here or imported ends up</p>
         </div>
         <div id="fig4" class="chart chart-facet"></div>
-        <figcaption>Each grid is 100 squares, so every food group is drawn at the same size whatever its tonnage. Exports fill from the left, imports from the right. Try 2019: in the 2017–19 drought cereal exports shrank sharply, yet cereal supply per person stayed at 107–110 kg. The surplus absorbed the shock. Hover over a square for tonnes; click a part in the legend to isolate it.<br><span class="src">Source: FAOSTAT Food Balances (2010–2023).</span></figcaption>
+        <figcaption><span class="cap-read">Each grid is 100 kg; exports fill left, imports right.</span><span class="cap-use">Drag the slider, click the legend, or hover for tonnes.</span><span class="src">Source: FAOSTAT Food Balances 2010&ndash;2023.</span></figcaption>
       </figure>
       <figure class="card card--full">
         <div class="fig-head">
           <p class="fig-num">Figure 5</p>
-          <h3><span class="fig-q">Is dairy still a surplus food?</span> Only just: the buffer has shrunk from 18 kg to 3 kg in every 100</h3>
-          <p class="fig-sub">Milk produced in Australia vs milk used here, one dot per year, 2010–2023</p>
+          <h3><span class="fig-q">Is dairy still a surplus food?</span> Only just: its surplus shrank from 18% to 3%</h3>
+          <p class="fig-sub">Milk produced compared with milk used, 2010&ndash;2023</p>
         </div>
         <div id="fig5" class="chart"></div>
-        <figcaption>Follow the path from light (2010) to dark (2023). Dashed lines join every point that grows the same amount per 100 kg used; the closer the path gets to the solid 100 line, the thinner the safety margin. Production climbed to a 2016 peak, then fell back while use kept rising and imports grew 70% (1.0 to 1.7 Mt). Hover a dot for imports and exports. Dairy products are counted as their liquid-milk equivalent.<br><span class="src">Source: FAOSTAT Food Balances (2010–2023), item "Milk – Excluding Butter".</span></figcaption>
+        <figcaption><span class="cap-read">Closer to the solid line means a smaller buffer.</span><span class="cap-use">Hover over a dot for that year&rsquo;s imports and exports.</span><span class="src">Source: FAOSTAT Food Balances, milk excluding butter.</span></figcaption>
       </figure>
     </div>
 
     <div class="takeaway">
-      <p><strong>What it means.</strong> Cereals, pulses, sugar and meat are in deep surplus, and most of it is shipped overseas. Seafood is the clear exception, with two-thirds of supply imported. Dairy is the staple losing its buffer: milk production peaked at 10.0 Mt in 2016 and fell to 8.5 Mt in 2023 while imports rose 70%, pushing it from 118 to just 103 kg grown per 100 kg used.</p>
-      <p class="pull">We grow 3&frac12; times the grain we use, but only about 1 kg in every 3 kg of seafood we use is caught or farmed here.</p>
+      <p><strong>What it means.</strong> Cereals, pulses, sugar and meat are in deep surplus, and much of the extra is exported. Seafood is the exception: <mark>two-thirds</mark> of it is imported. Dairy is losing its buffer, falling from <mark>118&nbsp;kg</mark> to <mark>103&nbsp;kg</mark> grown for every 100&nbsp;kg used. Even in the 2017&ndash;19 drought, cereal supply per person held steady.</p>
+      <p class="pull"><span class="pull-label">Key takeaway</span>Grain, pulses, sugar and meat are truly plentiful; seafood relies on the world, and dairy nearly does.</p>
     </div>
   </div>
 </section>
@@ -186,36 +191,36 @@
   <div class="wrap">
     <p class="stage-tag"><svg aria-hidden="true"><use href="#i-ship"/></svg><span>Ship</span><span class="stage-count">3 of 7</span></p>
     <h2>Where the surplus goes</h2>
-    <p class="lede">The surplus doesn't stay here. Australia shipped US$38.5 billion of food overseas in 2024 and brought in US$17.1 billion, and the two flows look very different.</p>
+    <p class="lede">The surplus does not stay here. In 2024, Australia exported US$38.5 billion of food and imported US$17.1 billion, and the two flows look very different.</p>
 
     <div class="fig-grid">
       <figure class="card card--full">
         <div class="fig-head">
           <p class="fig-num">Figure 6</p>
           <h3><span class="fig-q">What do we trade, and with whom?</span> Raw commodities out to Asia; processed food in, led by Europe</h3>
-          <p class="fig-sub">Australia's 10 largest food export markets and import sources by value, 2024.</p>
+          <p class="fig-sub">Top 10 food export markets and import sources, 2024</p>
           <div class="icon-filter" role="radiogroup" aria-label="Trade direction" data-chart="fig6" data-param="flow">
             <button type="button" role="radio" data-value="Exports"><svg aria-hidden="true"><use href="#i-export"/></svg><span class="filter-name">Exports</span><span class="filter-note">Australia &rarr; partner</span></button>
             <button type="button" role="radio" data-value="Imports"><svg aria-hidden="true"><use href="#i-import"/></svg><span class="filter-name">Imports</span><span class="filter-note">partner &rarr; Australia</span></button>
           </div>
         </div>
         <div id="fig6" class="chart chart-world"></div>
-        <figcaption>Line width is proportional to trade value (US$); arrows show the direction of trade. Europe's 38 trading countries share one corridor, so they are combined into a single flow. Labels give each partner's share of Australia's total; hover a line or dot for the largest item traded. Food only: wool, cotton, hides, tobacco and animal feed are excluded. Fish and seafood are not covered by this dataset.<br><span class="src">Source: FAOSTAT Detailed Trade Matrix (reporter: Australia, 190 partners, 2024); Natural Earth.</span></figcaption>
+        <figcaption><span class="cap-read">Line width shows trade value; colour shows its direction.</span><span class="cap-use">Switch exports and imports above; hover for the top item.</span><span class="src">Source: FAOSTAT Detailed Trade Matrix 2024; Natural Earth.</span></figcaption>
       </figure>
       <figure class="card card--full">
         <div class="fig-head">
           <p class="fig-num">Figure 7</p>
           <h3><span class="fig-q">Which foods go where?</span> Barley to China, beef to America and North Asia, pulses to South Asia</h3>
-          <p class="fig-sub">Australia's food exports by product (left) and destination region (right), 2024, US$</p>
+          <p class="fig-sub">Food exports by product and destination, 2024, US dollars</p>
         </div>
         <div id="fig7" class="chart chart-sankey"></div>
-        <figcaption>Each band's thickness is proportional to its value. Hover a band to follow one food to every region that buys it; click a food family in the legend to isolate it. 74% of barley goes to China, 69% of pulses to South Asia, 43% of wheat to South-East Asia, and half of canola to Europe. "Other food" includes sorghum, almonds, sugar, live cattle and processed foods.<br><span class="src">Source: FAOSTAT Detailed Trade Matrix (reporter: Australia, 190 partners, 2024).</span></figcaption>
+        <figcaption><span class="cap-read">Band thickness shows value, from each food to its buyers.</span><span class="cap-use">Hover to follow one food; click the legend to filter.</span><span class="src">Source: FAOSTAT Detailed Trade Matrix 2024.</span></figcaption>
       </figure>
     </div>
 
     <div class="takeaway">
-      <p><strong>What it means.</strong> Exports are bulk commodities headed to Asia and North America: beef to China, the US, Japan and Korea, wheat to Indonesia and South-East Asia, and lentils to India. Imports are mostly <em>processed</em> foods, and Europe as a whole is the largest source (31%): wine from France, olive oil from Spain and pork from Denmark and the Netherlands, alongside food preparations from New Zealand and pork from the US.</p>
-      <p class="pull">Our wheat feeds Indonesia; our lentils feed India; our pork comes from America.</p>
+      <p><strong>What it means.</strong> We export bulk commodities to Asia and North America: beef to China, the United States and Japan, wheat to South-East Asia and lentils to India. We import mostly <em>processed</em> foods, such as wine, olive oil and pork. Europe is the largest source, at <mark>31%</mark>.</p>
+      <p class="pull"><span class="pull-label">Key takeaway</span>For staples we supply the world; we rely on others mainly for processed food.</p>
     </div>
   </div>
 </section>
@@ -225,7 +230,7 @@
   <div class="wrap">
     <p class="stage-tag"><svg aria-hidden="true"><use href="#i-plate"/></svg><span>Plate</span><span class="stage-count">4 of 7</span></p>
     <h2>What changed on our plates</h2>
-    <p class="lede">What's available shapes what we eat. Since 2010 the mix of food available to each Australian has shifted, and the biggest move has been in the meat aisle.</p>
+    <p class="lede">What is available shapes what we eat. Since 2010, the food available to each Australian has shifted, most of all in the meat aisle.</p>
 
     <div class="fig-grid">
       <figure class="card card--full">
@@ -235,13 +240,13 @@
           <p class="fig-sub">Food supply per person, indexed so that 2010 = 100</p>
         </div>
         <div id="fig8" class="chart"></div>
-        <figcaption>Each line is scaled to its own 2010 level so foods of very different weights can share one axis; hover for kilograms per person. Click a food in the legend to highlight it.<br><span class="src">Source: FAOSTAT Food Balances (2010–2023).</span></figcaption>
+        <figcaption><span class="cap-read">Each line starts at 100, meaning unchanged since 2010.</span><span class="cap-use">Click a legend food; hover for kilograms per person.</span><span class="src">Source: FAOSTAT Food Balances 2010&ndash;2023.</span></figcaption>
       </figure>
     </div>
 
     <div class="takeaway">
-      <p><strong>What it means.</strong> Beef supply per person fell from 38.6 kg to 26.9 kg (&minus;30%) as about 69% of beef production went to export, while chicken rose from 46.5 kg to 53.1 kg. Fruit supply dropped from 102 kg to a 74 kg low in 2019 and has only partly recovered.</p>
-      <p class="pull">Australians now have twice as much chicken as beef available, and less fruit, than in 2010.</p>
+      <p><strong>What it means.</strong> Beef supply fell from <mark>38.6&nbsp;kg</mark> to <mark>26.9&nbsp;kg</mark> per person, as about 69% of production was exported. Chicken rose to <mark>53.1&nbsp;kg</mark>. Fruit fell to a low of 74&nbsp;kg in 2019 and has only partly recovered.</p>
+      <p class="pull"><span class="pull-label">Key takeaway</span>Beef gave way to chicken, but nothing replaced the fruit we lost.</p>
     </div>
   </div>
 </section>
@@ -251,32 +256,41 @@
   <div class="wrap">
     <p class="stage-tag"><svg aria-hidden="true"><use href="#i-shock"/></svg><span>Shock</span><span class="stage-count">5 of 7</span></p>
     <h2>Shocks in the shopping trolley</h2>
-    <p class="lede">Availability isn't only a long-term story. Supermarket sales react within weeks to seasons, holidays and crises.</p>
+    <p class="lede">Availability is not only a long-term story. Supermarket sales react within weeks to seasons, holidays and crises.</p>
 
     <div class="fig-grid">
       <figure class="card card--full">
         <div class="fig-head">
           <p class="fig-num">Figure 9</p>
           <h3><span class="fig-q">How unusual was the 2020 shock?</span> Far outside any normal month: flour and pasta sales jumped 45% in March, then fell 31% in April</h3>
-          <p class="fig-sub">Change in supermarket food sales from one month to the next, by food group, August 2018 – June 2024</p>
+          <p class="fig-sub">Month-to-month change in supermarket sales, 2018 to 2024</p>
         </div>
         <div id="fig9" class="chart"></div>
-        <figcaption>Each box holds the middle half of all monthly changes, with the median as a dark line; whiskers reach the largest changes that are still within 1.5 box-widths. Every grey dot is one month. March 2020 lies beyond the whiskers for every group except fruit, which barely moved. Hover a dot to see that month in every group; click a legend entry to isolate it.<br><span class="src">Source: ABS Apparent Consumption of Selected Foodstuffs, Australia, 2023-24 (Table 1.2, experimental).</span></figcaption>
+        <figcaption><span class="cap-read">Each dot is one month; boxes hold the middle half.</span><span class="cap-use">Hover over a dot to compare that month across groups.</span><span class="src">Source: ABS Apparent Consumption of Selected Foodstuffs.</span></figcaption>
       </figure>
       <figure class="card card--full">
         <div class="fig-head">
           <p class="fig-num">Figure 10</p>
           <h3><span class="fig-q">Is there a rhythm to what we buy?</span> Fruit follows the summer, meat peaks every December, and March 2020 broke every pattern</h3>
-          <p class="fig-sub">Each month's supermarket sales compared with that financial year's monthly average, by food group</p>
+          <p class="fig-sub">Each month&rsquo;s sales compared with that year&rsquo;s average</p>
+          <ul class="band-key" aria-label="Colour key: sales compared with that year&rsquo;s average">
+            <li><span style="background:#4B5874"></span>10% or more below</li>
+            <li><span style="background:#8A96AE"></span>5 to 10% below</li>
+            <li><span style="background:#C7CDDA"></span>2 to 5% below</li>
+            <li><span style="background:#F1F1EE"></span>Within 2%</li>
+            <li><span style="background:#F5C6A3"></span>2 to 5% above</li>
+            <li><span style="background:#E9924F"></span>5 to 10% above</li>
+            <li><span style="background:#BF5317"></span>10% or more above</li>
+          </ul>
         </div>
         <div id="fig10" class="chart chart-facet"></div>
-        <figcaption>Read across a row for one year, down a column for the same month in different years. Orange months sold above that year's average, blue months below; numbers mark differences of 10% or more. Comparing within each year removes long-term trends, so only seasons and shocks remain. Hover a month to outline it in every food group.<br><span class="src">Source: ABS Apparent Consumption of Selected Foodstuffs, Australia, 2023-24 (Table 1.2, experimental).</span></figcaption>
+        <figcaption><span class="cap-read">Orange months sold above the year&rsquo;s average, blue below.</span><span class="cap-use">Hover over a month to outline it in every group.</span><span class="src">Source: ABS Apparent Consumption of Selected Foodstuffs.</span></figcaption>
       </figure>
     </div>
 
     <div class="takeaway">
-      <p><strong>What it means.</strong> In March 2020 total food sales jumped 18% on February, with bread, flour and pasta up 45% and vegetables up 24%, then fell below normal in April as households ate through their stockpiles. Each year has its rhythm too: December is the peak month in five of six years, and fruit buying dips every June–July.</p>
-      <p class="pull">In March 2020 we bought 45% more flour and pasta, then stopped.</p>
+      <p><strong>What it means.</strong> In March 2020, total food sales jumped <mark>18%</mark>, led by bread, flour and pasta at <mark>+45%</mark>. In April, sales fell below normal as households ate their stockpiles. In most years, December is the busiest month, and fruit buying dips every June and July.</p>
+      <p class="pull"><span class="pull-label">Key takeaway</span>Shocks pass quickly: even the 2020 panic was over within two months.</p>
     </div>
   </div>
 </section>
@@ -286,23 +300,23 @@
   <div class="wrap">
     <p class="stage-tag"><svg aria-hidden="true"><use href="#i-checkout"/></svg><span>Checkout</span><span class="stage-count">6 of 7</span></p>
     <h2>Available is not the same as bought</h2>
-    <p class="lede">Two independent sources measure the plate from different ends: FAO estimates what is <em>available</em>, the ABS counts what is <em>bought</em> at the supermarket. Where they agree, the trend is real; where they split, something happens between the farm gate and the checkout.</p>
+    <p class="lede">Two sources measure the plate from different ends. FAO estimates what is <em>available</em>; the ABS counts what is <em>bought</em> at the supermarket. Where they agree, the trend is real. Where they split, something happens between farm and checkout.</p>
 
     <div class="fig-grid">
       <figure class="card card--full">
         <div class="fig-head">
           <p class="fig-num">Figure 11</p>
           <h3><span class="fig-q">Does more fruit available mean more fruit bought?</span> No: supply recovered, but supermarket sales fell</h3>
-          <p class="fig-sub">Change per person since 2019 in food available (FAO supply) vs food bought (ABS supermarket sales)</p>
+          <p class="fig-sub">Change per person since 2019: available versus bought</p>
         </div>
         <div id="fig11" class="chart"></div>
-        <figcaption>The longer the bar, the further "available" and "bought" have split. FAO calendar years 2019 to 2023 are compared with ABS financial years 2018-19 to 2022-23. Hover a point for the original values and units. Click a source in the legend to isolate it.<br><span class="src">Sources: FAOSTAT Food Balances; ABS Apparent Consumption of Selected Foodstuffs 2023-24 (Table 1.1).</span></figcaption>
+        <figcaption><span class="cap-read">Longer bars mean available and bought have split further.</span><span class="cap-use">Hover for values; click the legend to filter.</span><span class="src">Sources: FAOSTAT Food Balances; ABS Apparent Consumption.</span></figcaption>
       </figure>
     </div>
 
     <div class="takeaway">
-      <p><strong>What it means.</strong> Chicken rises in both sources, so that shift is real. Fruit and dairy milk split: supply recovered after 2019 but supermarket buying fell (fruit &minus;8%, dairy milk &minus;7%), while plant-based milk sales grew 33%. Fruit is becoming more <em>valuable</em> (farm-gate value +25% since 2020-21) rather than more <em>bought</em>; price is a likely link but is not tested here.</p>
-      <p class="pull">More fruit is available than in 2019, yet we are buying less of it.</p>
+      <p><strong>What it means.</strong> Chicken rises in both sources, so that shift is real. For fruit and dairy milk, supply recovered but buying fell, by <mark>8%</mark> and <mark>7%</mark>. Plant-based milk sales grew <mark>33%</mark>. Fruit&rsquo;s farm-gate value has risen 25% since 2020-21, so price is a likely cause, though not tested here.</p>
+      <p class="pull"><span class="pull-label">Key takeaway</span>Supply is not the limit: we buy less fruit and milk though more is available.</p>
     </div>
   </div>
 </section>
@@ -313,9 +327,9 @@
     <p class="stage-tag"><svg aria-hidden="true"><use href="#i-verdict"/></svg><span>Verdict</span><span class="stage-count">7 of 7</span></p>
     <h2>So, how available is our food?</h2>
     <ul class="summary">
-      <li><span class="dot" style="background:#F5F6F3"></span><div><strong>Surplus staples.</strong> Australia grows 3&frac12; times its grain, 3 times its pulses and 1.6 times its meat. Droughts shrink exports, not the bread aisle.</div></li>
-      <li><span class="dot" style="background:#A3AEC6"></span><div><strong>Thin margins.</strong> Two-thirds of our seafood is imported, and dairy has slipped to just above "only enough", with most of it produced in one state.</div></li>
-      <li><span class="dot" style="background:#5C6B8A"></span><div><strong>Changing plates.</strong> Chicken has replaced beef, fruit buying is falling, and sudden shocks like March 2020 show up in the trolley within weeks.</div></li>
+      <li><svg class="summary-icon" aria-hidden="true"><use href="#i-stock"/></svg><div><strong>Surplus staples.</strong> Australia grows 3&frac12; times its grain, 3&nbsp;times its pulses and 1.6&nbsp;times its meat. Droughts shrink exports, not the bread aisle.</div></li>
+      <li><svg class="summary-icon" aria-hidden="true"><use href="#i-import"/></svg><div><strong>Thin margins.</strong> Two-thirds of our seafood is imported, and dairy has slipped to just above "only enough", with most of it produced in one state.</div></li>
+      <li><svg class="summary-icon" aria-hidden="true"><use href="#i-plate"/></svg><div><strong>Changing plates.</strong> Chicken has replaced beef, fruit buying is falling, and sudden shocks like March 2020 show up in the trolley within weeks.</div></li>
     </ul>
     <p class="cta">Next time you shop, check the label: notice what's grown here, and what had to travel to reach you.</p>
   </div>
@@ -331,19 +345,24 @@
       <div>
         <h4>Data sources</h4>
         <ul>
-          <li><a href="https://www.fao.org/faostat/en/#data/FBS" target="_blank" rel="noopener">FAOSTAT Food Balances (2010–2023)</a>, UN FAO</li>
-          <li><a href="https://www.fao.org/faostat/en/#data/TM" target="_blank" rel="noopener">FAOSTAT Detailed Trade Matrix (2022–2024)</a>, UN FAO</li>
-          <li><a href="https://www.abs.gov.au/statistics/health/food-and-nutrition/apparent-consumption-selected-foodstuffs-australia/latest-release" target="_blank" rel="noopener">Apparent Consumption of Selected Foodstuffs 2023-24</a>, ABS</li>
+          <li><a href="https://www.fao.org/faostat/en/#data/FBS" target="_blank" rel="noopener">FAOSTAT Food Balances (2010–2023)</a>, Food and Agriculture Organization of the United Nations (FAO)</li>
+          <li><a href="https://www.fao.org/faostat/en/#data/TM" target="_blank" rel="noopener">FAOSTAT Detailed Trade Matrix (2022–2024)</a>, FAO</li>
+          <li><a href="https://www.abs.gov.au/statistics/health/food-and-nutrition/apparent-consumption-selected-foodstuffs-australia/latest-release" target="_blank" rel="noopener">Apparent Consumption of Selected Foodstuffs 2023-24</a> (Tables 1.1 and 1.2), Australian Bureau of Statistics (ABS)</li>
           <li>Australian Agriculture 2024-25: <a href="https://www.abs.gov.au/statistics/industry/agriculture/australian-agriculture-broadacre-crops/latest-release" target="_blank" rel="noopener">Broadacre Crops</a>, <a href="https://www.abs.gov.au/statistics/industry/agriculture/australian-agriculture-horticulture/latest-release" target="_blank" rel="noopener">Horticulture</a>, <a href="https://www.abs.gov.au/statistics/industry/agriculture/australian-agriculture-livestock/latest-release" target="_blank" rel="noopener">Livestock</a>, ABS</li>
           <li><a href="https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population/latest-release" target="_blank" rel="noopener">National, state and territory population</a>, ABS</li>
-          <li>ABS ASGS 2021 state boundaries; <a href="https://github.com/topojson/world-atlas" target="_blank" rel="noopener">Natural Earth / world-atlas</a></li>
+          <li>ABS Australian Statistical Geography Standard 2021 state boundaries; <a href="https://github.com/topojson/world-atlas" target="_blank" rel="noopener">Natural Earth / world-atlas</a></li>
         </ul>
       </div>
       <div>
         <h4>Notes</h4>
         <ul>
           <li>Supply (FAO) includes food later wasted; sales (ABS) exclude cafés and takeaway. Compare trends, not levels.</li>
-          <li>FAO values are model estimates; 2021–23 seafood figures are carried forward and vegetable imports are inflated by fresh-weight conversion.</li>
+          <li>FAO values are model estimates; 2021–23 seafood figures are carried forward.</li>
+          <li>Figures 1 and 2 count grains, pulses, oilseeds, sugarcane, fruit, vegetables, nuts, milk and livestock sold, but not wool or wine grapes. The Australian Capital Territory ($24 per resident) is too small to label.</li>
+          <li>Figure 2 places each spike at a representative point inside its state, not at the farms; states under 3% are unlabelled.</li>
+          <li>Figures 3 and 4 leave out vegetables, because FAO counts processed imports such as tomato paste at fresh weight. "Used here" covers food eaten by people and fed to livestock. Figure 4 also leaves out eggs, since 95% are grown and used here. Figure 5 counts dairy products as their liquid-milk equivalent.</li>
+          <li>Figures 6 and 7 cover food only (no wool, cotton, hides, tobacco or animal feed) and do not include fish or seafood. Europe's 38 trading countries share one corridor, so they are one flow. In Figure 7, "other food" includes sorghum, almonds, sugar, live cattle and processed foods.</li>
+          <li>Figure 11 compares FAO calendar years 2019 to 2023 with ABS financial years 2018-19 to 2022-23.</li>
           <li>Production values are A$ farm-gate; trade values are US$. They are never added together.</li>
           <li>ABS consumption data are labelled "experimental".</li>
         </ul>

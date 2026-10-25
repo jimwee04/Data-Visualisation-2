@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Calendar heatmap: each month's supermarket sales vs that financial year's monthly average, by food group, Jul 2018 - Jun 2024",
+  "description": "Calendar heatmap: each month's supermarket sales compared with that financial year's monthly average, by food group, July 2018 to June 2024",
   "data": {
     "url": "../data/clean/retail_monthly.csv",
     "format": {
@@ -69,13 +69,13 @@
       }
     }
   },
-  "spacing": 14,
+  "spacing": 22,
   "spec": {
     "width": {
       "step": 76
     },
     "height": {
-      "step": 19
+      "step": 16
     },
     "encoding": {
       "x": {
@@ -99,7 +99,8 @@
         "axis": {
           "orient": "bottom",
           "labelAngle": 0,
-          "labelFontSize": 11
+          "labelFontSize": 11,
+          "labelExpr": "{'Jul':'July','Aug':'August','Sep':'September','Oct':'October','Nov':'November','Dec':'December','Jan':'January','Feb':'February','Mar':'March','Apr':'April','May':'May','Jun':'June'}[datum.value]"
         }
       },
       "y": {
@@ -135,37 +136,29 @@
           "color": {
             "field": "pct",
             "type": "quantitative",
-            "title": "Sales vs that year's average",
+            "title": "Sales compared with that year's average",
             "scale": {
+              "type": "threshold",
               "domain": [
-                -15,
-                0,
-                15
-              ],
-              "range": [
-                "#5C6B8A",
-                "#F5F6F3",
-                "#C2724F"
-              ],
-              "clamp": true,
-              "interpolate": "lab"
-            },
-            "legend": {
-              "orient": "top",
-              "direction": "horizontal",
-              "gradientLength": 220,
-              "values": [
-                -15,
                 -10,
                 -5,
-                0,
+                -2,
+                2,
                 5,
-                10,
-                15
+                10
               ],
-              "labelExpr": "(datum.value > 0 ? '+' : '') + datum.value + '%' + (datum.value === 15 ? ' or more' : datum.value === -15 ? ' or less' : '')",
-              "titleLimit": 300
-            }
+              "range": [
+                "#4B5874",
+                "#8A96AE",
+                "#C7CDDA",
+                "#F1F1EE",
+                "#F5C6A3",
+                "#E9924F",
+                "#BF5317"
+              ]
+            },
+            "legend": null,
+            "description": "Seven bands; the colour key is drawn in the figure header (index.html) so it sits on the title sight line."
           },
           "stroke": {
             "condition": {
@@ -190,13 +183,13 @@
             {
               "field": "grams_per_day",
               "type": "quantitative",
-              "title": "Bought (g per person per day)",
+              "title": "Bought (grams per person per day)",
               "format": ".1f"
             },
             {
               "field": "fyAverage",
               "type": "quantitative",
-              "title": "That year's monthly average (g)",
+              "title": "That year's monthly average (grams per person per day)",
               "format": ".1f"
             },
             {
@@ -220,7 +213,7 @@
           },
           "color": {
             "condition": {
-              "test": "abs(datum.pct) >= 14",
+              "test": "abs(datum.pct) >= 10",
               "value": "#ffffff"
             },
             "value": "#2F3A55"

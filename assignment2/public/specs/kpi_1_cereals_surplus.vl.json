@@ -99,7 +99,7 @@
           },
           {
             "field": "exports",
-            "title": "Exported (1000 t)",
+            "title": "Exported (thousand tonnes)",
             "format": ",.0f"
           }
         ]
@@ -132,7 +132,7 @@
       "mark": {
         "type": "text",
         "color": "#A3AEC6",
-        "fontSize": 10,
+        "fontSize": 11,
         "baseline": "bottom"
       },
       "encoding": {
@@ -152,7 +152,7 @@
       "mark": {
         "type": "text",
         "color": "#A3AEC6",
-        "fontSize": 10,
+        "fontSize": 11,
         "baseline": "bottom"
       },
       "encoding": {

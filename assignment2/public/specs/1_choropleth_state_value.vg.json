@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Choropleth: farm-gate food value per resident by state, 2024-25",
   "width": "container",
-  "height": 400,
+  "height": 440,
   "projection": {
     "type": "conicEqualArea",
     "parallels": [
@@ -91,12 +91,13 @@
             ]
           },
           "legend": {
-            "orient": "bottom",
+            "orient": "bottom-left",
             "direction": "horizontal",
             "format": "$,.0f",
-            "titleOrient": "left",
-            "gradientLength": 260,
-            "labelExpr": "datum.label"
+            "titleOrient": "top",
+            "gradientLength": 200,
+            "labelExpr": "datum.label",
+            "offset": 6
           }
         },
         "strokeWidth": {
@@ -128,7 +129,7 @@
           {
             "field": "population",
             "type": "quantitative",
-            "title": "Residents (Dec 2024)",
+            "title": "Residents (December 2024)",
             "format": ",.0f"
           },
           {
@@ -160,16 +161,20 @@
           "filter": "datum.state !== 'ACT'"
         },
         {
-          "calculate": "datum.state + '\\n' + format(datum.value_per_person, '$,.0f')",
+          "calculate": "stateName[datum.state] + '\\n' + format(datum.value_per_person, '$,.0f')",
           "as": "label"
+        },
+        {
+          "calculate": "datum.state === 'SA' ? datum.label_lat + 1.6 : datum.label_lat",
+          "as": "labelLat"
         }
       ],
       "mark": {
         "type": "text",
-        "fontSize": 12,
+        "fontSize": 11,
         "fontWeight": 600,
         "lineBreak": "\n",
-        "lineHeight": 15
+        "lineHeight": 14
       },
       "encoding": {
         "longitude": {
@@ -177,7 +182,7 @@
           "type": "quantitative"
         },
         "latitude": {
-          "field": "label_lat",
+          "field": "labelLat",
           "type": "quantitative"
         },
         "text": {
@@ -191,6 +196,12 @@
           "value": "#2F3A55"
         }
       }
+    }
+  ],
+  "params": [
+    {
+      "name": "stateName",
+      "expr": "{'WA': 'Western\\nAustralia', 'NT': 'Northern\\nTerritory', 'SA': 'South\\nAustralia', 'QLD': 'Queensland', 'NSW': 'New South\\nWales', 'VIC': 'Victoria', 'TAS': 'Tasmania', 'ACT': 'Australian Capital Territory'}"
     }
   ]
 }

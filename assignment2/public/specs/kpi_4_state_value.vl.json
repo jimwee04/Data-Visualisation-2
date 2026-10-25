@@ -69,7 +69,7 @@
           },
           {
             "field": "food_value_m",
-            "title": "Total (A$ m)",
+            "title": "Total (A$ million)",
             "format": ",.0f"
           }
         ],
@@ -86,8 +86,11 @@
             "ticks": false,
             "labelAngle": 0,
             "labelColor": "#E7E2DE",
-            "labelFontSize": 9,
-            "labelPadding": 3
+            "labelFontSize": 10,
+            "labelPadding": 3,
+            "labelExpr": "{'WA': ['Western', 'Australia'], 'NT': ['Northern', 'Territory'], 'SA': ['South', 'Australia'], 'QLD': ['Queensland'], 'NSW': ['New South', 'Wales'], 'VIC': ['Victoria'], 'TAS': ['Tasmania'], 'ACT': ['Australian', 'Capital', 'Territory']}[datum.value]",
+            "labelLineHeight": 12,
+            "labelLimit": 90
           }
         }
       }

@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Box plot with jittered points: month-to-month change in supermarket food sales by food group, Aug 2018 - Jun 2024, with the March-April 2020 shock highlighted",
+  "description": "Box plot with jittered points: month-to-month change in supermarket food sales by food group, August 2018 to June 2024, with the March and April 2020 shock highlighted",
   "width": "container",
   "height": {
     "step": 58
@@ -92,8 +92,8 @@
         "outliers": false,
         "size": 30,
         "box": {
-          "color": "#E1E5ED",
-          "stroke": "#5C6B8A",
+          "color": "#ECEDEF",
+          "stroke": "#8A8D93",
           "strokeWidth": 1
         },
         "median": {
@@ -101,10 +101,10 @@
           "strokeWidth": 2
         },
         "rule": {
-          "color": "#5C6B8A"
+          "color": "#8A8D93"
         },
         "ticks": {
-          "color": "#5C6B8A",
+          "color": "#8A8D93",
           "size": 12
         }
       },
@@ -122,15 +122,11 @@
           },
           "axis": {
             "values": [
-              -30,
+              -40,
               -20,
-              -10,
               0,
-              10,
               20,
-              30,
-              40,
-              50
+              40
             ],
             "labelExpr": "(datum.value > 0 ? '+' : '') + datum.value + '%'",
             "grid": true
@@ -210,30 +206,27 @@
               "Every other month"
             ],
             "range": [
-              "#C2724F",
+              "#e07020",
               "#5C6B8A",
-              "#B9BFCD"
+              "#C4C6CB"
             ]
           },
           "legend": {
-            "orient": "top",
+            "orient": "none",
             "symbolType": "circle",
-            "labelLimit": 260
+            "labelLimit": 260,
+            "legendX": 0,
+            "legendY": -34,
+            "direction": "horizontal"
           }
         },
         "size": {
-          "condition": [
-            {
-              "param": "monthHover",
-              "empty": false,
-              "value": 150
-            },
-            {
-              "test": "datum.when !== 'Every other month'",
-              "value": 110
-            }
-          ],
-          "value": 14
+          "condition": {
+            "param": "monthHover",
+            "empty": false,
+            "value": 120
+          },
+          "value": 40
         },
         "opacity": {
           "condition": [
@@ -264,13 +257,13 @@
           {
             "field": "grams_per_day",
             "type": "quantitative",
-            "title": "Bought (g per person per day)",
+            "title": "Bought (grams per person per day)",
             "format": ".1f"
           },
           {
             "field": "prev",
             "type": "quantitative",
-            "title": "Month before (g)",
+            "title": "Month before (grams)",
             "format": ".1f"
           },
           {
@@ -298,11 +291,7 @@
           }
         },
         "strokeWidth": {
-          "condition": {
-            "test": "datum.when !== 'Every other month'",
-            "value": 1.5
-          },
-          "value": 0
+          "value": 1
         }
       }
     },
@@ -319,7 +308,7 @@
         "dx": 9,
         "fontSize": 11,
         "fontWeight": 600,
-        "color": "#C2724F"
+        "color": "#2F3A55"
       },
       "encoding": {
         "x": {
@@ -361,7 +350,7 @@
         "dx": -9,
         "fontSize": 11,
         "fontWeight": 600,
-        "color": "#5C6B8A"
+        "color": "#2F3A55"
       },
       "encoding": {
         "x": {
@@ -390,5 +379,11 @@
         }
       }
     }
-  ]
+  ],
+  "padding": {
+    "top": 40,
+    "left": 5,
+    "right": 5,
+    "bottom": 5
+  }
 }

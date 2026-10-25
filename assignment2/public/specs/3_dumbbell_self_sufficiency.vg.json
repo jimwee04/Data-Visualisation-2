@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Dumbbell plot: kg grown in Australia for every 100 kg used here, 2010 vs 2023",
+  "description": "Dumbbell plot: kg grown in Australia for every 100 kg used here, 2010 compared with 2023. Both ends are labelled.",
   "width": "container",
   "height": 340,
   "data": {
@@ -104,7 +104,7 @@
       },
       "mark": {
         "type": "text",
-        "fontSize": 10,
+        "fontSize": 11,
         "fontStyle": "italic",
         "color": "#4B5569",
         "baseline": "top",
@@ -126,7 +126,7 @@
     {
       "mark": {
         "type": "rule",
-        "color": "#B9BFCD",
+        "color": "#D5D7DB",
         "strokeWidth": 2
       },
       "encoding": {
@@ -190,7 +190,7 @@
         "x": {
           "field": "self_sufficiency",
           "type": "quantitative",
-          "title": "kg grown here per 100 kg used",
+          "title": "kg grown here for every 100 kg used",
           "scale": {
             "domain": [
               0,
@@ -206,7 +206,7 @@
               300,
               400
             ],
-            "grid": true
+            "grid": false
           }
         },
         "color": {
@@ -218,8 +218,8 @@
               "2023"
             ],
             "range": [
-              "#B9BFCD",
-              "#2F3A55"
+              "#B4B7BD",
+              "#45474C"
             ]
           },
           "legend": {
@@ -248,19 +248,19 @@
           {
             "field": "self_sufficiency",
             "type": "quantitative",
-            "title": "kg grown per 100 kg used",
+            "title": "kg grown for every 100 kg used",
             "format": ".0f"
           },
           {
             "field": "production",
             "type": "quantitative",
-            "title": "Production ('000 t)",
+            "title": "Production (thousand tonnes)",
             "format": ",.0f"
           },
           {
             "field": "domestic_use",
             "type": "quantitative",
-            "title": "Used in Australia ('000 t)",
+            "title": "Used in Australia (thousand tonnes)",
             "format": ",.0f"
           }
         ]
@@ -271,9 +271,9 @@
         {
           "joinaggregate": [
             {
-              "op": "max",
+              "op": "sum",
               "field": "self_sufficiency",
-              "as": "rightEnd"
+              "as": "pairSum"
             }
           ],
           "groupby": [
@@ -281,7 +281,11 @@
           ]
         },
         {
-          "filter": "datum.year === 2023"
+          "calculate": "datum.self_sufficiency > datum.pairSum - datum.self_sufficiency || (datum.self_sufficiency === datum.pairSum - datum.self_sufficiency && datum.year === 2023)",
+          "as": "isRight"
+        },
+        {
+          "filter": "datum.isRight"
         }
       ],
       "mark": {
@@ -289,8 +293,8 @@
         "align": "left",
         "dx": 10,
         "fontSize": 11,
-        "fontWeight": 600,
-        "color": "#2F3A55"
+        "strokeWidth": 4,
+        "strokeJoin": "round"
       },
       "encoding": {
         "y": {
@@ -303,13 +307,224 @@
           }
         },
         "x": {
-          "field": "rightEnd",
+          "field": "self_sufficiency",
           "type": "quantitative"
         },
         "text": {
           "field": "self_sufficiency",
           "type": "quantitative",
           "format": ".0f"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.year === 2023",
+            "value": "#2F3A55"
+          },
+          "value": "#6E6F73"
+        },
+        "opacity": {
+          "condition": {
+            "param": "yearPick",
+            "value": 1
+          },
+          "value": 0.2
+        },
+        "stroke": {
+          "condition": {
+            "test": "datum.self_sufficiency + 8 < 100",
+            "value": "#E7E2DE"
+          },
+          "value": "#ffffff"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "joinaggregate": [
+            {
+              "op": "sum",
+              "field": "self_sufficiency",
+              "as": "pairSum"
+            }
+          ],
+          "groupby": [
+            "group"
+          ]
+        },
+        {
+          "calculate": "datum.self_sufficiency > datum.pairSum - datum.self_sufficiency || (datum.self_sufficiency === datum.pairSum - datum.self_sufficiency && datum.year === 2023)",
+          "as": "isRight"
+        },
+        {
+          "filter": "datum.isRight"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 10,
+        "fontSize": 11
+      },
+      "encoding": {
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "sort": {
+            "field": "sortKey",
+            "op": "max",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "self_sufficiency",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "self_sufficiency",
+          "type": "quantitative",
+          "format": ".0f"
+        },
+        "color": {
+          "value": "#2F3A55"
+        },
+        "opacity": {
+          "condition": {
+            "param": "yearPick",
+            "value": 1
+          },
+          "value": 0.2
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "joinaggregate": [
+            {
+              "op": "sum",
+              "field": "self_sufficiency",
+              "as": "pairSum"
+            }
+          ],
+          "groupby": [
+            "group"
+          ]
+        },
+        {
+          "calculate": "datum.self_sufficiency > datum.pairSum - datum.self_sufficiency || (datum.self_sufficiency === datum.pairSum - datum.self_sufficiency && datum.year === 2023)",
+          "as": "isRight"
+        },
+        {
+          "filter": "!datum.isRight"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -10,
+        "fontSize": 11,
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "sort": {
+            "field": "sortKey",
+            "op": "max",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "self_sufficiency",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "self_sufficiency",
+          "type": "quantitative",
+          "format": ".0f"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.year === 2023",
+            "value": "#2F3A55"
+          },
+          "value": "#6E6F73"
+        },
+        "opacity": {
+          "condition": {
+            "param": "yearPick",
+            "value": 1
+          },
+          "value": 0.2
+        },
+        "stroke": {
+          "condition": {
+            "test": "datum.self_sufficiency - 8 < 100",
+            "value": "#E7E2DE"
+          },
+          "value": "#ffffff"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "joinaggregate": [
+            {
+              "op": "sum",
+              "field": "self_sufficiency",
+              "as": "pairSum"
+            }
+          ],
+          "groupby": [
+            "group"
+          ]
+        },
+        {
+          "calculate": "datum.self_sufficiency > datum.pairSum - datum.self_sufficiency || (datum.self_sufficiency === datum.pairSum - datum.self_sufficiency && datum.year === 2023)",
+          "as": "isRight"
+        },
+        {
+          "filter": "!datum.isRight"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -10,
+        "fontSize": 11
+      },
+      "encoding": {
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "sort": {
+            "field": "sortKey",
+            "op": "max",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "self_sufficiency",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "self_sufficiency",
+          "type": "quantitative",
+          "format": ".0f"
+        },
+        "color": {
+          "value": "#2F3A55"
+        },
+        "opacity": {
+          "condition": {
+            "param": "yearPick",
+            "value": 1
+          },
+          "value": 0.2
         }
       }
     }

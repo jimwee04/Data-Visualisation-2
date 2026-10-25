@@ -83,11 +83,11 @@
               3500
             ],
             "range": [
-              "#E7E2DE",
-              "#B9BFCD",
-              "#8B96AE",
-              "#5C6B8A",
-              "#2F3A55"
+              "#E4EEE0",
+              "#B5D2AE",
+              "#7FB079",
+              "#3F8A45",
+              "#1F5E26"
             ]
           },
           "legend": {
@@ -190,7 +190,7 @@
         },
         "color": {
           "condition": {
-            "test": "datum.label_inside === 1 && datum.value_per_person >= 2500",
+            "test": "datum.label_inside === 1 && datum.value_per_person >= 3000",
             "value": "#ffffff"
           },
           "value": "#2F3A55"

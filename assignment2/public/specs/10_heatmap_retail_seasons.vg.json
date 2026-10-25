@@ -158,7 +158,7 @@
               ]
             },
             "legend": null,
-            "description": "Seven bands; the colour key is drawn in the figure header (index.html) so it sits on the title sight line."
+            "description": "Seven bands; the colour key is drawn in the chart header (index.html) so it sits on the title sight line."
           },
           "stroke": {
             "condition": {

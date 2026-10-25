@@ -63,10 +63,10 @@ const kpis = {
 // so their cells are sized to fill the card once, before embedding.
 const fitToWidth = {
   // Ten waffles of 10 squares with 28px between them and ~32px of chart padding:
-  // five per row when they fit at 13px squares, otherwise two, so rows always split evenly;
+  // five per row when they fit at the 11px minimum square, otherwise two, so rows always split evenly;
   // then squares grow to fill the row.
   fig4: (spec, w) => {
-    const cols = Math.floor((w - 4) / 158) >= 5 ? 5 : 2;
+    const cols = w >= 5 * 110 + 4 * 28 + 32 ? 5 : 2;
     const square = Math.max(11, Math.min(20, Math.floor((w - 32 - 28 * (cols - 1)) / (cols * 10))));
     spec.columns = cols;
     spec.spec.width.step = spec.spec.height.step = square;
@@ -82,13 +82,19 @@ const fitToWidth = {
 
 const views = {};
 
-function embed(id, url, config) {
+// Specs and their data are resolved against this script's folder (public/), not the page,
+// so the same script works whether the page sits at the repo root or inside public/.
+const BASE = new URL("../", document.currentScript.src).href;
+const loader = vega.loader({ baseURL: BASE });
+
+function embed(id, path, config) {
+  const url = new URL(path, BASE).href;
   const fit = fitToWidth[id];
   const spec = fit
     ? fetch(url).then((r) => r.json()).then((s) => { fit(s, document.getElementById(id).clientWidth); return s; })
     : Promise.resolve(url);
   return spec
-    .then((s) => vegaEmbed("#" + id, s, { actions: false, renderer: "svg", config }))
+    .then((s) => vegaEmbed("#" + id, s, { actions: false, renderer: "svg", config, loader }))
     .then((result) => {
       views[id] = result.view;
       // Apply any icon choice made while the chart was still loading.
@@ -134,8 +140,8 @@ document.querySelectorAll(".icon-filter").forEach((group) => {
 });
 
 // ---------------------------------------------------------------- stage rail
-// Marks the stage being read, fills the track up to it, and (on narrow screens)
-// slides the rail in once the hero has scrolled away.
+// The rail is a top bar: it marks the stage being read, fills the track up to it,
+// and slides in once the hero has scrolled away.
 (function stageRail() {
   const rail = document.querySelector(".rail");
   if (!rail) return;
@@ -144,29 +150,18 @@ document.querySelectorAll(".icon-filter").forEach((group) => {
   const items = [...rail.querySelectorAll(".rail-item")];
   const sections = items.map((a) => document.querySelector(a.getAttribute("href")));
   const hero = document.querySelector(".hero");
-  const wide = window.matchMedia("(min-width: 1100px)");
   let lastCurrent = -1;
 
   // Stretch the track between the first and last dot centres.
   function placeTrack() {
     const box = list.getBoundingClientRect();
-    const centre = (a) => {
+    const centreX = (a) => {
       const r = a.querySelector(".rail-dot").getBoundingClientRect();
-      return {
-        x: r.left + r.width / 2 - box.left + list.scrollLeft,
-        y: r.top + r.height / 2 - box.top + list.scrollTop
-      };
+      return r.left + r.width / 2 - box.left + list.scrollLeft;
     };
-    const first = centre(items[0]), last = centre(items[items.length - 1]);
-    if (wide.matches) {
-      track.style.top = first.y + "px";
-      track.style.height = last.y - first.y + "px";
-      track.style.left = track.style.width = "";
-    } else {
-      track.style.left = first.x + "px";
-      track.style.width = last.x - first.x + "px";
-      track.style.top = track.style.height = "";
-    }
+    const first = centreX(items[0]), last = centreX(items[items.length - 1]);
+    track.style.left = first + "px";
+    track.style.width = last - first + "px";
   }
 
   function update() {
@@ -192,8 +187,8 @@ document.querySelectorAll(".icon-filter").forEach((group) => {
       else a.removeAttribute("aria-current");
     });
 
-    // Keep the current stage visible inside the horizontally scrolling top bar.
-    if (!wide.matches && current !== lastCurrent && current >= 0) {
+    // Keep the current stage visible when the bar is narrow enough to scroll.
+    if (current !== lastCurrent && current >= 0 && list.scrollWidth > list.clientWidth) {
       const a = items[current];
       list.scrollLeft = a.offsetLeft - (list.clientWidth - a.offsetWidth) / 2;
     }
@@ -209,7 +204,6 @@ document.querySelectorAll(".icon-filter").forEach((group) => {
     requestAnimationFrame(() => { update(); ticking = false; });
   }, { passive: true });
   window.addEventListener("resize", () => { placeTrack(); update(); });
-  wide.addEventListener("change", () => { placeTrack(); update(); });
   document.fonts.ready.then(placeTrack);
 
   placeTrack();

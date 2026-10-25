@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Small-multiple waffle charts: out of every 100 kg of a food group grown or imported, how many were exported, grown and used here, or imported. Each panel is labelled with all three percentages.",
+  "description": "Small-multiple waffle charts: out of every 100 kg of a food group grown or imported, how many were exported, grown and kept here, or imported. Each panel is labelled with all three percentages.",
   "params": [
     {
       "name": "yr",
@@ -60,7 +60,7 @@
       "as": "nKept"
     },
     {
-      "calculate": "upper(datum.group) + '|' + datum.nExported + '% exported|' + datum.nKept + '% grown & used here|' + datum.nImported + '% imported'",
+      "calculate": "upper(datum.group) + '|' + datum.nExported + '% exported|' + datum.nKept + '% kept here|' + datum.nImported + '% imported'",
       "as": "panel"
     },
     {
@@ -81,7 +81,7 @@
       "as": "row"
     },
     {
-      "calculate": "datum.cell < datum.nExported ? 'Exported' : datum.cell < datum.nExported + datum.nKept ? 'Grown & used here' : 'Imported'",
+      "calculate": "datum.cell < datum.nExported ? 'Exported' : datum.cell < datum.nExported + datum.nKept ? 'Grown and kept here' : 'Imported'",
       "as": "part"
     },
     {
@@ -149,12 +149,12 @@
         "scale": {
           "domain": [
             "Exported",
-            "Grown & used here",
+            "Grown and kept here",
             "Imported"
           ],
           "range": [
-            "#2F3A55",
-            "#C9CDD6",
+            "#2E7D32",
+            "#D3D1CC",
             "#b0408e"
           ]
         },

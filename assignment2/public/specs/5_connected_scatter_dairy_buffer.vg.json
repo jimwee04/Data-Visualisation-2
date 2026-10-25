@@ -82,7 +82,7 @@
   },
   "layer": [
     {
-      "description": "Shortfall zone: above the 100 line, more is used than produced (same stone fill as Figure 3)",
+      "description": "Shortfall zone: above the 100 line, more is used than produced (same stone fill as the self-sufficiency chart)",
       "data": {
         "values": [
           {
@@ -305,8 +305,8 @@
               2023
             ],
             "range": [
-              "#D5D7DB",
-              "#45474C"
+              "#C2DBBE",
+              "#1F5E26"
             ]
           },
           "legend": {

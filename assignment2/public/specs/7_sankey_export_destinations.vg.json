@@ -14,8 +14,8 @@
       "type": "quantitative",
       "scale": {
         "domain": [
-          -0.42,
-          1.58
+          -0.44,
+          1.74
         ]
       },
       "axis": null
@@ -136,7 +136,7 @@
               "#c0392b",
               "#bfae1c",
               "#1a9bb5",
-              "#B9BFCD"
+              "#C4C6CB"
             ]
           },
           "legend": {
@@ -253,7 +253,7 @@
             "color": {
               "condition": {
                 "test": "datum.side === 'Destination'",
-                "value": "#2F3A55"
+                "value": "#45474C"
               },
               "field": "family",
               "type": "nominal"

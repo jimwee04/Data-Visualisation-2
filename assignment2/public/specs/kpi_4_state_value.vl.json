@@ -37,7 +37,7 @@
     {
       "mark": {
         "type": "bar",
-        "color": "#A3AEC6",
+        "color": "#9CCB9F",
         "cornerRadiusTopLeft": 2,
         "cornerRadiusTopRight": 2,
         "width": {

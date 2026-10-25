@@ -183,7 +183,7 @@
                   "Imports"
                 ],
                 "range": [
-                  "#2F3A55",
+                  "#2E7D32",
                   "#b0408e"
                 ]
               },
@@ -258,7 +258,7 @@
                   "Imports"
                 ],
                 "range": [
-                  "#2F3A55",
+                  "#2E7D32",
                   "#b0408e"
                 ]
               },
@@ -456,7 +456,7 @@
       "mark": {
         "type": "circle",
         "size": 160,
-        "fill": "#2F3A55",
+        "fill": "#2E7D32",
         "stroke": "#ffffff",
         "strokeWidth": 2,
         "opacity": 1

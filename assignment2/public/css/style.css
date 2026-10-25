@@ -8,6 +8,9 @@
   /* Derived shades: a darker grey-slate for small text on stone, and a light slate tint for use on ink */
   --ink-soft: #4B5569;
   --slate-tint: #A3AEC6;
+  /* Answer accent: a saturated violet that clashes with the muted navy and warm stone on purpose.
+     No chart uses it, so it never reads as a data colour (nearest chart colour is 16.9 apart). */
+  --answer: #6D28D9;
 
   --surface: var(--paper);
   --surface-alt: var(--stone);
@@ -21,7 +24,6 @@
   /* Tall condensed display face (produce-crate / market signage) + a plain public-data sans */
   --display: "Big Shoulders Display", "Arial Narrow", sans-serif;
   --sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --rail-w: 200px;
   /* About 60 characters (7 to 10 words) per line, whatever the font size */
   --measure: 25em;
 }
@@ -204,12 +206,11 @@ a:hover { color: var(--slate); }
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
 }
-/* Each card is head / chart / caption. As a subgrid, paired cards share those rows,
-   so their titles, charts and captions start on the same lines. */
+/* Each card is question and answer / chart lead / chart / caption. On wide screens the question and
+   answer take a quarter-width column beside the chart (1:3), divided by a rule; otherwise they stack. */
 .card {
   display: grid;
-  grid-template-rows: subgrid;
-  grid-row: span 3;
+  grid-template-columns: minmax(0, 1fr);
   row-gap: 16px;
   align-content: start;
   background: var(--card);
@@ -221,29 +222,42 @@ a:hover { color: var(--slate); }
   min-width: 0;
 }
 .card--full { grid-column: 1 / -1; }
-.fig-head { min-width: 0; container-type: inline-size; }
-.fig-head .icon-filter { margin: 12px 0 0; }
-.fig-num {
-  margin: 0;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-muted);
+.fig-head { min-width: 0; }
+.fig-lead { min-width: 0; container-type: inline-size; }
+.fig-lead .icon-filter { margin: 12px 0 0; }
+@media (min-width: 1300px) {
+  .card { grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); column-gap: 36px; }
+  .card > .fig-head {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    padding-right: 32px;
+    border-right: 1px solid var(--border);
+  }
+  .card > :not(.fig-head) { grid-column: 2; }
 }
+/* Card text hierarchy, loudest first:
+   1. the answer (the finding to remember), 2. the question that sets it up;
+   in the chart column, the chart title says what is plotted and the caption is the quietest note. */
 .card h3 {
-  margin: 4px 0 2px;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.3;
-  max-width: var(--measure);
-}
-/* Figure titles read "Question? Answer": the question sits on its own quieter line, the answer below carries the weight */
-.fig-q { display: block; margin-bottom: 2px; color: var(--slate); font-weight: 600; }
-.fig-sub {
   margin: 0;
   font-size: 16px;
-  color: var(--text-secondary);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--slate);
+  max-width: var(--measure);
+}
+.fig-a {
+  margin: 6px 0 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--answer);
+}
+.fig-sub {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
   max-width: var(--measure);
 }
 .chart { width: 100%; min-height: 340px; }
@@ -265,28 +279,6 @@ figcaption > span { display: block; }
 figcaption > span { max-width: none; }
 .fig-sub { max-width: none; }
 .src { color: var(--text-muted); font-style: italic; }
-
-/* Reference values for Figure 1, in the row where Figure 2 has its filter, so that space carries information */
-.fig-keys {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
-  margin: 12px 0 0;
-  padding: 4px;
-  background: var(--paper);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-}
-.fig-keys > div { padding: 10px 10px 8px; min-width: 0; }
-.fig-keys dt { font-size: 12px; font-weight: 500; line-height: 1.3; color: var(--text-secondary); }
-.fig-keys dd {
-  margin: 2px 0 0;
-  font-family: var(--display);
-  font-size: 26px;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--text-primary);
-}
 
 /* Figure 10's colour key: one swatch per band, left-aligned under the subtitle */
 .band-key {
@@ -438,6 +430,23 @@ figcaption > span { max-width: none; }
   background: rgba(245, 246, 243, 0.07);
   font-size: 18px;
 }
+/* The verdict's overall answer, then one card per part of the research question */
+.verdict-lede {
+  max-width: var(--measure);
+  margin: 12px 0 0;
+  font-size: 20px;
+  color: var(--stone);
+}
+.summary li p { margin: 0; }
+.summary li .summary-q {
+  margin-bottom: 4px;
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate-tint);
+}
 .summary-icon {
   flex: none;
   width: 26px;
@@ -571,63 +580,36 @@ figcaption > span { max-width: none; }
 .rail-item.is-current .rail-stage { color: var(--ink); text-decoration: underline; text-decoration-color: var(--slate); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 .rail-item.is-current .rail-title { color: var(--text-secondary); }
 
-/* Wide screens: vertical rail in the left margin; content shifts right to make room */
-@media (min-width: 1100px) {
-  .rail {
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: var(--rail-w);
-    max-height: calc(100vh - 32px);
-    overflow-y: auto;
-    padding: 14px 10px 10px;
-    border-radius: 14px;
-    box-shadow: 0 8px 28px rgba(47, 58, 85, 0.14);
-  }
-  .rail-list li + li { margin-top: 2px; }
-  .rail-track { left: 19px; width: 2px; }
-  .rail-fill { transform-origin: top; transform: scaleY(var(--progress, 0)); }
-  .rail-item { align-items: flex-start; }
-  .rail-text { padding-top: 2px; }
-
-  .wrap {
-    --ml: max(calc(var(--rail-w) + 28px), calc((100% - 1440px) / 2));
-    margin-left: var(--ml);
-    margin-right: auto;
-    max-width: min(1440px, calc(100% - var(--ml) - 16px));
-  }
+/* The rail is a top bar at every width: it slides in once the hero has scrolled away,
+   and its stages sit centred, scrolling sideways only when the screen is too narrow */
+.rail {
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 6px 10px;
+  box-shadow: 0 2px 12px rgba(47, 58, 85, 0.12);
+  transform: translateY(-110%);
+  transition: transform 0.25s ease;
 }
-
-/* Narrow screens: the rail becomes a top bar that slides in after the hero */
-@media (max-width: 1099.98px) {
-  .rail {
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 6px 10px;
-    box-shadow: 0 2px 12px rgba(47, 58, 85, 0.12);
-    transform: translateY(-110%);
-    transition: transform 0.25s ease;
-  }
-  body.past-hero .rail { transform: none; }
-  .rail-heading, .rail-title { display: none; }
-  .rail-list {
-    display: flex;
-    gap: 2px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .rail-list::-webkit-scrollbar { display: none; }
-  .rail-track { top: 17px; height: 2px; }
-  .rail-fill { transform-origin: left; transform: scaleX(var(--progress, 0)); }
-  .rail-item { align-items: center; gap: 6px; padding: 4px 8px 4px 4px; white-space: nowrap; }
-  /* The track runs behind the labels, so each label gets a backing that stops the line at the words */
-  .rail-text { padding: 0 6px; background: var(--card); }
-  .rail-item:hover .rail-text { background: var(--surface-alt); }
-  .rail-dot { flex-basis: 26px; height: 26px; }
-  .rail-stage { font-size: 15px; }
-  .story { scroll-margin-top: 52px; }
+body.past-hero .rail { transform: none; }
+.rail-heading, .rail-title { display: none; }
+.rail-list {
+  display: flex;
+  justify-content: safe center;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+.rail-list::-webkit-scrollbar { display: none; }
+.rail-track { top: 17px; height: 2px; }
+.rail-fill { transform-origin: left; transform: scaleX(var(--progress, 0)); }
+.rail-item { align-items: center; gap: 6px; padding: 4px 8px 4px 4px; white-space: nowrap; }
+/* The track runs behind the labels, so each label gets a backing that stops the line at the words */
+.rail-text { padding: 0 6px; background: var(--card); }
+.rail-item:hover .rail-text { background: var(--surface-alt); }
+.rail-dot { flex-basis: 26px; height: 26px; }
+.rail-stage { font-size: 15px; }
+.story { scroll-margin-top: 52px; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

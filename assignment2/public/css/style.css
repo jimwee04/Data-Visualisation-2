@@ -207,7 +207,7 @@ a:hover { color: var(--slate); }
   gap: 24px;
 }
 /* Each card is question and answer / chart lead / chart / caption. On wide screens the question and
-   answer take a quarter-width column beside the chart (1:3), divided by a rule; otherwise they stack. */
+   answer take a third-width column beside the chart (1:2), divided by a rule; otherwise they stack. */
 .card {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -226,7 +226,7 @@ a:hover { color: var(--slate); }
 .fig-lead { min-width: 0; container-type: inline-size; }
 .fig-lead .icon-filter { margin: 12px 0 0; }
 @media (min-width: 1300px) {
-  .card { grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); column-gap: 36px; }
+  .card { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); column-gap: 36px; }
   .card > .fig-head {
     grid-column: 1;
     grid-row: 1 / span 3;
@@ -235,14 +235,14 @@ a:hover { color: var(--slate); }
   }
   .card > :not(.fig-head) { grid-column: 2; }
 }
-/* Card text hierarchy, loudest first:
-   1. the answer (the finding to remember), 2. the question that sets it up;
-   in the chart column, the chart title says what is plotted and the caption is the quietest note. */
+/* Text hierarchy, loudest first, on a 12 / 14 / 16 / 22 / 28 / 56 px scale:
+   section heading 56, section takeaway 28 (violet), figure answer 22 (violet), chart title and insight 16,
+   question 15 (semibold slate, still readable), caption 14, labels and axes 12. */
 .card h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  line-height: 1.35;
+  line-height: 1.4;
   color: var(--slate);
   max-width: var(--measure);
 }
@@ -255,7 +255,7 @@ a:hover { color: var(--slate); }
 }
 .fig-sub {
   margin: 0;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
   max-width: var(--measure);
@@ -268,7 +268,7 @@ figcaption {
   align-self: end;
   padding-top: 14px;
   border-top: 1px solid var(--border);
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text-secondary);
   line-height: 1.55;
 }
@@ -367,43 +367,55 @@ figcaption > span { max-width: none; }
 .vega-bind label { margin-right: 10px; }
 
 /* ---------------------------------------------------------------- takeaways */
-/* A band under the figures, on the same two columns: the interpretation left, the pull quote right */
+/* The section's key takeaway sits on the cards' grid: label in the question column, quote in the chart column,
+   so a section has one vertical split instead of three */
 .takeaway {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
   margin-top: 40px;
   padding-top: 28px;
   border-top: 2px solid var(--ink);
 }
-.takeaway p { margin: 0; max-width: var(--measure); font-size: 18px; font-weight: 400; line-height: 1.6; }
-/* Key figures in paragraphs: bold ink on a neutral tint, so they lead the eye without borrowing a chart colour */
-.takeaway mark {
-  padding: 0 0.15em;
-  border-radius: 3px;
-  background: rgba(92, 107, 138, 0.16);
-  color: var(--text-primary);
+@media (min-width: 1300px) {
+  /* Same inner width as a card (1px border + 32px padding each side), so the 1:2 split lands on the same line */
+  .takeaway {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    column-gap: 36px;
+    padding: 28px 33px 0;
+  }
+}
+.takeaway p { margin: 0; }
+/* The section's answer outranks each figure's answer: same violet, larger */
+.takeaway .pull {
+  max-width: var(--measure);
+  font-size: 28px;
   font-weight: 700;
+  line-height: 1.3;
+  color: var(--answer);
 }
-.pull {
-  align-self: start;
-  padding-left: 24px;
-  border-left: 4px solid var(--slate);
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.35;
-  color: var(--text-primary);
-}
-.takeaway .pull { font-size: 24px; font-weight: 600; line-height: 1.35; }
-.pull-label {
-  display: block;
-  margin-bottom: 6px;
+.pull-label,
+.insight-label {
   font-family: var(--display);
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--slate);
+}
+.takeaway .pull-label { padding-top: 4px; }
+
+/* Each figure's key insight, under its question and answer */
+.fig-insight { margin-top: 20px; }
+.fig-insight p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--text-primary); }
+.fig-insight .insight-label { margin-bottom: 6px; line-height: 1.2; color: var(--slate); }
+/* Key figures in the insight: bold ink on a neutral tint, so they lead the eye without borrowing a chart colour */
+.fig-insight mark {
+  padding: 0 0.15em;
+  border-radius: 3px;
+  background: rgba(92, 107, 138, 0.16);
+  color: var(--text-primary);
+  font-weight: 700;
 }
 
 /* ---------------------------------------------------------------- conclusion */

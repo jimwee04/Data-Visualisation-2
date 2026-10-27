@@ -38,7 +38,7 @@
         "domain": false,
         "ticks": false,
         "labelColor": "#E7E2DE",
-        "labelFontSize": 11,
+        "labelFontSize": 12,
         "labelPadding": 6
       }
     },
@@ -66,7 +66,11 @@
       },
       "encoding": {
         "color": {
-          "value": "#F5F6F3"
+          "condition": {
+            "test": "datum.meat === 'Beef'",
+            "value": "#E58A80"
+          },
+          "value": "#7FB0E6"
         },
         "tooltip": [
           {
@@ -87,7 +91,7 @@
         "align": "left",
         "dx": 4,
         "color": "#F5F6F3",
-        "fontSize": 11,
+        "fontSize": 12,
         "fontWeight": 600
       },
       "encoding": {

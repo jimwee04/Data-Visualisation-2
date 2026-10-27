@@ -6,7 +6,7 @@
   "params": [
     {
       "name": "familyOf",
-      "expr": "{'Beef': 'Meat', 'Lamb & mutton': 'Meat', 'Wheat': 'Grains', 'Barley': 'Grains', 'Canola': 'Oilseeds & pulses', 'Pulses': 'Oilseeds & pulses', 'Dairy': 'Dairy, wine & other food', 'Wine': 'Dairy, wine & other food', 'Other food': 'Dairy, wine & other food'}"
+      "expr": "{'Beef': 'Meat', 'Lamb & mutton': 'Meat', 'Wheat': 'Grains, oilseeds & pulses', 'Barley': 'Grains, oilseeds & pulses', 'Canola': 'Grains, oilseeds & pulses', 'Pulses': 'Grains, oilseeds & pulses', 'Dairy': 'Dairy, wine & other food', 'Wine': 'Dairy, wine & other food', 'Other food': 'Dairy, wine & other food'}"
     }
   ],
   "encoding": {
@@ -128,21 +128,19 @@
           "scale": {
             "domain": [
               "Meat",
-              "Grains",
-              "Oilseeds & pulses",
+              "Grains, oilseeds & pulses",
               "Dairy, wine & other food"
             ],
             "range": [
               "#c0392b",
               "#bfae1c",
-              "#1a9bb5",
               "#C4C6CB"
             ]
           },
           "legend": {
             "orient": "top",
             "symbolType": "square",
-            "columns": 4,
+            "columns": 3,
             "labelLimit": 260
           }
         },
@@ -158,8 +156,12 @@
               "value": 0.08
             },
             {
+              "test": "datum.commodity === 'Barley' && datum.region === 'China' && length(data('familyPick_store')) === 0",
+              "value": 0.85
+            },
+            {
               "param": "familyPick",
-              "value": 0.55
+              "value": 0.5
             }
           ],
           "value": 0.08
@@ -290,7 +292,7 @@
             "align": "right",
             "baseline": "middle",
             "dx": -8,
-            "fontSize": 11,
+            "fontSize": 12,
             "fontWeight": 600,
             "color": "#2F3A55"
           },
@@ -317,7 +319,7 @@
             "align": "left",
             "baseline": "middle",
             "dx": 8,
-            "fontSize": 11,
+            "fontSize": 12,
             "fontWeight": 600,
             "color": "#2F3A55"
           },
@@ -363,7 +365,7 @@
             "type": "text",
             "align": "right",
             "baseline": "top",
-            "fontSize": 11,
+            "fontSize": 12,
             "fontWeight": 700,
             "letterSpacing": 1,
             "color": "#6E6F73"
@@ -390,7 +392,7 @@
             "type": "text",
             "align": "left",
             "baseline": "top",
-            "fontSize": 11,
+            "fontSize": 12,
             "fontWeight": 700,
             "letterSpacing": 1,
             "color": "#6E6F73"
@@ -405,6 +407,75 @@
             "text": {
               "field": "t"
             }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Call-out for the story's headline flow: barley to China, placed at the ribbon's midpoint",
+      "data": {
+        "url": "../data/clean/sankey_links.csv",
+        "format": {
+          "parse": {
+            "usd_m": "number",
+            "src_y": "number",
+            "tgt_y": "number",
+            "pct_of_commodity": "number",
+            "pct_of_region": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.commodity === 'Barley' && datum.region === 'China'"
+        },
+        {
+          "calculate": "(datum.src_y + datum.tgt_y) / 2 + datum.usd_m / 2",
+          "as": "ymid"
+        },
+        {
+          "calculate": "'Barley to China: ' + format(datum.pct_of_commodity, '.0f') + '% of our barley'",
+          "as": "t"
+        },
+        {
+          "calculate": "0.5",
+          "as": "x"
+        }
+      ],
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "ymid",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "text",
+            "fontSize": 12,
+            "fontWeight": 700,
+            "color": "#2F3A55",
+            "stroke": "#ffffff",
+            "strokeWidth": 4,
+            "strokeJoin": "round",
+            "strokeOpacity": 0.9,
+            "dy": -14
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "fontSize": 12,
+            "fontWeight": 700,
+            "color": "#2F3A55",
+            "dy": -14
           }
         }
       ]

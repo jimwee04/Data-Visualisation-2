@@ -1,0 +1,100 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "KPI micro-chart: Australia's food exports compared with its food imports, 2024, US$ billion.",
+  "width": "container",
+  "height": 44,
+  "data": {
+    "url": "../data/clean/trade_totals.csv",
+    "format": {
+      "parse": {
+        "usd_b": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.flow === 'Exports' ? 'Exported' : 'Imported'",
+      "as": "dir"
+    },
+    {
+      "calculate": "'US$' + format(datum.usd_b, '.1f') + ' billion'",
+      "as": "label"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "dir",
+      "type": "nominal",
+      "sort": [
+        "Exported",
+        "Imported"
+      ],
+      "axis": {
+        "title": null,
+        "domain": false,
+        "ticks": false,
+        "labelColor": "#E7E2DE",
+        "labelFontSize": 12,
+        "labelPadding": 6
+      }
+    },
+    "x": {
+      "field": "usd_b",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          0,
+          62
+        ],
+        "nice": false
+      },
+      "axis": null
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 2,
+        "height": {
+          "band": 0.72
+        }
+      },
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.flow === 'Exports'",
+            "value": "#9CCB9F"
+          },
+          "value": "#E59BCB"
+        },
+        "tooltip": [
+          {
+            "field": "dir",
+            "title": "Food"
+          },
+          {
+            "field": "usd_b",
+            "title": "US$ billion, 2024",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 4,
+        "color": "#F5F6F3",
+        "fontSize": 12,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "text": {
+          "field": "label"
+        }
+      }
+    }
+  ]
+}

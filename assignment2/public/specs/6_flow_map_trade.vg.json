@@ -124,7 +124,10 @@
             "type": "line",
             "opacity": 0.6,
             "strokeCap": "round",
-            "interpolate": "linear"
+            "interpolate": "linear",
+            "color": {
+              "expr": "flow === 'Exports' ? '#2E7D32' : '#b0408e'"
+            }
           },
           "encoding": {
             "longitude": {
@@ -168,31 +171,13 @@
                 ],
                 "format": ",.0f",
                 "symbolType": "stroke",
-                "symbolStrokeColor": "#6E6F73",
+                "symbolStrokeColor": {
+                  "expr": "flow === 'Exports' ? '#2E7D32' : '#b0408e'"
+                },
                 "symbolSize": 400,
                 "titleOrient": "top",
-                "titleLimit": 320
-              }
-            },
-            "color": {
-              "field": "flow",
-              "type": "nominal",
-              "scale": {
-                "domain": [
-                  "Exports",
-                  "Imports"
-                ],
-                "range": [
-                  "#2E7D32",
-                  "#b0408e"
-                ]
-              },
-              "legend": {
-                "orient": "top-left",
-                "title": null,
-                "symbolType": "stroke",
-                "labelExpr": "datum.label === 'Exports' ? 'Food exports (Australia → partner)' : 'Food imports (partner → Australia)'",
-                "labelLimit": 320
+                "titleLimit": 320,
+                "symbolOpacity": 0.6
               }
             },
             "tooltip": [
@@ -238,7 +223,10 @@
             "size": 55,
             "stroke": "#ffffff",
             "strokeWidth": 1.5,
-            "opacity": 1
+            "opacity": 1,
+            "color": {
+              "expr": "flow === 'Exports' ? '#2E7D32' : '#b0408e'"
+            }
           },
           "encoding": {
             "longitude": {
@@ -248,21 +236,6 @@
             "latitude": {
               "field": "lat",
               "type": "quantitative"
-            },
-            "color": {
-              "field": "flow",
-              "type": "nominal",
-              "scale": {
-                "domain": [
-                  "Exports",
-                  "Imports"
-                ],
-                "range": [
-                  "#2E7D32",
-                  "#b0408e"
-                ]
-              },
-              "legend": null
             },
             "tooltip": [
               {
@@ -304,7 +277,7 @@
           "description": "Partner labels (top of node) with a halo so flows passing underneath do not hide them.",
           "transform": [
             {
-              "filter": "datum.rank <= 8 && datum.label_side === 'top'"
+              "filter": "datum.rank <= 10 && datum.label_side === 'top'"
             }
           ],
           "encoding": {
@@ -324,7 +297,7 @@
             {
               "mark": {
                 "type": "text",
-                "fontSize": 11,
+                "fontSize": 12,
                 "fontWeight": 600,
                 "color": "#2F3A55",
                 "baseline": "bottom",
@@ -338,7 +311,7 @@
             {
               "mark": {
                 "type": "text",
-                "fontSize": 11,
+                "fontSize": 12,
                 "fontWeight": 600,
                 "color": "#2F3A55",
                 "baseline": "bottom",
@@ -351,7 +324,7 @@
           "description": "Partner labels (left of node) with a halo so flows passing underneath do not hide them.",
           "transform": [
             {
-              "filter": "datum.rank <= 8 && datum.label_side === 'left'"
+              "filter": "datum.rank <= 10 && datum.label_side === 'left'"
             }
           ],
           "encoding": {
@@ -371,7 +344,7 @@
             {
               "mark": {
                 "type": "text",
-                "fontSize": 11,
+                "fontSize": 12,
                 "fontWeight": 600,
                 "color": "#2F3A55",
                 "align": "right",
@@ -385,7 +358,7 @@
             {
               "mark": {
                 "type": "text",
-                "fontSize": 11,
+                "fontSize": 12,
                 "fontWeight": 600,
                 "color": "#2F3A55",
                 "align": "right",
@@ -398,7 +371,7 @@
           "description": "Partner labels (right of node) with a halo so flows passing underneath do not hide them.",
           "transform": [
             {
-              "filter": "datum.rank <= 8 && datum.label_side === 'right'"
+              "filter": "datum.rank <= 10 && datum.label_side === 'right'"
             }
           ],
           "encoding": {
@@ -418,7 +391,7 @@
             {
               "mark": {
                 "type": "text",
-                "fontSize": 11,
+                "fontSize": 12,
                 "fontWeight": 600,
                 "color": "#2F3A55",
                 "align": "left",
@@ -432,7 +405,7 @@
             {
               "mark": {
                 "type": "text",
-                "fontSize": 11,
+                "fontSize": 12,
                 "fontWeight": 600,
                 "color": "#2F3A55",
                 "align": "left",
@@ -456,7 +429,7 @@
       "mark": {
         "type": "circle",
         "size": 160,
-        "fill": "#2E7D32",
+        "fill": "#2F3A55",
         "stroke": "#ffffff",
         "strokeWidth": 2,
         "opacity": 1
@@ -475,6 +448,72 @@
           "type": "nominal"
         }
       }
+    },
+    {
+      "description": "Direction key for the active view only, top left",
+      "data": {
+        "values": [
+          {
+            "x": 4,
+            "x2": 30,
+            "y": 14
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "rule",
+            "strokeWidth": 4,
+            "strokeCap": "round",
+            "opacity": 0.8,
+            "color": {
+              "expr": "flow === 'Exports' ? '#2E7D32' : '#b0408e'"
+            }
+          },
+          "encoding": {
+            "x": {
+              "field": "x",
+              "type": "quantitative",
+              "scale": null
+            },
+            "x2": {
+              "field": "x2"
+            },
+            "y": {
+              "field": "y",
+              "type": "quantitative",
+              "scale": null
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "dx": 34,
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#2F3A55",
+            "text": {
+              "expr": "flow === 'Exports' ? 'Food exports: Australia → partner' : 'Food imports: partner → Australia'"
+            }
+          },
+          "encoding": {
+            "x": {
+              "field": "x",
+              "type": "quantitative",
+              "scale": null
+            },
+            "y": {
+              "field": "y",
+              "type": "quantitative",
+              "scale": null
+            }
+          }
+        }
+      ]
     }
   ]
 }

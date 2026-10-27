@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Dumbbell plot: change since 2019 in FAO food supply per person compared with ABS supermarket sales per person, by food. The longer the bar, the more 'available' and 'bought' have split.",
+  "description": "Dumbbell plot: change since 2019 (the first year both sources cover) in FAO food supply per person compared with ABS supermarket sales per person, by food. The longer the line, the more 'available' and 'bought' have split.",
   "width": "container",
   "height": {
     "step": 46
@@ -129,12 +129,10 @@
             "type": "text",
             "align": "right",
             "baseline": "bottom",
-            "fontSize": 11,
-            "fontStyle": "italic",
+            "fontSize": 12,
             "color": "#4B5569",
-            "y": {
-              "expr": "height - 4"
-            }
+            "y": -12,
+            "fontWeight": 600
           },
           "encoding": {
             "x": {
@@ -156,12 +154,10 @@
             "type": "text",
             "align": "left",
             "baseline": "bottom",
-            "fontSize": 11,
-            "fontStyle": "italic",
+            "fontSize": 12,
             "color": "#4B5569",
-            "y": {
-              "expr": "height - 4"
-            }
+            "y": -12,
+            "fontWeight": 600
           },
           "encoding": {
             "x": {
@@ -203,18 +199,6 @@
       }
     },
     {
-      "params": [
-        {
-          "name": "srcPick",
-          "select": {
-            "type": "point",
-            "fields": [
-              "source"
-            ]
-          },
-          "bind": "legend"
-        }
-      ],
       "mark": {
         "type": "point",
         "filled": true,
@@ -245,7 +229,7 @@
           "scale": {
             "domain": [
               -10,
-              20
+              25
             ],
             "nice": false
           },
@@ -270,15 +254,11 @@
               "Supermarket sales (ABS)"
             ],
             "range": [
-              "#2E7D32",
-              "#2E7D32"
+              "#2F3A55",
+              "#8A8D93"
             ]
           },
-          "legend": {
-            "orient": "top",
-            "labelExpr": "datum.label === 'Food supply (FAO)' ? 'Available: FAO food supply' : 'Bought: ABS supermarket sales'",
-            "labelLimit": 260
-          }
+          "legend": null
         },
         "shape": {
           "field": "source",
@@ -292,14 +272,8 @@
               "circle",
               "square"
             ]
-          }
-        },
-        "opacity": {
-          "condition": {
-            "param": "srcPick",
-            "value": 1
           },
-          "value": 0.15
+          "legend": null
         },
         "tooltip": [
           {
@@ -357,7 +331,7 @@
         "type": "text",
         "align": "left",
         "dx": 12,
-        "fontSize": 11,
+        "fontSize": 12,
         "fontWeight": 600,
         "color": "#2F3A55",
         "stroke": "#ffffff",
@@ -397,7 +371,7 @@
         "type": "text",
         "align": "left",
         "dx": 12,
-        "fontSize": 11,
+        "fontSize": 12,
         "fontWeight": 600,
         "color": "#2F3A55"
       },
@@ -419,6 +393,65 @@
           "field": "gapLabel"
         }
       }
+    },
+    {
+      "description": "Direct labels on the top row name the two ends, in their own colours",
+      "transform": [
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "gap",
+              "as": "maxGap"
+            }
+          ]
+        },
+        {
+          "filter": "datum.gap === datum.maxGap"
+        },
+        {
+          "calculate": "datum.source === 'Food supply (FAO)' ? (datum.food === 'Fruit' ? 'Available, from its 2019 low' : 'Available') : 'Bought'",
+          "as": "t"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": 700,
+        "baseline": "bottom",
+        "dy": -11
+      },
+      "encoding": {
+        "y": {
+          "field": "food",
+          "type": "nominal",
+          "sort": {
+            "field": "gap",
+            "op": "max",
+            "order": "descending"
+          }
+        },
+        "x": {
+          "field": "change",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.source === 'Food supply (FAO)'",
+            "value": "#2F3A55"
+          },
+          "value": "#6E6F73"
+        }
+      }
     }
-  ]
+  ],
+  "padding": {
+    "top": 30,
+    "left": 5,
+    "right": 5,
+    "bottom": 5
+  }
 }

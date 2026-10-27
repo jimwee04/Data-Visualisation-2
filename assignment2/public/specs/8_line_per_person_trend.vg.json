@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Multi-series line chart: food supply per person, indexed to 2010 = 100, 2010-2023. Beef, chicken and fruit are highlighted; cereals and milk are grey context lines.",
+  "description": "Multi-series line chart: food supply per person, indexed to 2010 = 100, 2010-2023, drawn with straight segments between annual points. Beef, chicken and fruit are highlighted; cereals and milk are grey context lines. Annotations sit beside the line they describe, in that line's colour, and are hidden on narrow screens (the key insight repeats them).",
   "width": "container",
   "height": 360,
   "data": {
@@ -96,7 +96,7 @@
       "mark": {
         "type": "line",
         "strokeWidth": 2.5,
-        "interpolate": "monotone"
+        "interpolate": "linear"
       },
       "encoding": {
         "x": {
@@ -151,7 +151,7 @@
               "#c0392b",
               "#2a6fb8",
               "#9A9DA3",
-              "#d97fae"
+              "#1a9bb5"
             ]
           },
           "legend": {
@@ -190,7 +190,7 @@
         "type": "text",
         "align": "left",
         "dx": 6,
-        "fontSize": 11,
+        "fontSize": 12,
         "fontWeight": 500
       },
       "encoding": {
@@ -379,13 +379,13 @@
       }
     },
     {
-      "description": "Annotations sit in empty space and are hidden on narrow screens, where that space disappears (the caption and takeaway repeat them).",
       "data": {
         "values": [
           {
-            "year": 2019,
-            "y": 74.6,
-            "y2": 87.5
+            "x": 2019,
+            "y": 74.2,
+            "x2": 2019,
+            "y2": 93.5
           }
         ]
       },
@@ -399,8 +399,11 @@
       },
       "encoding": {
         "x": {
-          "field": "year",
+          "field": "x",
           "type": "quantitative"
+        },
+        "x2": {
+          "field": "x2"
         },
         "y": {
           "field": "y",
@@ -421,19 +424,53 @@
       "data": {
         "values": [
           {
-            "year": 2018.92,
-            "y": 92,
+            "x": 2019,
+            "y": 72.4
+          }
+        ]
+      },
+      "mark": {
+        "type": "circle",
+        "size": 36,
+        "color": "#1a9bb5",
+        "opacity": {
+          "expr": "width < 560 ? 0 : 1"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 2018.9,
+            "y": 96.5,
             "t": "Fruit low point:\n74 kg per person (2019)"
           }
         ]
       },
       "mark": {
         "type": "text",
-        "fontSize": 11,
-        "fontStyle": "italic",
-        "color": "#4B5569",
+        "fontSize": 12,
+        "fontWeight": 500,
+        "color": "#167F94",
         "lineBreak": "\n",
-        "lineHeight": 14,
+        "lineHeight": 15,
         "align": "right",
         "baseline": "middle",
         "opacity": {
@@ -464,19 +501,95 @@
       "data": {
         "values": [
           {
-            "year": 2010.15,
-            "y": 66,
-            "t": "Beef fell from 38.6 kg to 26.9 kg per person,\nas about 69% of production went to export"
+            "x": 2020,
+            "y": 95.0
+          }
+        ]
+      },
+      "mark": {
+        "type": "circle",
+        "size": 36,
+        "color": "#c0392b",
+        "opacity": {
+          "expr": "width < 560 ? 0 : 1"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 2020.12,
+            "y": 95.0,
+            "x2": 2020.45,
+            "y2": 95.0
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#6E6F73",
+        "strokeWidth": 1,
+        "opacity": {
+          "expr": "width < 560 ? 0 : 1"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "x2": {
+          "field": "x2"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        },
+        "y2": {
+          "field": "y2"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 2020.5,
+            "y": 95.0,
+            "t": "2020 jump: exports dipped and FAO\ncounts unsold beef as eaten"
           }
         ]
       },
       "mark": {
         "type": "text",
-        "fontSize": 11,
-        "fontStyle": "italic",
-        "color": "#4B5569",
+        "fontSize": 12,
+        "fontWeight": 500,
+        "color": "#A33224",
         "lineBreak": "\n",
-        "lineHeight": 14,
+        "lineHeight": 15,
         "align": "left",
         "baseline": "middle",
         "opacity": {
@@ -507,20 +620,20 @@
       "data": {
         "values": [
           {
-            "year": 2010.15,
-            "y": 125,
-            "t": "Chicken rose from 46.5 kg to 53.1 kg per person"
+            "year": 2022.9,
+            "y": 61.8,
+            "t": "Beef: 38.6 kg to 26.9 kg per person, as 69% is exported"
           }
         ]
       },
       "mark": {
         "type": "text",
-        "fontSize": 11,
-        "fontStyle": "italic",
-        "color": "#4B5569",
+        "fontSize": 12,
+        "fontWeight": 500,
+        "color": "#A33224",
         "lineBreak": "\n",
-        "lineHeight": 14,
-        "align": "left",
+        "lineHeight": 15,
+        "align": "right",
         "baseline": "middle",
         "opacity": {
           "expr": "width < 560 ? 0 : 1"
@@ -543,6 +656,133 @@
         },
         "text": {
           "field": "t"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 2023,
+            "y": 63.3,
+            "x2": 2023,
+            "y2": 68.6
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#6E6F73",
+        "strokeWidth": 1,
+        "opacity": {
+          "expr": "width < 560 ? 0 : 1"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "x2": {
+          "field": "x2"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        },
+        "y2": {
+          "field": "y2"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 2022.9,
+            "y": 125,
+            "t": "Chicken: 46.5 kg to 53.1 kg per person"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": 500,
+        "color": "#2a6fb8",
+        "lineBreak": "\n",
+        "lineHeight": 15,
+        "align": "right",
+        "baseline": "middle",
+        "opacity": {
+          "expr": "width < 560 ? 0 : 1"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 2023,
+            "y": 123.2,
+            "x2": 2023,
+            "y2": 115.6
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#6E6F73",
+        "strokeWidth": 1,
+        "opacity": {
+          "expr": "width < 560 ? 0 : 1"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "x2": {
+          "field": "x2"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              60,
+              130
+            ]
+          }
+        },
+        "y2": {
+          "field": "y2"
         }
       }
     }

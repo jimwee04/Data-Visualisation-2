@@ -49,7 +49,7 @@
       "as": "ym"
     },
     {
-      "calculate": "datum.ym === '2020-03' ? 'March 2020: panic buying' : datum.ym === '2020-04' ? 'April 2020: eating the stockpile' : 'Every other month'",
+      "calculate": "datum.ym === '2020-03' ? 'March 2020: panic buying' : datum.ym === '2020-04' ? 'April 2020: back to normal' : 'Every other month'",
       "as": "when"
     },
     {
@@ -92,19 +92,19 @@
         "outliers": false,
         "size": 30,
         "box": {
-          "color": "#ECEDEF",
-          "stroke": "#8A8D93",
-          "strokeWidth": 1
+          "color": "#ffffff",
+          "stroke": "#4B5569",
+          "strokeWidth": 1.5
         },
         "median": {
           "color": "#2F3A55",
           "strokeWidth": 2
         },
         "rule": {
-          "color": "#8A8D93"
+          "color": "#4B5569"
         },
         "ticks": {
-          "color": "#8A8D93",
+          "color": "#4B5569",
           "size": 12
         }
       },
@@ -116,7 +116,7 @@
           "scale": {
             "domain": [
               -42,
-              50
+              56
             ],
             "nice": false
           },
@@ -202,12 +202,12 @@
           "scale": {
             "domain": [
               "March 2020: panic buying",
-              "April 2020: eating the stockpile",
+              "April 2020: back to normal",
               "Every other month"
             ],
             "range": [
-              "#e07020",
-              "#5C6B8A",
+              "#2F3A55",
+              "#8A8D93",
               "#C4C6CB"
             ]
           },
@@ -306,7 +306,7 @@
         "align": "left",
         "baseline": "middle",
         "dx": 9,
-        "fontSize": 11,
+        "fontSize": 12,
         "fontWeight": 600,
         "color": "#2F3A55"
       },
@@ -348,7 +348,7 @@
         "align": "right",
         "baseline": "middle",
         "dx": -9,
-        "fontSize": 11,
+        "fontSize": 12,
         "fontWeight": 600,
         "color": "#2F3A55"
       },
@@ -382,7 +382,7 @@
   ],
   "padding": {
     "top": 40,
-    "left": 5,
+    "left": 16,
     "right": 5,
     "bottom": 5
   }

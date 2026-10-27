@@ -1,8 +1,8 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Waterfall chart: spare milk (produced minus used in Australia) in 2010, 2016 and 2023, bridged by the change in milk produced and milk used in each period. Each total equals the previous total plus the production change minus the use change.",
+  "description": "Waterfall chart: spare milk (produced minus used in Australia) in 2010, 2016 and 2023, bridged by the change in milk produced and milk used in each period. Each total equals the previous total plus the production change minus the use change. Within each period the gain is drawn before the loss; that order is a choice, so the floating levels between totals are not real years.",
   "width": "container",
-  "height": 420,
+  "height": 400,
   "data": {
     "url": "../data/clean/dairy_bridge.csv",
     "format": {
@@ -46,67 +46,6 @@
   ],
   "layer": [
     {
-      "description": "Shortfall zone: below zero, more milk is used than produced (same stone fill as the self-sufficiency chart)",
-      "data": {
-        "values": [
-          {
-            "y": -1.1,
-            "y2": 0
-          }
-        ]
-      },
-      "mark": {
-        "type": "rect",
-        "color": "#E7E2DE"
-      },
-      "encoding": {
-        "x": {
-          "value": 0
-        },
-        "x2": {
-          "value": "width"
-        },
-        "y": {
-          "field": "y",
-          "type": "quantitative"
-        },
-        "y2": {
-          "field": "y2"
-        }
-      }
-    },
-    {
-      "data": {
-        "values": [
-          {
-            "y": -1.03,
-            "t": "Below zero: we would use more milk than we make"
-          }
-        ]
-      },
-      "mark": {
-        "type": "text",
-        "fontSize": 11,
-        "fontStyle": "italic",
-        "color": "#4B5569",
-        "align": "left",
-        "baseline": "bottom",
-        "dx": 6
-      },
-      "encoding": {
-        "x": {
-          "value": 0
-        },
-        "y": {
-          "field": "y",
-          "type": "quantitative"
-        },
-        "text": {
-          "field": "t"
-        }
-      }
-    },
-    {
       "data": {
         "values": [
           {
@@ -149,6 +88,20 @@
           "sort": {
             "field": "order"
           },
+          "title": null,
+          "scale": {
+            "paddingInner": 0.3,
+            "paddingOuter": 0.15
+          },
+          "axis": {
+            "labelExpr": "split(replace(datum.label, ' ', '|'), '|')",
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "ticks": false,
+            "domain": false,
+            "labelFontSize": 12,
+            "labelLineHeight": 15
+          },
           "bandPosition": 1
         },
         "x2": {
@@ -157,7 +110,14 @@
         },
         "y": {
           "field": "end",
-          "type": "quantitative"
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              2.8
+            ],
+            "nice": false
+          }
         }
       }
     },
@@ -177,7 +137,7 @@
       ],
       "mark": {
         "type": "bar",
-        "stroke": "#1F5E26"
+        "stroke": "#2F3A55"
       },
       "encoding": {
         "x": {
@@ -197,24 +157,23 @@
             "labelPadding": 8,
             "ticks": false,
             "domain": false,
-            "labelFontSize": 11
+            "labelFontSize": 12,
+            "labelLineHeight": 15
           }
         },
         "y": {
           "field": "start",
           "type": "quantitative",
-          "title": "Spare milk (million tonnes)",
           "scale": {
             "domain": [
-              -1.1,
+              0,
               2.8
             ],
             "nice": false
           },
+          "title": "Million tonnes",
           "axis": {
             "values": [
-              -1,
-              -0.5,
               0,
               0.5,
               1,
@@ -230,11 +189,27 @@
           "field": "end"
         },
         "color": {
-          "condition": {
-            "test": "datum.kind === 'total'",
-            "value": "#2E7D32"
+          "field": "kind",
+          "type": "nominal",
+          "title": null,
+          "scale": {
+            "domain": [
+              "total",
+              "gain",
+              "loss"
+            ],
+            "range": [
+              "#2E7D32",
+              "#9CCB9F",
+              "#B4B7BD"
+            ]
           },
-          "value": "#B5D2AE"
+          "legend": {
+            "orient": "top",
+            "symbolType": "square",
+            "labelLimit": 300,
+            "labelExpr": "{'total': 'Spare milk in that year', 'gain': 'Adds spare milk', 'loss': 'Takes spare milk away'}[datum.label]"
+          }
         },
         "strokeWidth": {
           "condition": {
@@ -277,11 +252,11 @@
       ],
       "mark": {
         "type": "text",
-        "fontSize": 12,
-        "fontWeight": 600,
+        "fontSize": 13,
+        "fontWeight": 700,
         "color": "#1F5E26",
         "baseline": "bottom",
-        "dy": -21
+        "dy": -22
       },
       "encoding": {
         "x": {
@@ -301,12 +276,20 @@
             "labelPadding": 8,
             "ticks": false,
             "domain": false,
-            "labelFontSize": 11
+            "labelFontSize": 12,
+            "labelLineHeight": 15
           }
         },
         "y": {
           "field": "top",
-          "type": "quantitative"
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              2.8
+            ],
+            "nice": false
+          }
         },
         "text": {
           "field": "t"
@@ -325,8 +308,7 @@
       ],
       "mark": {
         "type": "text",
-        "fontSize": 11,
-        "fontWeight": 400,
+        "fontSize": 12,
         "color": "#1F5E26",
         "baseline": "bottom",
         "dy": -6
@@ -349,12 +331,20 @@
             "labelPadding": 8,
             "ticks": false,
             "domain": false,
-            "labelFontSize": 11
+            "labelFontSize": 12,
+            "labelLineHeight": 15
           }
         },
         "y": {
           "field": "top",
-          "type": "quantitative"
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              2.8
+            ],
+            "nice": false
+          }
         },
         "text": {
           "field": "t"
@@ -362,17 +352,17 @@
       }
     },
     {
-      "description": "Changes that add spare milk: label above",
+      "description": "Gains: label above the bar",
       "transform": [
         {
-          "filter": "datum.kind === 'change' && datum.value >= 0"
+          "filter": "datum.kind === 'gain'"
         }
       ],
       "mark": {
         "type": "text",
         "fontSize": 12,
         "fontWeight": 600,
-        "color": "#45474C",
+        "color": "#2F3A55",
         "baseline": "bottom",
         "dy": -5
       },
@@ -394,12 +384,20 @@
             "labelPadding": 8,
             "ticks": false,
             "domain": false,
-            "labelFontSize": 11
+            "labelFontSize": 12,
+            "labelLineHeight": 15
           }
         },
         "y": {
           "field": "top",
-          "type": "quantitative"
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              2.8
+            ],
+            "nice": false
+          }
         },
         "text": {
           "field": "value",
@@ -409,17 +407,21 @@
       }
     },
     {
-      "description": "Changes that take spare milk away: label below",
+      "description": "Losses: label below the bar",
       "transform": [
         {
-          "filter": "datum.kind === 'change' && datum.value < 0"
+          "filter": "datum.kind === 'loss'"
+        },
+        {
+          "calculate": "'−' + format(abs(datum.value), '.2f')",
+          "as": "t"
         }
       ],
       "mark": {
         "type": "text",
         "fontSize": 12,
         "fontWeight": 600,
-        "color": "#45474C",
+        "color": "#2F3A55",
         "baseline": "top",
         "dy": 5
       },
@@ -441,17 +443,23 @@
             "labelPadding": 8,
             "ticks": false,
             "domain": false,
-            "labelFontSize": 11
+            "labelFontSize": 12,
+            "labelLineHeight": 15
           }
         },
         "y": {
           "field": "bottom",
-          "type": "quantitative"
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              2.8
+            ],
+            "nice": false
+          }
         },
         "text": {
-          "field": "value",
-          "type": "quantitative",
-          "format": "+.2f"
+          "field": "t"
         }
       }
     }

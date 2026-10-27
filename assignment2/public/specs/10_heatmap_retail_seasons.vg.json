@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Calendar heatmap: each month's supermarket sales compared with that financial year's monthly average, by food group, July 2018 to June 2024",
+  "description": "Month-by-year heatmap, small multiples by food group: each month's supermarket sales compared with that financial year's monthly average (March 2020 left out of the average), July 2018 to June 2024",
   "data": {
     "url": "../data/clean/retail_monthly.csv",
     "format": {
@@ -24,10 +24,14 @@
       "as": "mon"
     },
     {
+      "calculate": "timeFormat(datum.month, '%Y-%m') === '2020-03' ? null : datum.grams_per_day",
+      "as": "baseGrams"
+    },
+    {
       "joinaggregate": [
         {
           "op": "mean",
-          "field": "grams_per_day",
+          "field": "baseGrams",
           "as": "fyAverage"
         }
       ],
@@ -69,13 +73,13 @@
       }
     }
   },
-  "spacing": 22,
+  "spacing": 16,
   "spec": {
     "width": {
       "step": 76
     },
     "height": {
-      "step": 16
+      "step": 15
     },
     "encoding": {
       "x": {
@@ -99,7 +103,7 @@
         "axis": {
           "orient": "bottom",
           "labelAngle": 0,
-          "labelFontSize": 11,
+          "labelFontSize": 12,
           "labelExpr": "{'Jul':'July','Aug':'August','Sep':'September','Oct':'October','Nov':'November','Dec':'December','Jan':'January','Feb':'February','Mar':'March','Apr':'April','May':'May','Jun':'June'}[datum.value]"
         }
       },
@@ -108,7 +112,7 @@
         "type": "ordinal",
         "title": null,
         "axis": {
-          "labelFontSize": 10
+          "labelFontSize": 12
         }
       }
     },
@@ -189,7 +193,7 @@
             {
               "field": "fyAverage",
               "type": "quantitative",
-              "title": "That year's monthly average (grams per person per day)",
+              "title": "That year's monthly average, March 2020 left out (grams per person per day)",
               "format": ".1f"
             },
             {
@@ -204,7 +208,7 @@
       {
         "mark": {
           "type": "text",
-          "fontSize": 10,
+          "fontSize": 12,
           "fontWeight": 600
         },
         "encoding": {
@@ -221,10 +225,5 @@
         }
       }
     ]
-  },
-  "resolve": {
-    "axis": {
-      "x": "independent"
-    }
   }
 }

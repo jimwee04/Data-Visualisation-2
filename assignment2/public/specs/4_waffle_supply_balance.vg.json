@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Small-multiple waffle charts: out of every 100 kg of a food group grown or imported, how many were exported, grown and kept here, or imported. Each panel is labelled with all three percentages.",
+  "description": "Small-multiple waffle charts: where every 100 kg of a food group that was grown here or imported ended up: exported, added to stocks (FAO stock variation), grown and used here, or imported. Where stocks were drawn down, the stock taken out is counted in the total and in 'grown and used here'. Each panel is labelled with its percentages.",
   "params": [
     {
       "name": "yr",
@@ -31,7 +31,8 @@
         "year": "number",
         "production": "number",
         "imports": "number",
-        "exports": "number"
+        "exports": "number",
+        "domestic_use": "number"
       }
     }
   },
@@ -40,7 +41,15 @@
       "filter": "datum.year === yr && datum.group !== 'Vegetables' && datum.group !== 'Eggs'"
     },
     {
-      "calculate": "datum.production + datum.imports",
+      "calculate": "datum.production + datum.imports - datum.exports - datum.domestic_use",
+      "as": "stockChange"
+    },
+    {
+      "calculate": "max(datum.stockChange, 0)",
+      "as": "stocks"
+    },
+    {
+      "calculate": "datum.production + datum.imports + max(-datum.stockChange, 0)",
       "as": "handled"
     },
     {
@@ -52,15 +61,19 @@
       "as": "nExported"
     },
     {
+      "calculate": "round(100 * datum.stocks / datum.handled)",
+      "as": "nStocks"
+    },
+    {
       "calculate": "round(100 * datum.imports / datum.handled)",
       "as": "nImported"
     },
     {
-      "calculate": "100 - datum.nExported - datum.nImported",
+      "calculate": "100 - datum.nExported - datum.nStocks - datum.nImported",
       "as": "nKept"
     },
     {
-      "calculate": "upper(datum.group) + '|' + datum.nExported + '% exported|' + datum.nKept + '% kept here|' + datum.nImported + '% imported'",
+      "calculate": "upper(datum.group) + '|' + datum.nExported + '% exported' + (datum.nStocks > 0 ? '|' + datum.nStocks + '% added to stocks' : '') + '|' + datum.nKept + '% grown and used here|' + datum.nImported + '% imported'",
       "as": "panel"
     },
     {
@@ -81,15 +94,15 @@
       "as": "row"
     },
     {
-      "calculate": "datum.cell < datum.nExported ? 'Exported' : datum.cell < datum.nExported + datum.nKept ? 'Grown and kept here' : 'Imported'",
+      "calculate": "datum.cell < datum.nExported ? 'Exported' : datum.cell < datum.nExported + datum.nStocks ? 'Added to stocks' : datum.cell < datum.nExported + datum.nStocks + datum.nKept ? 'Grown and used here' : 'Imported'",
       "as": "part"
     },
     {
-      "calculate": "datum.part === 'Exported' ? datum.exports : datum.part === 'Imported' ? datum.imports : datum.production - datum.exports",
+      "calculate": "datum.part === 'Exported' ? datum.exports : datum.part === 'Imported' ? datum.imports : datum.part === 'Added to stocks' ? datum.stocks : datum.domestic_use - datum.imports",
       "as": "kt"
     },
     {
-      "calculate": "datum.part === 'Exported' ? datum.nExported : datum.part === 'Imported' ? datum.nImported : datum.nKept",
+      "calculate": "datum.part === 'Exported' ? datum.nExported : datum.part === 'Imported' ? datum.nImported : datum.part === 'Added to stocks' ? datum.nStocks : datum.nKept",
       "as": "squares"
     }
   ],
@@ -149,11 +162,13 @@
         "scale": {
           "domain": [
             "Exported",
-            "Grown and kept here",
+            "Added to stocks",
+            "Grown and used here",
             "Imported"
           ],
           "range": [
             "#2E7D32",
+            "#8A8D93",
             "#D3D1CC",
             "#b0408e"
           ]

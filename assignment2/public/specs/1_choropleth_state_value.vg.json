@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Choropleth: farm-gate food value per resident by state, 2024-25",
+  "description": "Choropleth: farm-gate food value per resident by state, 2024-25. Five classes in round steps around the national average (A$2,680), so the middle class means 'about average'; the A$1,000 break separates the Australian Capital Territory. The colour key is drawn in the chart header (index.html).",
   "width": "container",
   "height": 440,
   "projection": {
@@ -83,22 +83,14 @@
               3500
             ],
             "range": [
-              "#E4EEE0",
-              "#B5D2AE",
-              "#7FB079",
-              "#3F8A45",
-              "#1F5E26"
+              "#EFEAE4",
+              "#D6CBBF",
+              "#B3A291",
+              "#857360",
+              "#594A3C"
             ]
           },
-          "legend": {
-            "orient": "bottom-left",
-            "direction": "horizontal",
-            "format": "$,.0f",
-            "titleOrient": "top",
-            "gradientLength": 200,
-            "labelExpr": "datum.label",
-            "offset": 6
-          }
+          "legend": null
         },
         "strokeWidth": {
           "condition": {
@@ -141,6 +133,7 @@
       }
     },
     {
+      "description": "Leader lines from each offshore label to its state",
       "data": {
         "url": "../data/clean/state_per_person.csv",
         "format": {
@@ -158,27 +151,112 @@
       },
       "transform": [
         {
-          "filter": "datum.state !== 'ACT'"
+          "filter": "datum.label_inside === 0 || datum.state === 'ACT'"
         },
+        {
+          "calculate": "datum.state === 'ACT' ? 153.4 : datum.state === 'VIC' ? datum.label_lon + 1.2 : datum.label_lon - 1.6",
+          "as": "fromLon"
+        },
+        {
+          "calculate": "datum.state === 'ACT' ? -35.9 : datum.state === 'VIC' ? datum.label_lat + 1.3 : datum.label_lat + 0.2",
+          "as": "fromLat"
+        },
+        {
+          "calculate": "datum.state === 'VIC' ? 143.6 : datum.state === 'TAS' ? 147.6 : 149.1",
+          "as": "toLon"
+        },
+        {
+          "calculate": "datum.state === 'VIC' ? -37.4 : datum.state === 'TAS' ? -42.0 : -35.5",
+          "as": "toLat"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#4B5569",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "longitude": {
+          "field": "fromLon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "fromLat",
+          "type": "quantitative"
+        },
+        "longitude2": {
+          "field": "toLon"
+        },
+        "latitude2": {
+          "field": "toLat"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 149.1,
+            "lat": -35.5
+          }
+        ]
+      },
+      "mark": {
+        "type": "circle",
+        "size": 30,
+        "color": "#4B5569"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "../data/clean/state_per_person.csv",
+        "format": {
+          "parse": {
+            "food_value_m": "number",
+            "population": "number",
+            "value_per_person": "number",
+            "lon": "number",
+            "lat": "number",
+            "label_lon": "number",
+            "label_lat": "number",
+            "label_inside": "number"
+          }
+        }
+      },
+      "transform": [
         {
           "calculate": "stateName[datum.state] + '\\n' + format(datum.value_per_person, '$,.0f')",
           "as": "label"
         },
         {
-          "calculate": "datum.state === 'SA' ? datum.label_lat + 1.6 : datum.label_lat",
+          "calculate": "datum.state === 'ACT' ? 155.6 : datum.label_lon",
+          "as": "labelLon"
+        },
+        {
+          "calculate": "datum.state === 'ACT' ? -36.6 : datum.state === 'SA' ? datum.label_lat + 1.6 : datum.label_lat",
           "as": "labelLat"
         }
       ],
       "mark": {
         "type": "text",
-        "fontSize": 11,
+        "fontSize": 12,
         "fontWeight": 600,
         "lineBreak": "\n",
-        "lineHeight": 14
+        "lineHeight": 15
       },
       "encoding": {
         "longitude": {
-          "field": "label_lon",
+          "field": "labelLon",
           "type": "quantitative"
         },
         "latitude": {
@@ -201,7 +279,7 @@
   "params": [
     {
       "name": "stateName",
-      "expr": "{'WA': 'Western\\nAustralia', 'NT': 'Northern\\nTerritory', 'SA': 'South\\nAustralia', 'QLD': 'Queensland', 'NSW': 'New South\\nWales', 'VIC': 'Victoria', 'TAS': 'Tasmania', 'ACT': 'Australian Capital Territory'}"
+      "expr": "{'WA': 'Western\\nAustralia', 'NT': 'Northern\\nTerritory', 'SA': 'South\\nAustralia', 'QLD': 'Queensland', 'NSW': 'New South\\nWales', 'VIC': 'Victoria', 'TAS': 'Tasmania', 'ACT': 'Australian Capital\\nTerritory'}"
     }
   ]
 }

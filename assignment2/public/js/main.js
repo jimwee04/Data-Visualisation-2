@@ -56,7 +56,7 @@ const kpis = {
   kpi1: "specs/kpi_1_cereals_surplus.vl.json",
   kpi2: "specs/kpi_2_seafood_gap.vl.json",
   kpi3: "specs/kpi_3_chicken_vs_beef.vl.json",
-  kpi4: "specs/kpi_4_state_value.vl.json"
+  kpi4: "specs/kpi_4_trade.vl.json"
 };
 
 // Faceted charts have fixed cell sizes and can't use the container width,

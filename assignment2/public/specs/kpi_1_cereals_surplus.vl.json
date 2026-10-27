@@ -66,7 +66,7 @@
           "value": 22
         },
         "tooltip": {
-          "value": "100 kg grown and used in Australia"
+          "value": "100 kg grown here and used here"
         }
       }
     },
@@ -132,7 +132,7 @@
       "mark": {
         "type": "text",
         "color": "#A3AEC6",
-        "fontSize": 11,
+        "fontSize": 12,
         "baseline": "bottom"
       },
       "encoding": {
@@ -144,7 +144,7 @@
           "value": 44
         },
         "text": {
-          "value": "used here"
+          "value": "grown and used here"
         }
       }
     },
@@ -152,7 +152,7 @@
       "mark": {
         "type": "text",
         "color": "#A3AEC6",
-        "fontSize": 11,
+        "fontSize": 12,
         "baseline": "bottom"
       },
       "encoding": {

@@ -102,7 +102,7 @@
             "type": "point",
             "filled": true,
             "size": 44100,
-            "fill": "#2E7D32",
+            "fill": "#857360",
             "fillOpacity": 0.85,
             "stroke": "#ffffff",
             "strokeWidth": 1,
@@ -185,7 +185,7 @@
             {
               "mark": {
                 "type": "text",
-                "fontSize": 11,
+                "fontSize": 12,
                 "fontWeight": 600,
                 "baseline": "top",
                 "dy": 5,
@@ -200,7 +200,7 @@
             {
               "mark": {
                 "type": "text",
-                "fontSize": 11,
+                "fontSize": 12,
                 "fontWeight": 600,
                 "baseline": "top",
                 "dy": 5,
@@ -265,7 +265,7 @@
               "as": "labelX"
             },
             {
-              "calculate": "'A$' + format(datum.ref, ',') + ' million'",
+              "calculate": "'A$' + (datum.ref >= 1000 ? format(datum.ref / 1000, ',') + ' billion' : format(datum.ref, ',') + ' million')",
               "as": "refLabel"
             }
           ],
@@ -275,8 +275,8 @@
                 "type": "point",
                 "filled": true,
                 "size": 44100,
-                "fill": "#6E6F73",
-                "fillOpacity": 0.55,
+                "fill": "#857360",
+                "fillOpacity": 0.85,
                 "stroke": "#ffffff",
                 "strokeWidth": 1,
                 "y": {
@@ -302,7 +302,7 @@
                 "type": "text",
                 "align": "left",
                 "baseline": "bottom",
-                "fontSize": 11,
+                "fontSize": 12,
                 "color": "#4B5569",
                 "y": {
                   "expr": "height - 5"
@@ -337,7 +337,7 @@
                 "type": "text",
                 "align": "left",
                 "baseline": "bottom",
-                "fontSize": 11,
+                "fontSize": 12,
                 "fontWeight": 600,
                 "color": "#2F3A55",
                 "x": 2,

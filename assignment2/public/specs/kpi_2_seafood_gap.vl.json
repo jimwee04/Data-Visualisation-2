@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "KPI micro-chart: kg of seafood caught or farmed in Australia for every 100 kg used here, 2023. The outlined gap up to 100 kg is filled by imports.",
+  "description": "KPI micro-chart: kg of seafood caught or farmed in Australia for every 100 kg used here, 2023. The dashed magenta gap up to 100 kg is filled by imports.",
   "width": "container",
   "height": 44,
   "data": {
@@ -78,12 +78,12 @@
       "mark": {
         "type": "bar",
         "fill": null,
-        "stroke": "#9CCB9F",
+        "stroke": "#E59BCB",
         "strokeDash": [
           3,
           2
         ],
-        "strokeWidth": 1
+        "strokeWidth": 1.5
       },
       "encoding": {
         "x": {
@@ -131,7 +131,7 @@
       "mark": {
         "type": "text",
         "color": "#A3AEC6",
-        "fontSize": 11,
+        "fontSize": 12,
         "baseline": "bottom"
       },
       "encoding": {
@@ -143,15 +143,15 @@
           "value": 44
         },
         "text": {
-          "value": "grown here"
+          "value": "grown and used here"
         }
       }
     },
     {
       "mark": {
         "type": "text",
-        "color": "#A3AEC6",
-        "fontSize": 11,
+        "color": "#E59BCB",
+        "fontSize": 12,
         "baseline": "bottom"
       },
       "encoding": {

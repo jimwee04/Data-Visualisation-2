@@ -54,6 +54,8 @@ save(g.round(2), 'fbs_groups.csv')
 
 # Chart 5: dairy waterfall. Spare milk (produced minus used) in 2010, 2016 (the production peak) and 2023,
 # bridged by the changes in production and use, so each total = previous total + production change - use change.
+# Within each period the gain is applied before the loss, so the running level never dips below zero
+# (the order is a choice, and an intermediate level is not a real year).
 d = g[g.group == 'Milk & dairy'].set_index('year')
 spare = lambda y: (d.production[y] - d.domestic_use[y]) / 1000          # million tonnes
 steps, level = [], 0.0
@@ -61,8 +63,11 @@ for a, b in [(2010, 2016), (2016, 2023)]:
     if not steps:
         steps.append(('total', f'Spare milk|{a}', a, spare(a)))
     dp, du = (d.production[b] - d.production[a]) / 1000, (d.domestic_use[b] - d.domestic_use[a]) / 1000
-    steps.append(('change', f"{'More' if dp > 0 else 'Less'} produced|{a}–{str(b)[2:]}", b, dp))
-    steps.append(('change', f"{'More' if du > 0 else 'Less'} used|{a}–{str(b)[2:]}", b, -du))
+    period = f"{a}–{str(b)[2:]}"
+    changes = [(f"Production {'rose' if dp > 0 else 'fell'}|{period}", dp),
+               (f"Use {'rose' if du > 0 else 'fell'}|{period}", -du)]
+    for label, v in sorted(changes, key=lambda c: c[1] < 0):
+        steps.append(('gain' if v > 0 else 'loss', label, b, v))
     steps.append(('total', f'Spare milk|{b}', b, spare(b)))
 rows = []
 for i, (kind, label, yr, v) in enumerate(steps):
@@ -72,6 +77,7 @@ for i, (kind, label, yr, v) in enumerate(steps):
                  'spare_pct': 100 * v / d.domestic_use[yr] * 1000 if kind == 'total' else None})
 bridge = pd.DataFrame(rows)
 assert abs(bridge.end.iloc[-1] - spare(2023)) < 1e-9          # the steps add up to the 2023 total
+assert (bridge[['start', 'end']] >= 0).all().all()               # and never go below zero
 save(bridge.round(3), 'dairy_bridge.csv')
 
 # Per-person supply for the items the story follows (meat split out by animal).
@@ -253,9 +259,9 @@ by['usd_m'] = (by.Value / 1e3).round(0)
 by['share'] = by.share.round(1)
 by['rank'] = by.groupby('flow').Value.rank(ascending=False).astype(int)
 # Which side of the circle the map label sits on, to avoid collisions in crowded regions
-# ('none' = no label: the Philippines label would sit on the China export flow; its tooltip still works).
+# (every partner is labelled; the halo keeps a label readable where a flow passes under it).
 SIDE = {('Exports', 'China'): 'left', ('Exports', 'Japan'): 'right', ('Exports', 'Vietnam'): 'left',
-        ('Exports', 'Philippines'): 'none', ('Exports', 'Indonesia'): 'right', ('Exports', 'New Zealand'): 'right',
+        ('Exports', 'Philippines'): 'left', ('Exports', 'Indonesia'): 'right', ('Exports', 'New Zealand'): 'right',
         ('Imports', 'China'): 'left', ('Imports', 'Thailand'): 'left', ('Imports', 'Malaysia'): 'left',
         ('Imports', 'Singapore'): 'right', ('Imports', 'Italy'): 'right', ('Imports', 'New Zealand'): 'right'}
 by['label_side'] = [SIDE.get((f, p), 'top') for f, p in zip(by.flow, by.partner)]
@@ -273,7 +279,9 @@ BEND = {('Exports', 'China'): -0.35, ('Exports', 'United States'): -0.05, ('Expo
 by['bend'] = [BEND[(f, p)] for f, p in zip(by.flow, by.partner)]
 save(by[['flow', 'rank', 'partner', 'm49', 'lon', 'lat', 'usd_m', 'share', 'top_item', 'members', 'bend', 'label_side']],
      'trade_partners.csv')
-print('trade totals US$bn:', (tr.groupby('flow').Value.sum() / 1e6).round(1).to_dict())
+tot = (tr.groupby('flow').Value.sum() / 1e6).round(1)
+print('trade totals US$bn:', tot.to_dict())
+save(tot.reset_index(name='usd_b'), 'trade_totals.csv')          # KPI 4: food exports against food imports
 
 # ---------------------------------------------------------------- Chart 7: Sankey, export commodity -> destination (2024)
 # Python decides the node order and where each ribbon joins its two nodes; the spec draws the curves.

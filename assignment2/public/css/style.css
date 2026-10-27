@@ -100,6 +100,20 @@ a:hover { color: var(--slate); }
   max-width: var(--measure);
 }
 .rq-text strong { color: #ffffff; font-weight: 700; box-shadow: inset 0 -0.16em 0 var(--slate); }
+/* On wide screens the hero uses the cards' 1:2 split: research question on the left, the four KPIs on the right,
+   inset by the card's border and padding (33px) so the split falls on the same vertical line as every card's */
+@media (min-width: 1100px) {
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    column-gap: 36px;
+    padding-inline: calc(24px + 33px);
+  }
+  .hero-title { grid-column: 1 / -1; }
+  .hero-intro { grid-column: 1; }
+  .hero-grid > .stats { grid-column: 2; align-self: start; margin-top: 14px; }
+  .hero-intro .rq-text { font-size: 22px; }
+}
 
 /* KPI row: each card is a link to the section that explains it */
 .stats {
@@ -225,28 +239,44 @@ a:hover { color: var(--slate); }
 .fig-head { min-width: 0; }
 .fig-lead { min-width: 0; container-type: inline-size; }
 .fig-lead .icon-filter { margin: 12px 0 0; }
-@media (min-width: 1300px) {
+@media (min-width: 1100px) {
   .card { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); column-gap: 36px; }
   .card > .fig-head {
     grid-column: 1;
     grid-row: 1 / span 3;
+    align-self: start;
+    position: sticky;
+    top: 64px;
     padding-right: 32px;
-    border-right: 1px solid var(--border);
+  }
+  /* The divider spans the whole card height even though the sticky question column is shorter */
+  .card::before {
+    content: "";
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    justify-self: end;
+    width: 1px;
+    background: var(--border);
   }
   .card > :not(.fig-head) { grid-column: 2; }
 }
+/* Stacked cards: maps keep their own proportions instead of floating in a wide, short box */
+@media (max-width: 1099px) {
+  .chart-map, .chart-world { max-width: 720px; margin-inline: auto; }
+}
 /* Text hierarchy, loudest first, on a 12 / 14 / 16 / 22 / 28 / 56 px scale:
-   section heading 56, section takeaway 28 (violet), figure answer 22 (violet), chart title and insight 16,
-   question 15 (semibold slate, still readable), caption 14, labels and axes 12. */
+   section heading 56, section takeaway 28 (ink), figure answer 22 (violet), question 17 (semibold slate),
+   chart title and insight 16, caption 14, labels and axes 12. */
 .card h3 {
   margin: 0;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
   line-height: 1.4;
   color: var(--slate);
   max-width: var(--measure);
 }
 .fig-a {
+  max-width: var(--measure);
   margin: 6px 0 0;
   font-size: 22px;
   font-weight: 700;
@@ -377,7 +407,7 @@ figcaption > span { max-width: none; }
   padding-top: 28px;
   border-top: 2px solid var(--ink);
 }
-@media (min-width: 1300px) {
+@media (min-width: 1100px) {
   /* Same inner width as a card (1px border + 32px padding each side), so the 1:2 split lands on the same line */
   .takeaway {
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
@@ -386,13 +416,13 @@ figcaption > span { max-width: none; }
   }
 }
 .takeaway p { margin: 0; }
-/* The section's answer outranks each figure's answer: same violet, larger */
+/* The section's answer outranks each figure's answer by size; it is ink, so violet stays the one mark of a figure's answer */
 .takeaway .pull {
   max-width: var(--measure);
   font-size: 28px;
   font-weight: 700;
   line-height: 1.3;
-  color: var(--answer);
+  color: var(--text-primary);
 }
 .pull-label,
 .insight-label {
@@ -407,7 +437,7 @@ figcaption > span { max-width: none; }
 
 /* Each figure's key insight, under its question and answer */
 .fig-insight { margin-top: 20px; }
-.fig-insight p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--text-primary); }
+.fig-insight p { margin: 0; max-width: var(--measure); font-size: 16px; line-height: 1.55; color: var(--text-primary); }
 .fig-insight .insight-label { margin-bottom: 6px; line-height: 1.2; color: var(--slate); }
 /* Key figures in the insight: bold ink on a neutral tint, so they lead the eye without borrowing a chart colour */
 .fig-insight mark {
@@ -423,15 +453,28 @@ figcaption > span { max-width: none; }
 .conclusion h2 { color: var(--paper); }
 .conclusion .stage-tag { color: var(--slate-tint); }
 .conclusion .stage-count { color: var(--stone); }
-/* Three verdicts stacked as rows on the page's text column, so each line holds 7 to 10 words */
+/* Verdict: on wide screens the heading and overall answer take the 1/3 column and the three answers plus the
+   call to action fill a 2 x 2 grid in the 2/3 column, on the same split as the cards */
 .summary {
   list-style: none;
   padding: 0;
-  margin: 32px 0 40px;
+  margin: 32px 0 0;
   display: grid;
   grid-template-columns: minmax(0, calc(var(--measure) + 88px));
   gap: 16px;
 }
+@media (min-width: 1100px) {
+  /* The verdict's and footer's headings start on the same inset line as their columns */
+  .conclusion .stage-tag, .about h2 { padding-left: 33px; }
+  .verdict-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    column-gap: 36px;
+    padding-inline: 33px;
+  }
+  .summary { margin-top: 6px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.summary li.summary-cta { background: none; border: 1px solid rgba(245, 246, 243, 0.2); align-items: center; }
 .summary li {
   display: flex;
   flex-direction: row;
@@ -470,8 +513,6 @@ figcaption > span { max-width: none; }
   stroke-linejoin: round;
 }
 .cta {
-  padding-top: 28px;
-  border-top: 1px solid rgba(245, 246, 243, 0.2);
   max-width: var(--measure);
   font-size: 22px;
   font-weight: 600;
@@ -487,10 +528,12 @@ figcaption > span { max-width: none; }
 }
 .about h2 { font-family: var(--display); font-size: 40px; font-weight: 800; line-height: 1; color: var(--text-primary); margin: 0 0 20px; }
 .about h4 { margin: 0 0 8px; color: var(--text-primary); font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; }
-/* Two wide columns (sources and credits on the left, notes on the right) keep footer lines at 7 to 10 words */
-.about-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 40px; }
+/* Sources and credits in the 1/3 column, notes in the 2/3 column as two short-line columns, on the cards' split */
+.about-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 32px 36px; padding-inline: 33px; }
 .about-grid { grid-template-rows: auto 1fr; align-items: start; }
-.about-grid > :nth-child(2) { grid-row: span 2; }
+.about-grid > :nth-child(2) { grid-column: 2; grid-row: 1 / span 2; }
+.about-grid > :nth-child(2) ul { columns: 2; column-gap: 36px; }
+.about-grid > :nth-child(2) li { break-inside: avoid; }
 .about ul { margin: 0; padding-left: 18px; }
 .about li { margin-bottom: 6px; max-width: var(--measure); }
 
@@ -629,10 +672,13 @@ body.past-hero .rail { transform: none; }
 }
 
 /* ---------------------------------------------------------------- responsive */
+@media (max-width: 1099px) {
+  .about-grid > :nth-child(2) ul { columns: 1; }
+}
 @media (max-width: 900px) {
   .fig-grid, .takeaway, .summary, .about-grid { grid-template-columns: minmax(0, 1fr); }
-  .about-grid { grid-template-rows: none; }
-  .about-grid > :nth-child(2) { grid-row: auto; }
+  .about-grid { grid-template-rows: none; padding-inline: 0; }
+  .about-grid > :nth-child(2) { grid-column: auto; grid-row: auto; }
 }
 @media (max-width: 560px) {
   .wrap { padding: 0 16px; }

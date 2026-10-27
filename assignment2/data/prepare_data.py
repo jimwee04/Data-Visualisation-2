@@ -52,6 +52,28 @@ g = (s1[s1.group.notna()].pivot_table(index=['Year', 'group'], columns='measure'
 g['self_sufficiency'] = (100 * g.production / g.domestic_use).round(1)
 save(g.round(2), 'fbs_groups.csv')
 
+# Chart 5: dairy waterfall. Spare milk (produced minus used) in 2010, 2016 (the production peak) and 2023,
+# bridged by the changes in production and use, so each total = previous total + production change - use change.
+d = g[g.group == 'Milk & dairy'].set_index('year')
+spare = lambda y: (d.production[y] - d.domestic_use[y]) / 1000          # million tonnes
+steps, level = [], 0.0
+for a, b in [(2010, 2016), (2016, 2023)]:
+    if not steps:
+        steps.append(('total', f'Spare milk|{a}', a, spare(a)))
+    dp, du = (d.production[b] - d.production[a]) / 1000, (d.domestic_use[b] - d.domestic_use[a]) / 1000
+    steps.append(('change', f"{'More' if dp > 0 else 'Less'} produced|{a}–{str(b)[2:]}", b, dp))
+    steps.append(('change', f"{'More' if du > 0 else 'Less'} used|{a}–{str(b)[2:]}", b, -du))
+    steps.append(('total', f'Spare milk|{b}', b, spare(b)))
+rows = []
+for i, (kind, label, yr, v) in enumerate(steps):
+    start = 0.0 if kind == 'total' else level
+    level = v if kind == 'total' else level + v
+    rows.append({'order': i + 1, 'label': label, 'kind': kind, 'year': yr, 'value': v, 'start': start, 'end': level,
+                 'spare_pct': 100 * v / d.domestic_use[yr] * 1000 if kind == 'total' else None})
+bridge = pd.DataFrame(rows)
+assert abs(bridge.end.iloc[-1] - spare(2023)) < 1e-9          # the steps add up to the 2023 total
+save(bridge.round(3), 'dairy_bridge.csv')
+
 # Per-person supply for the items the story follows (meat split out by animal).
 ITEMS = {'Bovine Meat': 'Beef', 'Poultry Meat': 'Chicken & poultry', 'Pigmeat': 'Pork',
          'Mutton & Goat Meat': 'Lamb & mutton'}

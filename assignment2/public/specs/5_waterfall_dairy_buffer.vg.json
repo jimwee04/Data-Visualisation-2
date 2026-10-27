@@ -1,0 +1,459 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Waterfall chart: spare milk (produced minus used in Australia) in 2010, 2016 and 2023, bridged by the change in milk produced and milk used in each period. Each total equals the previous total plus the production change minus the use change.",
+  "width": "container",
+  "height": 420,
+  "data": {
+    "url": "../data/clean/dairy_bridge.csv",
+    "format": {
+      "parse": {
+        "order": "number",
+        "year": "number",
+        "value": "number",
+        "start": "number",
+        "end": "number",
+        "spare_pct": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "window": [
+        {
+          "op": "lead",
+          "field": "label",
+          "as": "next"
+        }
+      ],
+      "sort": [
+        {
+          "field": "order"
+        }
+      ]
+    },
+    {
+      "calculate": "max(datum.start, datum.end)",
+      "as": "top"
+    },
+    {
+      "calculate": "min(datum.start, datum.end)",
+      "as": "bottom"
+    },
+    {
+      "calculate": "replace(datum.label, '|', ' ')",
+      "as": "step"
+    }
+  ],
+  "layer": [
+    {
+      "description": "Shortfall zone: below zero, more milk is used than produced (same stone fill as the self-sufficiency chart)",
+      "data": {
+        "values": [
+          {
+            "y": -1.1,
+            "y2": 0
+          }
+        ]
+      },
+      "mark": {
+        "type": "rect",
+        "color": "#E7E2DE"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "x2": {
+          "value": "width"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        },
+        "y2": {
+          "field": "y2"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "y": -1.03,
+            "t": "Below zero: we would use more milk than we make"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontStyle": "italic",
+        "color": "#4B5569",
+        "align": "left",
+        "baseline": "bottom",
+        "dx": 6
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "y": 0
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#4B5569",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "description": "Connectors: each bar's end level carries across to the next bar",
+      "transform": [
+        {
+          "filter": "datum.next != null"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#8A8D93",
+        "strokeWidth": 1,
+        "strokeDash": [
+          3,
+          2
+        ]
+      },
+      "encoding": {
+        "x": {
+          "field": "label",
+          "type": "ordinal",
+          "sort": {
+            "field": "order"
+          },
+          "bandPosition": 1
+        },
+        "x2": {
+          "field": "next",
+          "bandPosition": 0
+        },
+        "y": {
+          "field": "end",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "order"
+            ],
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "bar",
+        "stroke": "#1F5E26"
+      },
+      "encoding": {
+        "x": {
+          "field": "label",
+          "type": "ordinal",
+          "sort": {
+            "field": "order"
+          },
+          "title": null,
+          "scale": {
+            "paddingInner": 0.3,
+            "paddingOuter": 0.15
+          },
+          "axis": {
+            "labelExpr": "split(replace(datum.label, ' ', '|'), '|')",
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "ticks": false,
+            "domain": false,
+            "labelFontSize": 11
+          }
+        },
+        "y": {
+          "field": "start",
+          "type": "quantitative",
+          "title": "Spare milk (million tonnes)",
+          "scale": {
+            "domain": [
+              -1.1,
+              2.8
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              -1,
+              -0.5,
+              0,
+              0.5,
+              1,
+              1.5,
+              2,
+              2.5
+            ],
+            "format": ".1f",
+            "grid": false
+          }
+        },
+        "y2": {
+          "field": "end"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.kind === 'total'",
+            "value": "#2E7D32"
+          },
+          "value": "#B5D2AE"
+        },
+        "strokeWidth": {
+          "condition": {
+            "param": "hover",
+            "empty": false,
+            "value": 2
+          },
+          "value": 0
+        },
+        "tooltip": [
+          {
+            "field": "step",
+            "title": "Step"
+          },
+          {
+            "field": "value",
+            "type": "quantitative",
+            "title": "Million tonnes",
+            "format": "+.2f"
+          },
+          {
+            "field": "spare_pct",
+            "type": "quantitative",
+            "title": "Spare, as % of milk used",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "description": "Totals: amount above the share spare",
+      "transform": [
+        {
+          "filter": "datum.kind === 'total'"
+        },
+        {
+          "calculate": "format(datum.value, '.2f')",
+          "as": "t"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "color": "#1F5E26",
+        "baseline": "bottom",
+        "dy": -21
+      },
+      "encoding": {
+        "x": {
+          "field": "label",
+          "type": "ordinal",
+          "sort": {
+            "field": "order"
+          },
+          "title": null,
+          "scale": {
+            "paddingInner": 0.3,
+            "paddingOuter": 0.15
+          },
+          "axis": {
+            "labelExpr": "split(replace(datum.label, ' ', '|'), '|')",
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "ticks": false,
+            "domain": false,
+            "labelFontSize": 11
+          }
+        },
+        "y": {
+          "field": "top",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.kind === 'total'"
+        },
+        {
+          "calculate": "format(datum.spare_pct, '.0f') + '% spare'",
+          "as": "t"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": 400,
+        "color": "#1F5E26",
+        "baseline": "bottom",
+        "dy": -6
+      },
+      "encoding": {
+        "x": {
+          "field": "label",
+          "type": "ordinal",
+          "sort": {
+            "field": "order"
+          },
+          "title": null,
+          "scale": {
+            "paddingInner": 0.3,
+            "paddingOuter": 0.15
+          },
+          "axis": {
+            "labelExpr": "split(replace(datum.label, ' ', '|'), '|')",
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "ticks": false,
+            "domain": false,
+            "labelFontSize": 11
+          }
+        },
+        "y": {
+          "field": "top",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "description": "Changes that add spare milk: label above",
+      "transform": [
+        {
+          "filter": "datum.kind === 'change' && datum.value >= 0"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "color": "#45474C",
+        "baseline": "bottom",
+        "dy": -5
+      },
+      "encoding": {
+        "x": {
+          "field": "label",
+          "type": "ordinal",
+          "sort": {
+            "field": "order"
+          },
+          "title": null,
+          "scale": {
+            "paddingInner": 0.3,
+            "paddingOuter": 0.15
+          },
+          "axis": {
+            "labelExpr": "split(replace(datum.label, ' ', '|'), '|')",
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "ticks": false,
+            "domain": false,
+            "labelFontSize": 11
+          }
+        },
+        "y": {
+          "field": "top",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "value",
+          "type": "quantitative",
+          "format": "+.2f"
+        }
+      }
+    },
+    {
+      "description": "Changes that take spare milk away: label below",
+      "transform": [
+        {
+          "filter": "datum.kind === 'change' && datum.value < 0"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "color": "#45474C",
+        "baseline": "top",
+        "dy": 5
+      },
+      "encoding": {
+        "x": {
+          "field": "label",
+          "type": "ordinal",
+          "sort": {
+            "field": "order"
+          },
+          "title": null,
+          "scale": {
+            "paddingInner": 0.3,
+            "paddingOuter": 0.15
+          },
+          "axis": {
+            "labelExpr": "split(replace(datum.label, ' ', '|'), '|')",
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "ticks": false,
+            "domain": false,
+            "labelFontSize": 11
+          }
+        },
+        "y": {
+          "field": "bottom",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "value",
+          "type": "quantitative",
+          "format": "+.2f"
+        }
+      }
+    }
+  ]
+}

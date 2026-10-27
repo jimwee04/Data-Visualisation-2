@@ -1,0 +1,8 @@
+order,label,kind,year,value,start,end,spare_pct
+1,Spare milk|2010,total,2010,1.369,0.0,1.369,17.886
+2,More produced|2010–16,change,2016,0.997,1.369,2.366,
+3,More used|2010–16,change,2016,-1.572,2.366,0.794,
+4,Spare milk|2016,total,2016,0.794,0.0,0.794,8.606
+5,Less produced|2016–23,change,2023,-1.553,0.794,-0.759,
+6,Less used|2016–23,change,2023,0.969,-0.759,0.21,
+7,Spare milk|2023,total,2023,0.21,0.0,0.21,2.543
